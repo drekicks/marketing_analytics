@@ -17,7 +17,8 @@ join film f
 	on f.film_id = i.film_id 
 group by 1
 ) 
-select rental_rank, title, rentals from rntl_cnt where rank <=10;
+select rental_rank, title, rentals
+from rntl_cnt where rental_rank <=10;
 
 select  s.store_id, c2.country , sum(amount) rental_amt from payment p join staff s 
 	on p.staff_id = s.staff_id 
