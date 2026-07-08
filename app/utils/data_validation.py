@@ -1,5 +1,4 @@
 import pandas as pd
-import re
 from datetime import datetime
 
 
@@ -77,15 +76,15 @@ def validate_customer_data(df: pd.DataFrame, valid_tiers: list = None) -> dict:
 
 
 def print_validation_summary(results: dict):
-    print("=" * 55)
+    print("=" * 59)
     print("DATA VALIDATION SUMMARY")
-    print("=" * 55)
+    print("=" * 59)
     # --- Print dataset shape first, if present ---
     shape_info = results.get("_dataset_shape")
     if shape_info:
         print(f"{'Row Count':.<40}{shape_info['row_count']:>10}")
         print(f"{'Column Count':.<40}{shape_info['column_count']:>10}")
-        print("-" * 55)
+        print("-" * 59)
 
     # --- Print each validation check, skipping the shape entry ---
     for check_name, check_result in results.items():
@@ -93,4 +92,4 @@ def print_validation_summary(results: dict):
             continue
         label = check_name.replace("_", " ").title()
         print(f"{label:.<40}{check_result['count']:>10} issue(s)")
-    print("=" * 55)
+    print("=" * 59)
