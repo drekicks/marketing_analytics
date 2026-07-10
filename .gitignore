@@ -10,4 +10,5 @@ __pycache__/
 
 # Output/data files (optional, if you don't want these in git)
 output/
-data/
+
+data
