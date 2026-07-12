@@ -21,7 +21,7 @@ rent_hist2 as
 		unique_films,
 		total_rentals,
 		curr_date-first_rental customer_tenure_days, 
-		last_rental - first_rental days_since_last_rental,
+		curr_date -last_rental days_since_last_rental,
 		extract(year from age(curr_date, first_rental))*12 +
 		extract(month from age(curr_date, first_rental)) as customer_tenure_mnths
 	from rent_hist
@@ -156,6 +156,7 @@ case
 	else ''
 end
 from cust_seg c
+order by 2
 
 ;
 	

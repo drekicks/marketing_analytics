@@ -8,7 +8,7 @@ db_conn = database.engine
 query = load_sql_extracts(["04_customer_segmentation"])
 
 df = query["04_customer_segmentation"]
-print(df.head(5))
+# print(df.head(5))
 
 results = validation.validate_customer_segmentation_output(df)
 

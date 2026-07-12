@@ -253,12 +253,12 @@ def validate_customer_segmentation_output(df: pd.DataFrame) -> dict:
     results["invalid_customer_tier"] = {"count": invalid_tier_mask.sum(), "rows": df[invalid_tier_mask]}
 
     # --- recency_segment must be one of the two expected values ---
-    valid_recency = ["Active", "Lapsed"]
+    valid_recency = ["Active", "Lapsed", "Pre-Lapsed"]
     invalid_recency_mask = ~df["recency_segment"].isin(valid_recency)
     results["invalid_recency_segment"] = {"count": invalid_recency_mask.sum(), "rows": df[invalid_recency_mask]}
 
     # --- engagement_segment must be one of the three expected values ---
-    valid_engagement = ["Low Engagement", "Medium Engagement", "High Engagement"]
+    valid_engagement = ["Very Low Engagement", "Low Engagement", "Moderate Engagement", "High Engagement", "Very High Engagement"]
     invalid_engagement_mask = ~df["engagement_segment"].isin(valid_engagement)
     results["invalid_engagement_segment"] = {
         "count": invalid_engagement_mask.sum(), "rows": df[invalid_engagement_mask]
@@ -294,8 +294,8 @@ def validate_customer_segmentation_output(df: pd.DataFrame) -> dict:
     # --- primary_segment must be one of the known labels, never null ---
     valid_segments = [
         "Champion", "Win-Back VIP", "Win-Back Growth", "Win-Back Reactivation",
-        "Upsell - Scale", "Upsell - Core", "Engagement Growth - Core",
-        "Engagement Growth - Volume", "Category Expansion", "Maintain",
+        "Upsell - Scale", "Upsell - Core","Engagement Growth",
+        "Category Expansion", "Churn Watchlist", "Maintain"
     ]
     invalid_segment_mask = ~df["primary_segment"].isin(valid_segments)
     results["invalid_primary_segment"] = {"count": invalid_segment_mask.sum(), "rows": df[invalid_segment_mask]}
@@ -317,12 +317,12 @@ def validate_customer_segmentation_output(df: pd.DataFrame) -> dict:
             return "Upsell - Scale"
         if row["is_upsell_core"]:
             return "Upsell - Core"
-        if row["is_engagement_growth_core"]:
-            return "Engagement Growth - Core"
-        if row["is_engagement_growth_volume"]:
-            return "Engagement Growth - Volume"
+        if row["is_engagement_growth"]:
+            return "Engagement Growth"
         if row["is_narrow_explorer"]:
             return "Category Expansion"
+        if row["is_churn_watchlist"]:
+            return "Churn Watchlist"
         return "Maintain"
 
     recomputed = df.apply(expected_segment, axis=1)

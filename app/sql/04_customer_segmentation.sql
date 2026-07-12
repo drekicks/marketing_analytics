@@ -25,6 +25,7 @@ customer_rentals AS (
     SELECT
         c.customer_id,
         c.first_name || ' ' || c.last_name AS customer_name,
+        c3.country,
         MIN(r.rental_date)                 AS first_rental,
         MAX(r.rental_date)                 AS last_rental,
         COUNT(DISTINCT r.rental_id)        AS total_rentals,
@@ -33,7 +34,10 @@ customer_rentals AS (
     JOIN customer c   ON c.customer_id = r.customer_id
     JOIN inventory i  ON i.inventory_id = r.inventory_id
     JOIN film f       ON f.film_id = i.film_id
-    GROUP BY c.customer_id, c.first_name, c.last_name
+    join address a 	on a.address_id = c.address_id
+    join city c2  on c2.city_id = a.city_id 
+    join country c3 on c3.country_id = c2.country_id 
+    GROUP BY c.customer_id, c.first_name, c.last_name,c3.country 
 ),
 customer_payments AS (
     SELECT
@@ -89,6 +93,8 @@ customer_base AS (
     SELECT
         cr.customer_id,
         cr.customer_name,
+        cr.country,
+        cr.total_rentals,
         fr.fav_mpaa_rating,
         fc.fav_film_ctgry,
         cr.unique_films,
@@ -119,33 +125,36 @@ customer_tier_final AS (
             ELSE 'Low Value'
         END AS customer_tier
     FROM customer_tiered
-),
+),-- select payment_decile, avg(total_payments), avg(avg_payment_amount), sum(total_payments), sum(unique_films), sum(total_rentals) from customer_tier_final group by 1;,
 -- ---------------------------------------------------------------------
 -- 2) Recency + engagement rate segmentation
 -- ---------------------------------------------------------------------
 customer_metrics AS (
     SELECT
         *,
-        CASE WHEN days_since_last_rental <= 90 THEN 'Active' ELSE 'Lapsed' END AS recency_segment,
+        CASE WHEN days_since_last_rental <= 60 THEN 'Active' when days_since_last_rental between 61 and 175 then 'Pre-Lapsed' ELSE 'Lapsed' END AS recency_segment,
         round(unique_films / (customer_tenure_days / 30.0),2) AS films_per_month
     FROM customer_tier_final
 ),
 engagement_tiled AS (
     SELECT
         *,
-        NTILE(3) OVER (ORDER BY films_per_month) AS engagement_tile
+        NTILE(5) OVER (ORDER BY films_per_month) AS engagement_tile
     FROM customer_metrics
 ),
 engagement_final AS (
     SELECT
         *,
         CASE engagement_tile
-            WHEN 1 THEN 'Low Engagement'
-            WHEN 2 THEN 'Medium Engagement'
-            WHEN 3 THEN 'High Engagement'
+            WHEN 1 THEN 'Very Low Engagement'
+            WHEN 2 THEN 'Low Engagement'
+            WHEN 3 THEN 'Moderate Engagement'
+            when 4 then 'High Engagement'
+            when 5 then 'Very High Engagement'
+            else 'Review'
         END AS engagement_segment
     FROM engagement_tiled
-),
+),-- select engagement_segment, recency_segment, customer_tier, count(distinct customer_id) custs, avg(films_per_month) avg_fpm, min(films_per_month) min_fpm, max(films_per_month) max_fpm from engagement_final group by 1,2,3 order by 5;,
 -- ---------------------------------------------------------------------
 -- 3) Category affinity: per-customer rental counts by category
 --    (this is your first query, reused here as a CTE)
@@ -222,6 +231,7 @@ customer_segments AS (
     SELECT
         e.customer_id,
         e.customer_name,
+        e.country,
         e.fav_mpaa_rating,
         e.fav_film_ctgry,
         e.customer_tier,
@@ -234,6 +244,7 @@ customer_segments AS (
         e.films_per_month,
         e.customer_tenure_days,
         e.days_since_last_rental,
+        e.total_rentals,
         cb.categories_touched,
         tc.top_rental_category,
         tc.top_category_rentals,
@@ -246,17 +257,20 @@ customer_segments AS (
             AS is_winback_growth,
         (e.customer_tier = 'Low Value' AND e.recency_segment = 'Lapsed')
             AS is_winback_reactivation,
-        (e.customer_tier = 'Low Value' AND e.engagement_segment = 'High Engagement')
+        (e.customer_tier = 'Low Value' AND e.engagement_segment in ('High Engagement','Very High Engagement') and e.recency_segment='Active')
             AS is_upsell_core,
-        (e.customer_tier = 'Medium Value' AND e.engagement_segment = 'High Engagement')
+        (e.customer_tier = 'Medium Value' AND e.engagement_segment in ('High Engagement','Very High Engagement') and e.recency_segment='Active')
             AS is_upsell_scale,
-        (e.customer_tier = 'Medium Value' AND e.engagement_segment = 'Low Engagement')
-            AS is_engagement_growth_core,
-        (e.customer_tier = 'Low Value' AND e.engagement_segment = 'Low Engagement')
-            AS is_engagement_growth_volume,
+        --(e.customer_tier = 'Medium Value' AND e.engagement_segment in ('Very Low Engagement','Low Engagement'))
+          --  AS is_engagement_growth_scale,
+        (e.customer_tier in ('Low Value','Medium Value') AND e.engagement_segment in ('Very Low Engagement','Low Engagement'))
+            AS is_engagement_growth,
         (e.customer_tier = 'High Value' AND e.recency_segment = 'Active'
-            AND e.engagement_segment = 'High Engagement')
+            AND e.engagement_segment in ('High Engagement','Very High Engagement'))
             AS is_champion,
+        (e.customer_tier in ('Medium Value','High Value') AND e.recency_segment = 'Pre-Lapsed'
+            AND e.engagement_segment in ('High Engagement','Very High Engagement'))
+            AS is_churn_watchlist,
         (cb.categories_touched <= 12)
             AS is_narrow_explorer
     FROM engagement_final e
@@ -279,9 +293,10 @@ SELECT
         WHEN is_winback_reactivation      THEN 'Win-Back Reactivation'
         WHEN is_upsell_scale              THEN 'Upsell - Scale'
         WHEN is_upsell_core               THEN 'Upsell - Core'
-        WHEN is_engagement_growth_core    THEN 'Engagement Growth - Core'
-        WHEN is_engagement_growth_volume  THEN 'Engagement Growth - Volume'
-        WHEN is_narrow_explorer           THEN 'Category Expansion'
+        --WHEN is_engagement_growth_scale    THEN 'Engagement Growth - Scale'
+        WHEN is_engagement_growth	      THEN 'Engagement Growth'
+       WHEN is_narrow_explorer           THEN 'Category Expansion'
+        when is_churn_watchlist			  then 'Churn Watchlist'
         ELSE 'Maintain'
     END AS primary_segment
 FROM customer_segments;

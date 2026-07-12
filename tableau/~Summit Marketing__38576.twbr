@@ -1,0 +1,2333 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<!-- build 20261.26.0512.1636                               -->
+<workbook original-version='18.1' source-build='2026.1.2 (20261.26.0512.1636)' source-platform='win' version='18.1' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <document-format-change-manifest>
+    <AccessibleZoneTabOrder />
+    <AnimationOnByDefault />
+    <AutoCreateAndUpdateDSDPhoneLayouts />
+    <DatagraphCoreV1 />
+    <DatagraphNodeSingleValueFieldV1 />
+    <_.fcp.DynamicColorRange.true...DynamicColorRange />
+    <MapboxVectorStylesAndLayers />
+    <MarkAnimation />
+    <ObjectModelEncapsulateLegacy />
+    <ObjectModelTableType />
+    <ParameterAction />
+    <ParameterActionClearSelection />
+    <SchemaViewerObjectModel />
+    <SetMembershipControl />
+    <SheetIdentifierTracking />
+    <SortTagCleanup />
+    <WindowsPersistSimpleIdentifiers />
+  </document-format-change-manifest>
+  <preferences>
+    <preference name='ui.encoding.shelf.height' value='24' />
+    <preference name='ui.shelf.height' value='26' />
+  </preferences>
+  <datasources>
+    <datasource hasconnection='false' inline='true' name='Parameters' version='18.1'>
+      <aliases enabled='yes' />
+      <column caption='ColorCenter' datatype='real' name='[ColorCenter]' param-domain-type='any' role='measure' type='quantitative' value='0.375'>
+        <calculation class='tableau' formula='0.375' />
+      </column>
+    </datasource>
+    <datasource caption='customer_segmentation' inline='true' name='federated.13gp20y04uuppf1fg0sam1ff6w3v' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='customer_segmentation' name='textscan.1tvudps026ld8o1asnkqz16h09np'>
+            <connection class='textscan' cleaning='yes' compat='no' csvFile='C:\Users\aferr\OneDrive\Documents\GitHub\marketing_analytics\data\customer_segmentation.csv' dataRefreshTime='' directory='C:/Users/aferr/OneDrive/Documents/GitHub/marketing_analytics/data' filename='C:/Users/aferr/AppData/Local/Temp/TableauTemp/1dr20z60189abx18agn5g04tk87j/customer_segmentation.csv.xlsx' interpretationMode='8' password='' server='' validate='no' />
+          </named-connection>
+        </named-connections>
+        <relation connection='textscan.1tvudps026ld8o1asnkqz16h09np' name='customer_segmentation.csv' table='[C:\Users\aferr\OneDrive\Documents\GitHub\marketing_analytics\data\customer_segmentation#csv]' type='table'>
+          <columns character-set='UTF-8' gridOrigin='A1:AC600:no:A1:AC600:1' header='yes' locale='en_US' separator=','>
+            <column datatype='integer' name='customer_id' ordinal='0' />
+            <column datatype='string' name='customer_name' ordinal='1' />
+            <column datatype='string' name='country' ordinal='2' />
+            <column datatype='string' name='fav_mpaa_rating' ordinal='3' />
+            <column datatype='string' name='fav_film_ctgry' ordinal='4' />
+            <column datatype='string' name='customer_tier' ordinal='5' />
+            <column datatype='string' name='recency_segment' ordinal='6' />
+            <column datatype='string' name='engagement_segment' ordinal='7' />
+            <column datatype='real' name='total_payments' ordinal='8' />
+            <column datatype='real' name='rev_per_rentals' ordinal='9' />
+            <column datatype='real' name='avg_payment_amount' ordinal='10' />
+            <column datatype='integer' name='unique_films' ordinal='11' />
+            <column datatype='real' name='films_per_month' ordinal='12' />
+            <column datatype='integer' name='customer_tenure_days' ordinal='13' />
+            <column datatype='integer' name='days_since_last_rental' ordinal='14' />
+            <column datatype='integer' name='total_rentals' ordinal='15' />
+            <column datatype='integer' name='categories_touched' ordinal='16' />
+            <column datatype='string' name='top_rental_category' ordinal='17' />
+            <column datatype='integer' name='top_category_rentals' ordinal='18' />
+            <column datatype='string' name='category_engagement_tier' ordinal='19' />
+            <column datatype='boolean' name='is_winback_vip' ordinal='20' />
+            <column datatype='boolean' name='is_winback_growth' ordinal='21' />
+            <column datatype='boolean' name='is_winback_reactivation' ordinal='22' />
+            <column datatype='boolean' name='is_upsell_core' ordinal='23' />
+            <column datatype='boolean' name='is_upsell_scale' ordinal='24' />
+            <column datatype='boolean' name='is_engagement_growth' ordinal='25' />
+            <column datatype='boolean' name='is_champion' ordinal='26' />
+            <column datatype='boolean' name='is_churn_watchlist' ordinal='27' />
+            <column datatype='boolean' name='is_narrow_explorer' ordinal='28' />
+            <column datatype='string' name='primary_segment' ordinal='29' />
+          </columns>
+        </relation>
+        <metadata-records>
+          <metadata-record class='capability'>
+            <remote-name />
+            <remote-type>0</remote-type>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias />
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='character-set'>&quot;UTF-8&quot;</attribute>
+              <attribute datatype='string' name='collation'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='field-delimiter'>&quot;,&quot;</attribute>
+              <attribute datatype='string' name='gridOrigin'>&quot;A1:AC600:no:A1:AC600:1&quot;</attribute>
+              <attribute datatype='string' name='header-row'>&quot;true&quot;</attribute>
+              <attribute datatype='string' name='locale'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='single-char'>&quot;&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>customer_id</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[customer_id]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>customer_id</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>customer_name</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[customer_name]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>customer_name</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>country</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[country]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>country</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>fav_mpaa_rating</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[fav_mpaa_rating]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>fav_mpaa_rating</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>fav_film_ctgry</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[fav_film_ctgry]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>fav_film_ctgry</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>customer_tier</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[customer_tier]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>customer_tier</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>recency_segment</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[recency_segment]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>recency_segment</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>engagement_segment</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[engagement_segment]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>engagement_segment</remote-alias>
+            <ordinal>7</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>total_payments</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[total_payments]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>total_payments</remote-alias>
+            <ordinal>8</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>rev_per_rentals</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[rev_per_rentals]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>rev_per_rentals</remote-alias>
+            <ordinal>9</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>avg_payment_amount</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[avg_payment_amount]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>avg_payment_amount</remote-alias>
+            <ordinal>10</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>unique_films</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[unique_films]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>unique_films</remote-alias>
+            <ordinal>11</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>films_per_month</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[films_per_month]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>films_per_month</remote-alias>
+            <ordinal>12</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>customer_tenure_days</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[customer_tenure_days]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>customer_tenure_days</remote-alias>
+            <ordinal>13</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>days_since_last_rental</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[days_since_last_rental]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>days_since_last_rental</remote-alias>
+            <ordinal>14</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>total_rentals</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[total_rentals]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>total_rentals</remote-alias>
+            <ordinal>15</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>categories_touched</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[categories_touched]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>categories_touched</remote-alias>
+            <ordinal>16</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>top_rental_category</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[top_rental_category]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>top_rental_category</remote-alias>
+            <ordinal>17</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>top_category_rentals</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[top_category_rentals]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>top_category_rentals</remote-alias>
+            <ordinal>18</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>category_engagement_tier</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[category_engagement_tier]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>category_engagement_tier</remote-alias>
+            <ordinal>19</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>is_winback_vip</remote-name>
+            <remote-type>11</remote-type>
+            <local-name>[is_winback_vip]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>is_winback_vip</remote-alias>
+            <ordinal>20</ordinal>
+            <local-type>boolean</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>is_winback_growth</remote-name>
+            <remote-type>11</remote-type>
+            <local-name>[is_winback_growth]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>is_winback_growth</remote-alias>
+            <ordinal>21</ordinal>
+            <local-type>boolean</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>is_winback_reactivation</remote-name>
+            <remote-type>11</remote-type>
+            <local-name>[is_winback_reactivation]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>is_winback_reactivation</remote-alias>
+            <ordinal>22</ordinal>
+            <local-type>boolean</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>is_upsell_core</remote-name>
+            <remote-type>11</remote-type>
+            <local-name>[is_upsell_core]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>is_upsell_core</remote-alias>
+            <ordinal>23</ordinal>
+            <local-type>boolean</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>is_upsell_scale</remote-name>
+            <remote-type>11</remote-type>
+            <local-name>[is_upsell_scale]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>is_upsell_scale</remote-alias>
+            <ordinal>24</ordinal>
+            <local-type>boolean</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>is_engagement_growth</remote-name>
+            <remote-type>11</remote-type>
+            <local-name>[is_engagement_growth]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>is_engagement_growth</remote-alias>
+            <ordinal>25</ordinal>
+            <local-type>boolean</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>is_champion</remote-name>
+            <remote-type>11</remote-type>
+            <local-name>[is_champion]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>is_champion</remote-alias>
+            <ordinal>26</ordinal>
+            <local-type>boolean</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>is_churn_watchlist</remote-name>
+            <remote-type>11</remote-type>
+            <local-name>[is_churn_watchlist]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>is_churn_watchlist</remote-alias>
+            <ordinal>27</ordinal>
+            <local-type>boolean</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>is_narrow_explorer</remote-name>
+            <remote-type>11</remote-type>
+            <local-name>[is_narrow_explorer]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>is_narrow_explorer</remote-alias>
+            <ordinal>28</ordinal>
+            <local-type>boolean</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>primary_segment</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[primary_segment]</local-name>
+            <parent-name>[customer_segmentation.csv]</parent-name>
+            <remote-alias>primary_segment</remote-alias>
+            <ordinal>29</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]</object-id>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+      <aliases enabled='yes' />
+      <column datatype='string' name='[:Measure Names]' role='dimension' type='nominal'>
+        <aliases>
+          <alias key='&quot;[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:avg_payment_amount:qk]&quot;' value='Avg Payment Amount' />
+          <alias key='&quot;[federated.13gp20y04uuppf1fg0sam1ff6w3v].[ctd:customer_id:qk]&quot;' value='Customers' />
+        </aliases>
+      </column>
+      <column caption='Customers' datatype='integer' name='[Calculation_2650944326668288]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='count([customer_id])' />
+      </column>
+      <column caption='Average Revenue' datatype='real' default-format='C1033%' name='[Calculation_2650944327987202]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='sum([total_payments])/COUNTD([customer_id])' />
+      </column>
+      <column caption='Highlight Border Fill' datatype='string' name='[Calculation_2650944400818179]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [customer_tier] = &quot;High Value&quot; AND [is_champion] THEN &quot;Highlight&quot; END' />
+      </column>
+      <column caption='Lapsed Customer' datatype='integer' name='[Calculation_2650944660324356]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='sum(case [recency_segment] when &quot;Lapsed&quot; then 1 else 0 end)' />
+      </column>
+      <column caption='Lapse Rate' datatype='real' default-format='p0.0%' name='[Lapsed Customer (copy)_2650944666427397]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='sum(case [recency_segment] when &quot;Lapsed&quot; then 1 else 0 end)/[Calculation_2650944326668288]' />
+      </column>
+      <column caption='customer_segmentation.csv' datatype='table' name='[__tableau_internal_object_id__].[customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E]' role='measure' type='quantitative' />
+      <column caption='Avg Payment Amount' datatype='real' name='[avg_payment_amount]' role='measure' type='quantitative' />
+      <column caption='Categories Touched' datatype='integer' name='[categories_touched]' role='measure' type='quantitative' />
+      <column caption='Category Engagement Tier' datatype='string' name='[category_engagement_tier]' role='dimension' type='nominal' />
+      <column caption='Country' datatype='string' name='[country]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
+      <column aggregation='CountD' caption='Customer Id' datatype='integer' name='[customer_id]' role='measure' type='quantitative' />
+      <column caption='Customer Name' datatype='string' name='[customer_name]' role='dimension' type='nominal' />
+      <column caption='Customer Tenure Days' datatype='integer' name='[customer_tenure_days]' role='measure' type='quantitative' />
+      <column caption='Customer Tier' datatype='string' name='[customer_tier]' role='dimension' type='nominal' />
+      <column caption='Days Since Last Rental' datatype='integer' name='[days_since_last_rental]' role='measure' type='quantitative' />
+      <column caption='Engagement Segment' datatype='string' name='[engagement_segment]' role='dimension' type='nominal' />
+      <column caption='Fav Film Ctgry' datatype='string' name='[fav_film_ctgry]' role='dimension' type='nominal' />
+      <column caption='Fav Mpaa Rating' datatype='string' name='[fav_mpaa_rating]' role='dimension' type='nominal' />
+      <column caption='Films Per Month' datatype='real' default-format='n#,##0.00;-#,##0.00' name='[films_per_month]' role='dimension' type='quantitative' />
+      <column caption='Is Champion' datatype='boolean' name='[is_champion]' role='dimension' type='nominal' />
+      <column caption='Is Narrow Explorer' datatype='boolean' name='[is_narrow_explorer]' role='dimension' type='nominal' />
+      <column caption='Is Upsell Core' datatype='boolean' name='[is_upsell_core]' role='dimension' type='nominal' />
+      <column caption='Is Upsell Scale' datatype='boolean' name='[is_upsell_scale]' role='dimension' type='nominal' />
+      <column caption='Is Winback Growth' datatype='boolean' name='[is_winback_growth]' role='dimension' type='nominal' />
+      <column caption='Is Winback Reactivation' datatype='boolean' name='[is_winback_reactivation]' role='dimension' type='nominal' />
+      <column caption='Is Winback Vip' datatype='boolean' name='[is_winback_vip]' role='dimension' type='nominal' />
+      <column caption='Primary Segment' datatype='string' name='[primary_segment]' role='dimension' type='nominal' />
+      <column caption='Recency Segment' datatype='string' name='[recency_segment]' role='dimension' type='nominal' />
+      <column caption='Rev Per Rentals' datatype='real' name='[rev_per_rentals]' role='measure' type='quantitative' />
+      <column caption='Top Category Rentals' datatype='integer' name='[top_category_rentals]' role='measure' type='quantitative' />
+      <column caption='Top Rental Category' datatype='string' name='[top_rental_category]' role='dimension' type='nominal' />
+      <column caption='Total Payments' datatype='real' default-format='c&quot;$&quot;#,##0;(&quot;$&quot;#,##0)' name='[total_payments]' role='measure' type='quantitative' />
+      <column caption='Total Rentals' datatype='integer' name='[total_rentals]' role='measure' type='quantitative' />
+      <column caption='Unique Films' datatype='integer' name='[unique_films]' role='measure' type='quantitative' />
+      <column-instance column='[avg_payment_amount]' derivation='Avg' name='[avg:avg_payment_amount:ok]' pivot='key' type='ordinal' />
+      <column-instance column='[avg_payment_amount]' derivation='Avg' name='[avg:avg_payment_amount:qk]' pivot='key' type='quantitative' />
+      <column-instance column='[customer_id]' derivation='CountD' name='[ctd:customer_id:qk]' pivot='key' type='quantitative' />
+      <column-instance column='[Is Champion Set]' derivation='InOut' name='[io:Is Champion Set:nk]' pivot='key' type='nominal' />
+      <column-instance column='[Calculation_2650944400818179]' derivation='None' name='[none:Calculation_2650944400818179:nk]' pivot='key' type='nominal' />
+      <column-instance column='[category_engagement_tier]' derivation='None' name='[none:category_engagement_tier:nk]' pivot='key' type='nominal' />
+      <column-instance column='[customer_tier]' derivation='None' name='[none:customer_tier:nk]' pivot='key' type='nominal' />
+      <column-instance column='[films_per_month]' derivation='None' name='[none:films_per_month:ok]' pivot='key' type='ordinal' />
+      <column-instance column='[primary_segment]' derivation='None' name='[none:primary_segment:nk]' pivot='key' type='nominal' />
+      <group caption='Action (Country)' hidden='true' name='[Action (Country)]' name-style='unqualified' user:auto-column='sheet_link'>
+        <groupfilter function='crossjoin'>
+          <groupfilter function='level-members' level='[country]' />
+        </groupfilter>
+      </group>
+      <group caption='Action (Highlight Border Fill,Customer Tier,Films Per Month)' hidden='true' name='[Action (Highlight Border Fill,Customer Tier,Films Per Month)]' name-style='unqualified' user:auto-column='sheet_link'>
+        <groupfilter function='crossjoin'>
+          <groupfilter function='level-members' level='[Calculation_2650944400818179]' />
+          <groupfilter function='level-members' level='[customer_tier]' />
+          <groupfilter function='level-members' level='[none:films_per_month:ok]' />
+        </groupfilter>
+      </group>
+      <group caption='Action (country)' hidden='true' name='[Action (country)]' name-style='unqualified' user:auto-column='sheet_link'>
+        <groupfilter function='crossjoin'>
+          <groupfilter function='level-members' level='[country]' />
+        </groupfilter>
+      </group>
+      <group caption='Is Champion Set' name='[Is Champion Set]' name-style='unqualified' user:ui-builder='filter-group'>
+        <groupfilter function='member' level='[is_champion]' member='true' user:ui-domain='relevant' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+      </group>
+      <layout common-percentage='0.969415' dim-ordering='alphabetic' measure-ordering='alphabetic' parameter-percentage='0.0305851' show-aliased-fields='true' show-hidden-fields='true' show-structure='true' user-set-layout-v2='true' />
+      <style>
+        <style-rule element='mark'>
+          <encoding attr='color' field='[avg:avg_payment_amount:ok]' type='palette'>
+            <map to='#4e79a7'>
+              <bucket>3.8389473684210516</bucket>
+            </map>
+            <map to='#4e79a7'>
+              <bucket>4.013545150501673</bucket>
+            </map>
+            <map to='#4e79a7'>
+              <bucket>4.1511000000000022</bucket>
+            </map>
+            <map to='#4e79a7'>
+              <bucket>4.196894824707849</bucket>
+            </map>
+            <map to='#59a14f'>
+              <bucket>3.9735294117647055</bucket>
+            </map>
+            <map to='#76b7b2'>
+              <bucket>3.4599999999999995</bucket>
+            </map>
+            <map to='#9c755f'>
+              <bucket>4.1532352941176471</bucket>
+            </map>
+            <map to='#9c755f'>
+              <bucket>4.5639999999999992</bucket>
+            </map>
+            <map to='#b07aa1'>
+              <bucket>4.0687499999999996</bucket>
+            </map>
+            <map to='#bab0ac'>
+              <bucket>4.3148295454545451</bucket>
+            </map>
+            <map to='#bab0ac'>
+              <bucket>4.7190476190476192</bucket>
+            </map>
+            <map to='#e15759'>
+              <bucket>4.231065759637187</bucket>
+            </map>
+            <map to='#e15759'>
+              <bucket>4.2383417085427126</bucket>
+            </map>
+            <map to='#e15759'>
+              <bucket>4.2987499999999992</bucket>
+            </map>
+            <map to='#e15759'>
+              <bucket>4.6560000000000015</bucket>
+            </map>
+            <map to='#edc948'>
+              <bucket>4.0272413793103432</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>4.1015189873417723</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>4.2014500000000021</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>4.3105416666666674</bucket>
+            </map>
+            <map to='#ff9da7'>
+              <bucket>4.0730493273542603</bucket>
+            </map>
+            <map to='#ff9da7'>
+              <bucket>4.5088888888888885</bucket>
+            </map>
+          </encoding>
+          <encoding attr='color' field='[none:customer_tier:nk]' type='palette'>
+            <map to='#4e79a7'>
+              <bucket>&quot;High Value&quot;</bucket>
+            </map>
+            <map to='#59a14f'>
+              <bucket>&quot;Medium Value&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;Low Value&quot;</bucket>
+            </map>
+          </encoding>
+          <encoding attr='color' field='[io:Is Champion Set:nk]' type='palette'>
+            <map to='#4e79a7'>
+              <bucket>true</bucket>
+            </map>
+            <map to='#a2a2a2'>
+              <bucket>false</bucket>
+            </map>
+          </encoding>
+          <encoding attr='color' field='[none:customer_tier:nk]&#10;[io:Is Champion Set:nk]' type='palette'>
+            <map-pri to='multiordinal_blue_10_0'>
+              <bucket>&quot;High Value&quot;</bucket>
+            </map-pri>
+            <map-pri to='multiordinal_green_10_0'>
+              <bucket>&quot;Medium Value&quot;</bucket>
+            </map-pri>
+            <map-pri to='multiordinal_orange_10_0'>
+              <bucket>&quot;Low Value&quot;</bucket>
+            </map-pri>
+          </encoding>
+          <encoding attr='color' field='[none:Calculation_2650944400818179:nk]' type='palette'>
+            <map to='#4e79a7'>
+              <bucket>&quot;Hide&quot;</bucket>
+            </map>
+            <map to='#e15759'>
+              <bucket>%null%</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;Highlight&quot;</bucket>
+            </map>
+          </encoding>
+          <encoding attr='shape' field='[none:Calculation_2650944400818179:nk]' type='shape'>
+            <map to='KPI/02.png'>
+              <bucket>&quot;Hide&quot;</bucket>
+            </map>
+            <map to='circle'>
+              <bucket>&quot;Highlight&quot;</bucket>
+            </map>
+            <map to='square'>
+              <bucket>%null%</bucket>
+            </map>
+          </encoding>
+          <encoding attr='color' field='[none:primary_segment:nk]' type='palette'>
+            <map to='#4e79a7'>
+              <bucket>&quot;Category Expansion&quot;</bucket>
+            </map>
+            <map to='#59a14f'>
+              <bucket>&quot;Maintain&quot;</bucket>
+            </map>
+            <map to='#76b7b2'>
+              <bucket>&quot;Engagement Growth&quot;</bucket>
+            </map>
+            <map to='#9c755f'>
+              <bucket>&quot;Win-Back Reactivation&quot;</bucket>
+            </map>
+            <map to='#b07aa1'>
+              <bucket>&quot;Upsell - Scale&quot;</bucket>
+            </map>
+            <map to='#bab0ac'>
+              <bucket>&quot;Win-Back VIP&quot;</bucket>
+            </map>
+            <map to='#e15759'>
+              <bucket>&quot;Churn Watchlist&quot;</bucket>
+            </map>
+            <map to='#edc948'>
+              <bucket>&quot;Upsell - Core&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;Champion&quot;</bucket>
+            </map>
+            <map to='#ff9da7'>
+              <bucket>&quot;Win-Back Growth&quot;</bucket>
+            </map>
+          </encoding>
+          <encoding attr='color' field='[none:category_engagement_tier:nk]' type='palette'>
+            <map to='#4e79a7'>
+              <bucket>&quot;High Engagement Category&quot;</bucket>
+            </map>
+            <map to='#e15759'>
+              <bucket>&quot;Medium Engagement Category&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;Low Engagement Category&quot;</bucket>
+            </map>
+          </encoding>
+        </style-rule>
+      </style>
+      <semantic-values>
+        <semantic-value key='[Country].[Name]' value='&quot;United States&quot;' />
+      </semantic-values>
+      <field-sort-info field-sort-order-type='custom-order' />
+      <object-graph>
+        <objects>
+          <object caption='customer_segmentation.csv' id='customer_segmentation.csv_626AE7CD57C64F32AD76790A97FB089E'>
+            <properties context=''>
+              <relation connection='textscan.1tvudps026ld8o1asnkqz16h09np' name='customer_segmentation.csv' table='[C:\Users\aferr\OneDrive\Documents\GitHub\marketing_analytics\data\customer_segmentation#csv]' type='table'>
+                <columns character-set='UTF-8' gridOrigin='A1:AC600:no:A1:AC600:1' header='yes' locale='en_US' separator=','>
+                  <column datatype='integer' name='customer_id' ordinal='0' />
+                  <column datatype='string' name='customer_name' ordinal='1' />
+                  <column datatype='string' name='country' ordinal='2' />
+                  <column datatype='string' name='fav_mpaa_rating' ordinal='3' />
+                  <column datatype='string' name='fav_film_ctgry' ordinal='4' />
+                  <column datatype='string' name='customer_tier' ordinal='5' />
+                  <column datatype='string' name='recency_segment' ordinal='6' />
+                  <column datatype='string' name='engagement_segment' ordinal='7' />
+                  <column datatype='real' name='total_payments' ordinal='8' />
+                  <column datatype='real' name='rev_per_rentals' ordinal='9' />
+                  <column datatype='real' name='avg_payment_amount' ordinal='10' />
+                  <column datatype='integer' name='unique_films' ordinal='11' />
+                  <column datatype='real' name='films_per_month' ordinal='12' />
+                  <column datatype='integer' name='customer_tenure_days' ordinal='13' />
+                  <column datatype='integer' name='days_since_last_rental' ordinal='14' />
+                  <column datatype='integer' name='total_rentals' ordinal='15' />
+                  <column datatype='integer' name='categories_touched' ordinal='16' />
+                  <column datatype='string' name='top_rental_category' ordinal='17' />
+                  <column datatype='integer' name='top_category_rentals' ordinal='18' />
+                  <column datatype='string' name='category_engagement_tier' ordinal='19' />
+                  <column datatype='boolean' name='is_winback_vip' ordinal='20' />
+                  <column datatype='boolean' name='is_winback_growth' ordinal='21' />
+                  <column datatype='boolean' name='is_winback_reactivation' ordinal='22' />
+                  <column datatype='boolean' name='is_upsell_core' ordinal='23' />
+                  <column datatype='boolean' name='is_upsell_scale' ordinal='24' />
+                  <column datatype='boolean' name='is_engagement_growth' ordinal='25' />
+                  <column datatype='boolean' name='is_champion' ordinal='26' />
+                  <column datatype='boolean' name='is_churn_watchlist' ordinal='27' />
+                  <column datatype='boolean' name='is_narrow_explorer' ordinal='28' />
+                  <column datatype='string' name='primary_segment' ordinal='29' />
+                </columns>
+              </relation>
+            </properties>
+          </object>
+        </objects>
+      </object-graph>
+    </datasource>
+  </datasources>
+  <mapsources>
+    <mapsource name='Tableau' />
+  </mapsources>
+  <actions>
+    <action caption='Highlight 1 (generated)' name='[Action1_9F7AD79B5B9C4D1E983D1E8643244C7D]'>
+      <activation auto-clear='true' type='on-select' />
+      <source type='sheet' worksheet='Customer Value' />
+      <command command='tsc:brush'>
+        <param name='field-captions' value='Highlight Border Fill,Customer Tier,IN/OUT(Is Champion Set)' />
+        <param name='target' value='Customer Value' />
+      </command>
+    </action>
+    <action caption='Filter 1 (generated)' name='[Action3_8460B09420E5406082CD8D511DBED30C]'>
+      <activation auto-clear='true' type='on-select' />
+      <source dashboard='My 2nd Dashboard' type='sheet' worksheet='Country Investment' />
+      <command command='tsc:tsl-filter'>
+        <param name='special-fields' value='all' />
+        <param name='target' value='My 2nd Dashboard' />
+      </command>
+    </action>
+    <edit-parameter-action caption='ParameterColorCenter1' name='[Action2_DC1BF1A5D32D4550AF0A814993EFF3F1]'>
+      <activation type='on-select' />
+      <source type='sheet' worksheet='Churn Risk' />
+      <agg-type type='median' />
+      <clear-option type='do-nothing' value='i:1' />
+      <params>
+        <param name='source-field' value='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Lapsed Customer (copy)_2650944666427397:qk]' />
+        <param name='target-parameter' value='[Parameters].[ColorCenter]' />
+      </params>
+    </edit-parameter-action>
+  </actions>
+  <worksheets>
+    <worksheet name='Category Engagement'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='customer_segmentation' name='federated.13gp20y04uuppf1fg0sam1ff6w3v' />
+          </datasources>
+          <datasource-dependencies datasource='federated.13gp20y04uuppf1fg0sam1ff6w3v'>
+            <column caption='Category Engagement Tier' datatype='string' name='[category_engagement_tier]' role='dimension' type='nominal' />
+            <column-instance column='[customer_id]' derivation='CountD' name='[ctd:customer_id:qk]' pivot='key' type='quantitative' />
+            <column aggregation='CountD' caption='Customer Id' datatype='integer' name='[customer_id]' role='measure' type='quantitative' />
+            <column caption='Customer Tier' datatype='string' name='[customer_tier]' role='dimension' type='nominal' />
+            <column caption='Fav Film Ctgry' datatype='string' name='[fav_film_ctgry]' role='dimension' type='nominal' />
+            <column-instance column='[category_engagement_tier]' derivation='None' name='[none:category_engagement_tier:nk]' pivot='key' type='nominal' />
+            <column-instance column='[customer_tier]' derivation='None' name='[none:customer_tier:nk]' pivot='key' type='nominal' />
+            <column-instance column='[fav_film_ctgry]' derivation='None' name='[none:fav_film_ctgry:nk]' pivot='key' type='nominal' />
+          </datasource-dependencies>
+          <manual-sort column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:category_engagement_tier:nk]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;High Engagement Category&quot;</bucket>
+              <bucket>&quot;Medium Engagement Category&quot;</bucket>
+              <bucket>&quot;Low Engagement Category&quot;</bucket>
+            </dictionary>
+          </manual-sort>
+          <filter class='categorical' column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:customer_tier:nk]'>
+            <groupfilter function='level-members' level='[none:customer_tier:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+          </filter>
+          <manual-sort column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:fav_film_ctgry:nk]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;Animation&quot;</bucket>
+              <bucket>&quot;Action&quot;</bucket>
+              <bucket>&quot;Sci-Fi&quot;</bucket>
+              <bucket>&quot;Documentary&quot;</bucket>
+              <bucket>&quot;Sports&quot;</bucket>
+              <bucket>&quot;Drama&quot;</bucket>
+              <bucket>&quot;Foreign&quot;</bucket>
+              <bucket>&quot;Classics&quot;</bucket>
+              <bucket>&quot;Games&quot;</bucket>
+              <bucket>&quot;Family&quot;</bucket>
+              <bucket>&quot;Comedy&quot;</bucket>
+              <bucket>&quot;New&quot;</bucket>
+              <bucket>&quot;Children&quot;</bucket>
+              <bucket>&quot;Horror&quot;</bucket>
+              <bucket>&quot;Music&quot;</bucket>
+              <bucket>&quot;Travel&quot;</bucket>
+              <bucket>%all%</bucket>
+            </dictionary>
+          </manual-sort>
+          <slices>
+            <column>[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:customer_tier:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='axis'>
+            <format attr='display' class='0' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[ctd:customer_id:qk]' scope='cols' value='false' />
+          </style-rule>
+          <style-rule element='worksheet'>
+            <format attr='display-field-labels' scope='rows' value='false' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <color column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:category_engagement_tier:nk]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-cull' value='true' />
+                <format attr='mark-labels-show' value='false' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:fav_film_ctgry:nk]</rows>
+        <cols>[federated.13gp20y04uuppf1fg0sam1ff6w3v].[ctd:customer_id:qk]</cols>
+      </table>
+      <simple-id uuid='{3CEA1BCA-3EAA-4679-B15D-7176483E2C46}' />
+    </worksheet>
+    <worksheet name='Churn Risk'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='customer_segmentation' name='federated.13gp20y04uuppf1fg0sam1ff6w3v' />
+          </datasources>
+          <datasource-dependencies datasource='federated.13gp20y04uuppf1fg0sam1ff6w3v'>
+            <column caption='Customers' datatype='integer' name='[Calculation_2650944326668288]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='count([customer_id])' />
+            </column>
+            <column caption='Average Revenue' datatype='real' default-format='C1033%' name='[Calculation_2650944327987202]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='sum([total_payments])/COUNTD([customer_id])' />
+            </column>
+            <column caption='Lapse Rate' datatype='real' default-format='p0.0%' name='[Lapsed Customer (copy)_2650944666427397]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='sum(case [recency_segment] when &quot;Lapsed&quot; then 1 else 0 end)/[Calculation_2650944326668288]' />
+            </column>
+            <column-instance column='[days_since_last_rental]' derivation='Avg' name='[avg:days_since_last_rental:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[films_per_month]' derivation='Avg' name='[avg:films_per_month:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[customer_id]' derivation='CountD' name='[ctd:customer_id:qk]' pivot='key' type='quantitative' />
+            <column aggregation='CountD' caption='Customer Id' datatype='integer' name='[customer_id]' role='measure' type='quantitative' />
+            <column caption='Customer Tier' datatype='string' name='[customer_tier]' role='dimension' type='nominal' />
+            <column caption='Days Since Last Rental' datatype='integer' name='[days_since_last_rental]' role='measure' type='quantitative' />
+            <column caption='Engagement Segment' datatype='string' name='[engagement_segment]' role='dimension' type='nominal' />
+            <column caption='Films Per Month' datatype='real' default-format='n#,##0.00;-#,##0.00' name='[films_per_month]' role='dimension' type='quantitative' />
+            <column-instance column='[customer_tier]' derivation='None' name='[none:customer_tier:nk]' pivot='key' type='nominal' />
+            <column-instance column='[engagement_segment]' derivation='None' name='[none:engagement_segment:nk]' pivot='key' type='nominal' />
+            <column-instance column='[recency_segment]' derivation='None' name='[none:recency_segment:nk]' pivot='key' type='nominal' />
+            <column caption='Recency Segment' datatype='string' name='[recency_segment]' role='dimension' type='nominal' />
+            <column-instance column='[total_payments]' derivation='Sum' name='[sum:total_payments:qk]' pivot='key' type='quantitative' />
+            <column caption='Total Payments' datatype='real' default-format='c&quot;$&quot;#,##0;(&quot;$&quot;#,##0)' name='[total_payments]' role='measure' type='quantitative' />
+            <column-instance column='[Calculation_2650944327987202]' derivation='User' name='[usr:Calculation_2650944327987202:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Lapsed Customer (copy)_2650944666427397]' derivation='User' name='[usr:Lapsed Customer (copy)_2650944666427397:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <manual-sort column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:customer_tier:nk]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;High Value&quot;</bucket>
+              <bucket>&quot;Medium Value&quot;</bucket>
+              <bucket>&quot;Low Value&quot;</bucket>
+            </dictionary>
+          </manual-sort>
+          <manual-sort column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:engagement_segment:nk]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;Very Low Engagement&quot;</bucket>
+              <bucket>&quot;Low Engagement&quot;</bucket>
+              <bucket>&quot;Moderate Engagement&quot;</bucket>
+              <bucket>&quot;High Engagement&quot;</bucket>
+              <bucket>&quot;Very High Engagement&quot;</bucket>
+            </dictionary>
+          </manual-sort>
+          <filter class='categorical' column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:recency_segment:nk]'>
+            <groupfilter function='level-members' level='[none:recency_segment:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+          </filter>
+          <slices>
+            <column>[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:recency_segment:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='cell'>
+            <format attr='width' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:engagement_segment:nk]' value='88' />
+          </style-rule>
+          <style-rule element='mark'>
+            <encoding attr='color' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_payments:qk]' num-steps='8' palette='red_10_0' type='interpolated' />
+            <encoding attr='color' center='0.375' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Lapsed Customer (copy)_2650944666427397:qk]' palette='orange_blue_diverging_10_0' type='interpolated' />
+          </style-rule>
+          <style-rule element='worksheet'>
+            <format attr='display-field-labels' scope='cols' value='false' />
+            <format attr='display-field-labels' scope='rows' value='false' />
+          </style-rule>
+          <style-rule element='legend-title-text'>
+            <format attr='color' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Lapsed Customer (copy)_2650944666427397:qk]' value='Lapse Rate'>
+              <formatted-text>
+                <run>Lapse Rate</run>
+              </formatted-text>
+            </format>
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Square' />
+            <encodings>
+              <color column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Lapsed Customer (copy)_2650944666427397:qk]' />
+              <text column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[ctd:customer_id:qk]' />
+              <tooltip column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Calculation_2650944327987202:qk]' />
+              <tooltip column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_payments:qk]' />
+              <tooltip column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:films_per_month:qk]' />
+              <tooltip column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:days_since_last_rental:qk]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+              <style-rule element='pane'>
+                <format attr='minwidth' value='-1' />
+                <format attr='maxwidth' value='-1' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:customer_tier:nk]</rows>
+        <cols>[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:engagement_segment:nk]</cols>
+      </table>
+      <simple-id uuid='{E9433AFD-E16B-4102-9BD2-143FE77F1D60}' />
+    </worksheet>
+    <worksheet name='Country Investment'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='customer_segmentation' name='federated.13gp20y04uuppf1fg0sam1ff6w3v' />
+          </datasources>
+          <mapsources>
+            <mapsource name='Tableau' />
+          </mapsources>
+          <datasource-dependencies datasource='federated.13gp20y04uuppf1fg0sam1ff6w3v'>
+            <column caption='Customers' datatype='integer' name='[Calculation_2650944326668288]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='count([customer_id])' />
+            </column>
+            <column caption='Lapse Rate' datatype='real' default-format='p0.0%' name='[Lapsed Customer (copy)_2650944666427397]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='sum(case [recency_segment] when &quot;Lapsed&quot; then 1 else 0 end)/[Calculation_2650944326668288]' />
+            </column>
+            <column caption='Country' datatype='string' name='[country]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
+            <column aggregation='CountD' caption='Customer Id' datatype='integer' name='[customer_id]' role='measure' type='quantitative' />
+            <column-instance column='[country]' derivation='None' name='[none:country:nk]' pivot='key' type='nominal' />
+            <column caption='Recency Segment' datatype='string' name='[recency_segment]' role='dimension' type='nominal' />
+            <column-instance column='[total_payments]' derivation='Sum' name='[sum:total_payments:qk]' pivot='key' type='quantitative' />
+            <column caption='Total Payments' datatype='real' default-format='c&quot;$&quot;#,##0;(&quot;$&quot;#,##0)' name='[total_payments]' role='measure' type='quantitative' />
+            <column-instance column='[Calculation_2650944326668288]' derivation='User' name='[usr:Calculation_2650944326668288:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Lapsed Customer (copy)_2650944666427397]' derivation='User' name='[usr:Lapsed Customer (copy)_2650944666427397:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <filter class='quantitative' column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Calculation_2650944326668288:qk]' included-values='in-range'>
+            <min>5</min>
+          </filter>
+          <slices>
+            <column>[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Calculation_2650944326668288:qk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='mark'>
+            <encoding attr='color' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Lapsed Customer (copy)_2650944666427397:qk]' palette='orange_blue_diverging_10_0' type='interpolated' />
+          </style-rule>
+          <style-rule element='map'>
+            <format attr='washout' value='0.0' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <color column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Lapsed Customer (copy)_2650944666427397:qk]' />
+              <size column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_payments:qk]' />
+              <lod column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:country:nk]' />
+              <tooltip column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Calculation_2650944326668288:qk]' />
+            </encodings>
+          </pane>
+        </panes>
+        <rows>[federated.13gp20y04uuppf1fg0sam1ff6w3v].[Latitude (generated)]</rows>
+        <cols>[federated.13gp20y04uuppf1fg0sam1ff6w3v].[Longitude (generated)]</cols>
+      </table>
+      <simple-id uuid='{DFC0EC22-B5D9-44A6-9D3E-F56BC74B5F19}' />
+    </worksheet>
+    <worksheet name='Customer Tier Revenue'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='customer_segmentation' name='federated.13gp20y04uuppf1fg0sam1ff6w3v' />
+          </datasources>
+          <mapsources>
+            <mapsource name='Tableau' />
+          </mapsources>
+          <datasource-dependencies datasource='federated.13gp20y04uuppf1fg0sam1ff6w3v'>
+            <column caption='Average Revenue' datatype='real' default-format='C1033%' name='[Calculation_2650944327987202]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='sum([total_payments])/COUNTD([customer_id])' />
+            </column>
+            <column aggregation='CountD' caption='Customer Id' datatype='integer' name='[customer_id]' role='measure' type='quantitative' />
+            <column caption='Customer Tier' datatype='string' name='[customer_tier]' role='dimension' type='nominal' />
+            <column-instance column='[customer_tier]' derivation='None' name='[none:customer_tier:nk]' pivot='key' type='nominal' />
+            <column-instance column='[total_payments]' derivation='Sum' name='[sum:total_payments:qk]' pivot='key' type='quantitative' />
+            <column caption='Total Payments' datatype='real' default-format='c&quot;$&quot;#,##0;(&quot;$&quot;#,##0)' name='[total_payments]' role='measure' type='quantitative' />
+            <column-instance column='[Calculation_2650944327987202]' derivation='User' name='[usr:Calculation_2650944327987202:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <manual-sort column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:customer_tier:nk]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;High Value&quot;</bucket>
+              <bucket>&quot;Medium Value&quot;</bucket>
+              <bucket>&quot;Low Value&quot;</bucket>
+            </dictionary>
+          </manual-sort>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='cell'>
+            <format attr='text-format' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_payments:qk]' value='c&quot;$&quot;#,##0;(&quot;$&quot;#,##0)' />
+          </style-rule>
+          <style-rule element='label'>
+            <format attr='text-format' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_payments:qk]' value='c&quot;$&quot;#,##0;(&quot;$&quot;#,##0)' />
+            <format attr='text-format' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Calculation_2650944327987202:qk]' value='c&quot;$&quot;#,##0;(&quot;$&quot;#,##0)' />
+          </style-rule>
+          <style-rule element='worksheet'>
+            <format attr='display-field-labels' scope='rows' value='false' />
+          </style-rule>
+          <style-rule element='map'>
+            <format attr='washout' value='0.0' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane id='2' selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-cull' value='true' />
+                <format attr='mark-labels-show' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+          <pane id='3' selection-relaxation-option='selection-relaxation-allow' x-axis-name='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_payments:qk]'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+            <encodings>
+              <text column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_payments:qk]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-cull' value='true' />
+                <format attr='mark-labels-show' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+          <pane id='5' selection-relaxation-option='selection-relaxation-allow' x-axis-name='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Calculation_2650944327987202:qk]'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-cull' value='true' />
+                <format attr='mark-labels-show' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:customer_tier:nk]</rows>
+        <cols>([federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Calculation_2650944327987202:qk] + [federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_payments:qk])</cols>
+      </table>
+      <simple-id uuid='{C7C7A573-FF2A-4484-8D2B-EFAB4122D277}' />
+    </worksheet>
+    <worksheet name='Customer Value'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run>Customer Value</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='customer_segmentation' name='federated.13gp20y04uuppf1fg0sam1ff6w3v' />
+          </datasources>
+          <datasource-dependencies datasource='federated.13gp20y04uuppf1fg0sam1ff6w3v'>
+            <column caption='Highlight Border Fill' datatype='string' name='[Calculation_2650944400818179]' role='dimension' type='nominal'>
+              <calculation class='tableau' formula='IF [customer_tier] = &quot;High Value&quot; AND [is_champion] THEN &quot;Highlight&quot; END' />
+            </column>
+            <column-instance column='[categories_touched]' derivation='Avg' name='[avg:categories_touched:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[total_payments]' derivation='Avg' name='[avg:total_payments:qk]' pivot='key' type='quantitative' />
+            <column caption='Categories Touched' datatype='integer' name='[categories_touched]' role='measure' type='quantitative' />
+            <column caption='Customer Tier' datatype='string' name='[customer_tier]' role='dimension' type='nominal' />
+            <column caption='Films Per Month' datatype='real' default-format='n#,##0.00;-#,##0.00' name='[films_per_month]' role='dimension' type='quantitative' />
+            <column-instance column='[Is Champion Set]' derivation='InOut' name='[io:Is Champion Set:nk]' pivot='key' type='nominal' />
+            <column caption='Is Champion' datatype='boolean' name='[is_champion]' role='dimension' type='nominal' />
+            <column-instance column='[Calculation_2650944400818179]' derivation='None' name='[none:Calculation_2650944400818179:nk]' pivot='key' type='nominal' />
+            <column-instance column='[customer_tier]' derivation='None' name='[none:customer_tier:nk]' pivot='key' type='nominal' />
+            <column-instance column='[films_per_month]' derivation='None' name='[none:films_per_month:qk]' pivot='key' type='quantitative' />
+            <column caption='Total Payments' datatype='real' default-format='c&quot;$&quot;#,##0;(&quot;$&quot;#,##0)' name='[total_payments]' role='measure' type='quantitative' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:Calculation_2650944400818179:nk]' kind='hide'>
+            <groupfilter function='except' user:ui-domain='relevant' user:ui-enumeration='exclusive' user:ui-manual-selection='true' user:ui-manual-selection-all-when-empty='true' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[none:Calculation_2650944400818179:nk]' />
+              <groupfilter function='member' level='[none:Calculation_2650944400818179:nk]' member='%null%' />
+            </groupfilter>
+          </filter>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='axis'>
+            <encoding attr='space' class='0' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:films_per_month:qk]' field-type='quantitative' major-origin='0.0' major-spacing='0.0' max='5.0' min='1.0' range-type='fixed' scope='cols' type='space' />
+            <format attr='title' class='0' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:films_per_month:qk]' scope='cols' value='Films Per Month (engagement)' />
+            <encoding attr='space' class='1' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:total_payments:qk]' field-type='quantitative' fold='true' major-origin='0.0' major-show='false' major-spacing='100.0' minor-origin='0.0' minor-show='false' minor-spacing='10.0' scope='rows' synchronized='true' type='space' />
+            <encoding attr='space' class='0' domain-expand='false' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:total_payments:qk]' field-type='quantitative' scope='rows' type='space' />
+            <format attr='auto-subtitle' class='1' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:total_payments:qk]' scope='rows' value='true' />
+            <format attr='title' class='1' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:total_payments:qk]' scope='rows' value='' />
+          </style-rule>
+          <style-rule element='label'>
+            <format attr='text-format' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:films_per_month:qk]' value='n#,##0.0;-#,##0.0' />
+          </style-rule>
+          <style-rule element='legend-title'>
+            <format attr='text-align' value='center' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane id='4' selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Shape' />
+            <mark-sizing mark-sizing-setting='marks-scaling-off' />
+            <encodings>
+              <size column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:categories_touched:qk]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='shape' value=':filled/circle' />
+                <format attr='size' value='1.2853591442108154' />
+                <format attr='mark-transparency' value='178' />
+                <format attr='has-stroke' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+          <pane id='5' selection-relaxation-option='selection-relaxation-allow' y-axis-name='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:total_payments:qk]'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Shape' />
+            <mark-sizing mark-sizing-setting='marks-scaling-off' />
+            <encodings>
+              <color column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:customer_tier:nk]' />
+              <size column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:categories_touched:qk]' />
+              <color column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[io:Is Champion Set:nk]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='shape' value=':filled/circle' />
+                <format attr='size' value='1' />
+                <format attr='has-stroke' value='true' />
+                <format attr='mark-transparency' value='203' />
+              </style-rule>
+            </style>
+          </pane>
+          <pane id='6' selection-relaxation-option='selection-relaxation-allow' y-axis-name='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:total_payments:qk]' y-index='1'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Shape' />
+            <mark-sizing mark-sizing-setting='marks-scaling-off' />
+            <encodings>
+              <size column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:categories_touched:qk]' />
+              <shape column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:Calculation_2650944400818179:nk]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='shape' value='circle' />
+                <format attr='size' value='1' />
+                <format attr='has-stroke' value='true' />
+                <format attr='stroke-color' value='#aa0000' />
+                <format attr='mark-transparency' value='255' />
+                <format attr='mark-color' value='#ff0000' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>([federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:total_payments:qk] + [federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:total_payments:qk])</rows>
+        <cols>[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:films_per_month:qk]</cols>
+      </table>
+      <simple-id uuid='{2326D0C4-ECC2-4007-9444-9818D97AFAFD}' />
+    </worksheet>
+    <worksheet name='Segment Opportunity'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='customer_segmentation' name='federated.13gp20y04uuppf1fg0sam1ff6w3v' />
+          </datasources>
+          <datasource-dependencies datasource='federated.13gp20y04uuppf1fg0sam1ff6w3v'>
+            <column caption='Customers' datatype='integer' name='[Calculation_2650944326668288]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='count([customer_id])' />
+            </column>
+            <column-instance column='[total_payments]' derivation='Avg' name='[avg:total_payments:qk]' pivot='key' type='quantitative' />
+            <column aggregation='CountD' caption='Customer Id' datatype='integer' name='[customer_id]' role='measure' type='quantitative' />
+            <column-instance column='[primary_segment]' derivation='None' name='[none:primary_segment:nk]' pivot='key' type='nominal' />
+            <column caption='Primary Segment' datatype='string' name='[primary_segment]' role='dimension' type='nominal' />
+            <column-instance column='[total_payments]' derivation='Sum' name='[sum:total_payments:qk]' pivot='key' type='quantitative' />
+            <column caption='Total Payments' datatype='real' default-format='c&quot;$&quot;#,##0;(&quot;$&quot;#,##0)' name='[total_payments]' role='measure' type='quantitative' />
+            <column-instance column='[Calculation_2650944326668288]' derivation='User' name='[usr:Calculation_2650944326668288:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='axis'>
+            <encoding attr='space' class='0' domain-expand='false' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:total_payments:qk]' field-type='quantitative' scope='rows' type='space' />
+            <encoding attr='space' class='0' domain-expand='false' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Calculation_2650944326668288:qk]' field-type='quantitative' scope='cols' type='space' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <mark-sizing mark-sizing-setting='marks-scaling-off' />
+            <encodings>
+              <color column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:primary_segment:nk]' />
+              <size column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_payments:qk]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='size' value='2' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:total_payments:qk]</rows>
+        <cols>[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Calculation_2650944326668288:qk]</cols>
+      </table>
+      <simple-id uuid='{16BEBE01-2E55-4F51-97B0-7469CB754D00}' />
+    </worksheet>
+    <worksheet name='Sheet 2'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='customer_segmentation' name='federated.13gp20y04uuppf1fg0sam1ff6w3v' />
+          </datasources>
+          <datasource-dependencies datasource='federated.13gp20y04uuppf1fg0sam1ff6w3v'>
+            <column caption='Average Revenue' datatype='real' default-format='C1033%' name='[Calculation_2650944327987202]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='sum([total_payments])/COUNTD([customer_id])' />
+            </column>
+            <column aggregation='CountD' caption='Customer Id' datatype='integer' name='[customer_id]' role='measure' type='quantitative' />
+            <column caption='Customer Tier' datatype='string' name='[customer_tier]' role='dimension' type='nominal' />
+            <column-instance column='[customer_tier]' derivation='None' name='[none:customer_tier:nk]' pivot='key' type='nominal' />
+            <column-instance column='[total_payments]' derivation='Sum' name='[sum:total_payments:qk]' pivot='key' type='quantitative' />
+            <column caption='Total Payments' datatype='real' default-format='c&quot;$&quot;#,##0;(&quot;$&quot;#,##0)' name='[total_payments]' role='measure' type='quantitative' />
+            <column-instance column='[Calculation_2650944327987202]' derivation='User' name='[usr:Calculation_2650944327987202:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <manual-sort column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:customer_tier:nk]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;High Value&quot;</bucket>
+              <bucket>&quot;Medium Value&quot;</bucket>
+              <bucket>&quot;Low Value&quot;</bucket>
+            </dictionary>
+          </manual-sort>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='axis'>
+            <format attr='title' class='0' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_payments:qk]' scope='cols' value='Total Revenue' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane id='4' selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+          <pane id='5' selection-relaxation-option='selection-relaxation-allow' x-axis-name='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_payments:qk]'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+          <pane id='6' selection-relaxation-option='selection-relaxation-allow' x-axis-name='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Calculation_2650944327987202:qk]'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:customer_tier:nk]</rows>
+        <cols>([federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_payments:qk] + [federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Calculation_2650944327987202:qk])</cols>
+      </table>
+      <simple-id uuid='{0F4B4013-3CE3-45BD-A008-FDCA8A677AE0}' />
+    </worksheet>
+    <worksheet name='Sheet 3'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='customer_segmentation' name='federated.13gp20y04uuppf1fg0sam1ff6w3v' />
+          </datasources>
+          <datasource-dependencies datasource='federated.13gp20y04uuppf1fg0sam1ff6w3v'>
+            <column caption='Customers' datatype='integer' name='[Calculation_2650944326668288]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='count([customer_id])' />
+            </column>
+            <column caption='Average Revenue' datatype='real' default-format='C1033%' name='[Calculation_2650944327987202]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='sum([total_payments])/COUNTD([customer_id])' />
+            </column>
+            <column-instance column='[avg_payment_amount]' derivation='Avg' name='[avg:avg_payment_amount:qk]' pivot='key' type='quantitative' />
+            <column caption='Avg Payment Amount' datatype='real' name='[avg_payment_amount]' role='measure' type='quantitative' />
+            <column-instance column='[customer_id]' derivation='CountD' name='[ctd:customer_id:qk]' pivot='key' type='quantitative' />
+            <column aggregation='CountD' caption='Customer Id' datatype='integer' name='[customer_id]' role='measure' type='quantitative' />
+            <column caption='Customer Tier' datatype='string' name='[customer_tier]' role='dimension' type='nominal' />
+            <column-instance column='[customer_tier]' derivation='None' name='[none:customer_tier:nk]' pivot='key' type='nominal' />
+            <column-instance column='[recency_segment]' derivation='None' name='[none:recency_segment:nk]' pivot='key' type='nominal' />
+            <column caption='Recency Segment' datatype='string' name='[recency_segment]' role='dimension' type='nominal' />
+            <column-instance column='[total_payments]' derivation='Sum' name='[sum:total_payments:qk]' pivot='key' type='quantitative' />
+            <column caption='Total Payments' datatype='real' default-format='c&quot;$&quot;#,##0;(&quot;$&quot;#,##0)' name='[total_payments]' role='measure' type='quantitative' />
+            <column-instance column='[Calculation_2650944326668288]' derivation='User' name='[usr:Calculation_2650944326668288:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_2650944327987202]' derivation='User' name='[usr:Calculation_2650944327987202:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[:Measure Names]'>
+            <groupfilter function='union' user:op='manual'>
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.13gp20y04uuppf1fg0sam1ff6w3v].[ctd:customer_id:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:avg_payment_amount:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_payments:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Calculation_2650944327987202:qk]&quot;' />
+            </groupfilter>
+          </filter>
+          <manual-sort column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[:Measure Names]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;[federated.13gp20y04uuppf1fg0sam1ff6w3v].[ctd:customer_id:qk]&quot;</bucket>
+              <bucket>&quot;[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:avg_payment_amount:qk]&quot;</bucket>
+              <bucket>&quot;[federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_payments:qk]&quot;</bucket>
+              <bucket>&quot;[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Calculation_2650944326668288:qk]&quot;</bucket>
+              <bucket>&quot;[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Calculation_2650944327987202:qk]&quot;</bucket>
+            </dictionary>
+          </manual-sort>
+          <slices>
+            <column>[federated.13gp20y04uuppf1fg0sam1ff6w3v].[:Measure Names]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='cell'>
+            <format attr='width' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[:Measure Names]' value='97' />
+            <format attr='text-format' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:avg_payment_amount:qk]' value='C1033%' />
+            <format attr='text-format' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_payments:qk]' value='c&quot;$&quot;#,##0;(&quot;$&quot;#,##0)' />
+            <format attr='text-format' field='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Calculation_2650944327987202:qk]' value='c&quot;$&quot;#,##0.00;(&quot;$&quot;#,##0.00)' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <text column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[Multiple Values]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+              </style-rule>
+              <style-rule element='pane'>
+                <format attr='minwidth' value='-1' />
+                <format attr='maxwidth' value='-1' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>([federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:recency_segment:nk] / [federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:customer_tier:nk])</rows>
+        <cols>[federated.13gp20y04uuppf1fg0sam1ff6w3v].[:Measure Names]</cols>
+      </table>
+      <simple-id uuid='{736D24A1-FE90-43C5-A4C9-0ABA17C1CA1C}' />
+    </worksheet>
+    <worksheet name='Sheet 6'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='customer_segmentation' name='federated.13gp20y04uuppf1fg0sam1ff6w3v' />
+          </datasources>
+          <datasource-dependencies datasource='federated.13gp20y04uuppf1fg0sam1ff6w3v'>
+            <column caption='Engagement Segment' datatype='string' name='[engagement_segment]' role='dimension' type='nominal' />
+            <column-instance column='[engagement_segment]' derivation='None' name='[none:engagement_segment:nk]' pivot='key' type='nominal' />
+            <column-instance column='[total_payments]' derivation='Sum' name='[sum:total_payments:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[total_rentals]' derivation='Sum' name='[sum:total_rentals:qk]' pivot='key' type='quantitative' />
+            <column caption='Total Payments' datatype='real' default-format='c&quot;$&quot;#,##0;(&quot;$&quot;#,##0)' name='[total_payments]' role='measure' type='quantitative' />
+            <column caption='Total Rentals' datatype='integer' name='[total_rentals]' role='measure' type='quantitative' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane id='1' selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='false' />
+              </style-rule>
+            </style>
+          </pane>
+          <pane id='2' selection-relaxation-option='selection-relaxation-allow' y-axis-name='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_rentals:qk]'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='false' />
+              </style-rule>
+            </style>
+          </pane>
+          <pane id='3' selection-relaxation-option='selection-relaxation-allow' y-axis-name='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_payments:qk]'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='false' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>([federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_rentals:qk] + [federated.13gp20y04uuppf1fg0sam1ff6w3v].[sum:total_payments:qk])</rows>
+        <cols>[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:engagement_segment:nk]</cols>
+      </table>
+      <simple-id uuid='{2CD15128-D3A4-47B2-83B2-650428D381D2}' />
+    </worksheet>
+  </worksheets>
+  <dashboards>
+    <dashboard enable-sort-zone-taborder='true' name='Dashboard 1'>
+      <style />
+      <size maxheight='800' maxwidth='1200' minheight='800' minwidth='1200' sizing-mode='fixed' />
+      <zones>
+        <zone h='100000' id='4' type-v2='layout-basic' w='100000' x='0' y='0'>
+          <zone h='98000' id='18' param='horz' type-v2='layout-flow' w='98666' x='667' y='1000'>
+            <zone h='98000' id='16' type-v2='layout-basic' w='98666' x='667' y='1000'>
+              <zone h='41500' id='8' param='horz' type-v2='layout-flow' w='98666' x='667' y='57500'>
+                <zone h='41500' id='6' type-v2='layout-basic' w='98666' x='667' y='57500'>
+                  <zone h='41500' id='3' name='Customer Tier Revenue' show-title='false' w='52416' x='667' y='57500'>
+                    <zone-style>
+                      <format attr='border-color' value='#000000' />
+                      <format attr='border-style' value='none' />
+                      <format attr='border-width' value='0' />
+                      <format attr='margin' value='4' />
+                    </zone-style>
+                  </zone>
+                  <zone h='41500' id='12' name='Churn Risk' show-title='false' w='46250' x='53083' y='57500'>
+                    <zone-style>
+                      <format attr='border-color' value='#000000' />
+                      <format attr='border-style' value='none' />
+                      <format attr='border-width' value='0' />
+                      <format attr='margin' value='4' />
+                    </zone-style>
+                  </zone>
+                </zone>
+              </zone>
+              <zone h='56500' id='5' name='Customer Value' w='98666' x='667' y='1000'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+            </zone>
+          </zone>
+          <zone-style>
+            <format attr='border-color' value='#000000' />
+            <format attr='border-style' value='none' />
+            <format attr='border-width' value='0' />
+            <format attr='margin' value='8' />
+          </zone-style>
+        </zone>
+      </zones>
+      <devicelayouts>
+        <devicelayout auto-generated='true' name='Phone'>
+          <size maxheight='900' minheight='900' sizing-mode='vscroll' />
+          <zones>
+            <zone h='100000' id='14' type-v2='layout-basic' w='100000' x='0' y='0'>
+              <zone h='98000' id='13' param='vert' type-v2='layout-flow' w='98666' x='667' y='1000'>
+                <zone fixed-size='280' h='49000' id='5' is-fixed='true' name='Customer Value' w='98666' x='667' y='1000'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='280' h='49000' id='3' is-fixed='true' name='Customer Tier Revenue' w='49333' x='667' y='50000'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='280' h='49000' id='12' is-fixed='true' name='Churn Risk' w='49333' x='50000' y='50000'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+              </zone>
+              <zone-style>
+                <format attr='border-color' value='#000000' />
+                <format attr='border-style' value='none' />
+                <format attr='border-width' value='0' />
+                <format attr='margin' value='8' />
+              </zone-style>
+            </zone>
+          </zones>
+        </devicelayout>
+      </devicelayouts>
+      <simple-id uuid='{999C2117-B48B-44CA-B7C9-08CB85D885BF}' />
+    </dashboard>
+    <dashboard enable-sort-zone-taborder='true' name='My 2nd Dashboard'>
+      <style>
+        <style-rule element='dash-title'>
+          <format attr='background-color' value='#00000000' />
+          <format attr='border-style' value='dashed' />
+        </style-rule>
+      </style>
+      <size maxheight='800' maxwidth='1000' minheight='800' minwidth='1000' />
+      <zones>
+        <zone h='100000' id='4' type-v2='layout-basic' w='100000' x='0' y='0'>
+          <zone h='98000' id='15' param='vert' type-v2='layout-flow' w='98400' x='800' y='1000'>
+            <zone h='5250' id='16' type-v2='title' w='98400' x='800' y='1000'>
+              <zone-style>
+                <format attr='border-color' value='#000000' />
+                <format attr='border-style' value='none' />
+                <format attr='border-width' value='0' />
+                <format attr='margin' value='4' />
+              </zone-style>
+            </zone>
+            <zone h='92750' id='13' type-v2='layout-basic' w='98400' x='800' y='6250'>
+              <zone h='52408' id='7' param='horz' type-v2='layout-flow' w='98400' x='800' y='6250'>
+                <zone h='52408' id='5' type-v2='layout-basic' w='98400' x='800' y='6250'>
+                  <zone h='52408' id='3' name='Country Investment' w='82400' x='800' y='6250'>
+                    <zone-style>
+                      <format attr='border-color' value='#000000' />
+                      <format attr='border-style' value='none' />
+                      <format attr='border-width' value='0' />
+                      <format attr='margin' value='4' />
+                    </zone-style>
+                  </zone>
+                  <zone h='52408' id='9' name='Country Investment' pane-specification-id='0' param='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Lapsed Customer (copy)_2650944666427397:qk]' type-v2='color' w='16000' x='83200' y='6250'>
+                    <zone-style>
+                      <format attr='border-color' value='#000000' />
+                      <format attr='border-style' value='none' />
+                      <format attr='border-width' value='0' />
+                      <format attr='margin' value='4' />
+                    </zone-style>
+                  </zone>
+                </zone>
+              </zone>
+              <zone h='40342' id='10' name='Category Engagement' w='85100' x='800' y='58658'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+              <zone h='40342' id='11' name='Category Engagement' pane-specification-id='0' param='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:category_engagement_tier:nk]' type-v2='color' w='13300' x='85900' y='58658'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+            </zone>
+          </zone>
+          <zone-style>
+            <format attr='border-color' value='#000000' />
+            <format attr='border-style' value='none' />
+            <format attr='border-width' value='0' />
+            <format attr='margin' value='8' />
+          </zone-style>
+        </zone>
+      </zones>
+      <devicelayouts>
+        <devicelayout auto-generated='true' name='Phone'>
+          <size maxheight='700' minheight='700' sizing-mode='vscroll' />
+          <zones>
+            <zone h='100000' id='2' type-v2='layout-basic' w='100000' x='0' y='0'>
+              <zone h='84000' id='1' param='vert' type-v2='layout-flow' w='84000' x='8000' y='8000' />
+              <zone-style>
+                <format attr='border-color' value='#000000' />
+                <format attr='border-style' value='none' />
+                <format attr='border-width' value='0' />
+                <format attr='margin' value='8' />
+              </zone-style>
+            </zone>
+          </zones>
+        </devicelayout>
+      </devicelayouts>
+      <simple-id uuid='{5A0BD89E-A26D-4C92-843C-18ED6DE742C4}' />
+    </dashboard>
+    <dashboard name='Story 1' type='storyboard'>
+      <style />
+      <size maxheight='964' maxwidth='1016' minheight='964' minwidth='1016' />
+      <zones>
+        <zone h='100000' id='2' type-v2='layout-basic' w='100000' x='0' y='0'>
+          <zone h='98340' id='1' param='vert' removable='false' type-v2='layout-flow' w='98426' x='787' y='830'>
+            <zone h='3423' id='3' type-v2='title' w='98426' x='787' y='830' />
+            <zone h='10477' id='4' is-fixed='true' paired-zone-id='5' removable='false' type-v2='flipboard-nav' w='98426' x='787' y='4253' />
+            <zone h='84440' id='5' paired-zone-id='4' removable='false' type-v2='flipboard' w='98426' x='787' y='14730'>
+              <flipboard active-id='1' nav-type='caption' show-nav-arrows='true'>
+                <story-points>
+                  <story-point captured-sheet='' id='1' />
+                </story-points>
+              </flipboard>
+            </zone>
+          </zone>
+          <zone-style>
+            <format attr='border-color' value='#000000' />
+            <format attr='border-style' value='none' />
+            <format attr='border-width' value='0' />
+            <format attr='margin' value='8' />
+          </zone-style>
+        </zone>
+      </zones>
+      <simple-id uuid='{31331BE2-A63B-478A-A636-FC1D0B37872B}' />
+    </dashboard>
+  </dashboards>
+  <windows source-height='30'>
+    <window class='worksheet' name='Customer Tier Revenue'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{7256D650-6D97-412A-AD0C-2CBE0E3A31C6}' />
+    </window>
+    <window class='worksheet' name='Customer Value'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card pane-specification-id='5' param='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[avg:categories_touched:qk]' type='size' />
+            <card pane-specification-id='6' param='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:Calculation_2650944400818179:nk]' type='shape' />
+            <card pane-specification-id='5' param='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:customer_tier:nk]&#10;[federated.13gp20y04uuppf1fg0sam1ff6w3v].[io:Is Champion Set:nk]' type='color' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{65457B52-AD55-421F-9C85-59DF5539C90E}' />
+    </window>
+    <window class='worksheet' name='Churn Risk'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+          <strip size='160'>
+            <card pane-specification-id='0' param='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Lapsed Customer (copy)_2650944666427397:qk]' type='color' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card param='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:recency_segment:nk]' type='filter' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{D9B3D2F9-4607-4B9C-B766-267A6D0F3D5F}' />
+    </window>
+    <window class='worksheet' name='Country Investment'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card pane-specification-id='0' param='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Lapsed Customer (copy)_2650944666427397:qk]' type='color' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{C230C8E1-DF83-489B-A97F-4303DD164430}' />
+    </window>
+    <window class='worksheet' name='Segment Opportunity'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card pane-specification-id='0' param='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:primary_segment:nk]' type='color' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{DCB55CE2-9977-4DA3-A2F4-8CCD0ED00768}' />
+    </window>
+    <window class='worksheet' name='Category Engagement'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card param='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:customer_tier:nk]' type='filter' />
+            <card pane-specification-id='0' param='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:category_engagement_tier:nk]' type='color' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{BE5F6AF6-694B-4168-9B60-253FB5FAD5C4}' />
+    </window>
+    <window class='dashboard' maximized='true' name='Dashboard 1'>
+      <viewpoints>
+        <viewpoint name='Churn Risk'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Customer Tier Revenue'>
+          <zoom type='fit-height' />
+        </viewpoint>
+        <viewpoint name='Customer Value'>
+          <zoom type='entire-view' />
+        </viewpoint>
+      </viewpoints>
+      <active id='-1' />
+      <simple-id uuid='{38A283F6-BBFF-44C3-B2AF-CE5ABCE7E44F}' />
+    </window>
+    <window class='dashboard' name='My 2nd Dashboard'>
+      <viewpoints>
+        <viewpoint name='Category Engagement'>
+          <zoom type='fit-height' />
+        </viewpoint>
+        <viewpoint name='Country Investment'>
+          <zoom type='entire-view' />
+        </viewpoint>
+      </viewpoints>
+      <active id='-1' />
+      <simple-id uuid='{A44347E3-8E2D-40AB-AFE0-C1974C91EA42}' />
+    </window>
+    <window class='worksheet' name='Sheet 2'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{624523DA-FFEE-43A5-9BF5-A7F9722B12A4}' />
+    </window>
+    <window class='worksheet' name='Sheet 3'>
+      <cards>
+        <edge name='left'>
+          <strip size='260'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+            <card type='measures' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{70CCAEE5-9FAD-4D94-9D8F-DEF945EB724B}' />
+    </window>
+    <window class='worksheet' name='Sheet 6'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{D6695A3C-6E1F-4623-BBB2-5C8ED3A9F8AB}' />
+    </window>
+    <window class='dashboard' name='Story 1'>
+      <viewpoints />
+      <active id='-1' />
+      <simple-id uuid='{CB7B9160-1870-4C3A-959F-F845A9A8B96D}' />
+    </window>
+  </windows>
+  <datagraph>
+    <graph>
+      <properties>
+        <default-execution-subgraph-guid value='99d44ff5-9439-4fc7-8c13-9a6079988072' />
+      </properties>
+      <node-execution-subgraphs>
+        <pair execution-subgraph-guid='99d44ff5-9439-4fc7-8c13-9a6079988072' node-guid='61ce4aa3-4d6f-4900-9a9d-e395d1047fb8' />
+        <pair execution-subgraph-guid='99d44ff5-9439-4fc7-8c13-9a6079988072' node-guid='10fb87b5-30d0-40e7-80e1-197c4195b20f' />
+      </node-execution-subgraphs>
+      <nodes>
+        <single-value-field-node fieldname='[Parameters].[ColorCenter]' fieldname-input-guid='1ba47ca2-179d-4fc4-bf45-1f173ae84768' node-guid='61ce4aa3-4d6f-4900-9a9d-e395d1047fb8' value-output-guid='47db3944-f1b4-4f8a-a635-ab2e8b0296c0' />
+        <_.fcp.DynamicColorRange.true...quantitative-color-legend-node fieldname='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[usr:Lapsed Customer (copy)_2650944666427397:qk]' node-guid='10fb87b5-30d0-40e7-80e1-197c4195b20f' range-input-guid='7dbc4052-076a-4586-83aa-53c28edfae62' range-point='center' sheet-identifier='{E9433AFD-E16B-4102-9BD2-143FE77F1D60}' />
+      </nodes>
+      <edges>
+        <edge from='47db3944-f1b4-4f8a-a635-ab2e8b0296c0' to='7dbc4052-076a-4586-83aa-53c28edfae62' />
+      </edges>
+      <pin-values />
+    </graph>
+  </datagraph>
+  <external>
+    <shapes>
+      <shape name='KPI/01.png'>
+        iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAACXBIWXMAAA7EAAAOxAGVKw4b
+        AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAh1pVFh0WE1MOmNvbS5h
+        ZG9iZS54bXAAAQBVVEYtOABYTUw6Y29tLmFkb2JlLnhtcAAokX1T0W6bMBT9Fct92aQFY8CG
+        oLIKbND6kK1KI3WvBNwGJWBkOwvNr+1hn7RfmMlCVk1VbD/42ufcc6997+3d0JfVVhiwFi9N
+        l8DfP39B0NQJfCILd9EzsWm+HJV4PH5dVcdtNa/h3WdwO8RD27fClGBod52OhwSWtVyL2O7H
+        YwTBCWK2CUzHC/B98QCYVAIQx59VLsaAUgcHhFL8CXgu9pBrF53hICY09kJwHtCqqfo5XvLi
+        rGWtBG6M6WOEDoeDc/AdqV4Qns/now/Pm1nETL92phxmnb6ZPHChK9X0ppEdGO1yLfcmgXBK
+        oe0Xi4vjTjunhJxKtmgoe4QdF7UtmtDaLMXzdbRevfYCLYWWe1UJC795I3WdOgJtNPE31dhP
+        KXdcVvtWdOaeJ9DeOHVTx0FKOeaEpnZyjnGUZZR5uCAkz33ippOP97hF5qeMUN/SCca5H0Vh
+        lBd5nnHGipBduPedNmVXiYnb/ON6V7kxU6I0Uq2k3E0V8LCRRuqN7AF7pODDU9PV8qA/jt9z
+        jlSo5oeoCyVbcHrfuHlHP2Mpi1KS04CT3Mc49SI3wn7AgnAeuNTq/+XWb/Le78fAA1aQgLmY
+        hxHPMc5CgvMi5VGKvZzhACIbCfqvUqYjW37j9lL31rh0juhsuyjbF38A6YkGSkr/HRQAAAIU
+        SURBVFiF7dhNqA1RHADw3/UoIilKilBI+U6SjWwoio1EFha+yuplQWIlFhYWYmWrbJWs3oIs
+        ZSdZWPgo5dVb+Oh5Pc+77ljMvXW7ZuacuR/mLpw6u/P/n9/M/PufmaklSWKYx5yqAaHxH9jz
+        SJJEhXW4DLewpuXonFUDHyPBOHYOG/B8E9eakzg0LMAN+NEBTDCLs1UD5+FlBq59XqsSeDOA
+        S/C0KuBe1AO4KWysArgEHwO4BBeqqsGHEbgnqFUBPBmBG8fyKtrManwN4Bo4WEWjHsHzAC7B
+        vbJH3Qhu4DJqPQCvRuDeYEFZ4O22BHe7xO3CrwBuBtvzcHnAExmJrpfELcTbAC7BJeTisoDb
+        pI0yK9nFEsD7Ebhnmu+jscDFeF+QsIHTEbgjEbgvWNUKiAXui0hcx9EC3ApMROQ53h4UC1wk
+        rm5mcCADV8NYRPyDzsAyNbgS7yI2mcKejn1GI+I+SEupayCsxaeIzb5hazNmM6YD6+sZF9UV
+        ENZLz8YQcgKb8CpibW6r6gbYuisxBT8bseYF5vYbCDukjzIEKJqTWJe3Qa9A2I3vPQDPFCXv
+        B5D0VT3vhCmaj0KJ+wWE/fhZAvcZS/8lEA5LG3UI15DdzAcOhGPCX2Z3yiTsNxBO4XcO7jXm
+        Vw2Ec9JH2Y6bxpayiQYF5O/zd7SbJIMEwpUmbkyX3y9FwFqPuIGPof8FPPTAP7paeKi9UDuN
+        AAAAAElFTkSuQmCC
+      </shape>
+      <shape name='KPI/02.png'>
+        iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAACXBIWXMAAA7EAAAOxAGVKw4b
+        AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAhxpVFh0WE1MOmNvbS5h
+        ZG9iZS54bXAAAQBVVEYtOABYTUw6Y29tLmFkb2JlLnhtcAAokX1T0W6bMBT9Fct92aQFY8CG
+        oLIKbKP1IVuVRupeCbgNSsDIOAvNr+1hn7RfmMlCVk1VbD/42ufcc6997+3d0BXlVhqwli91
+        m8DfP39BUFcJfCILd9Exuam/HLV8PH5dlcdtOa/g3WdwO8RD0zXSFGBodm0fDwksKrWWsd2P
+        xwiCE8RsE5iOF+D74gEwpSUgjj8rXYwBpQ4OCKX4E/Bc7CHXLjrDQUxo7IXgPKBV09VzvOT5
+        WctaCdwY08UIHQ4H5+A7Sr8gPJ/PRx+eN7OIWf/ammKYtf3N5IHLvtR1Z2rVgtEu1mpvEgin
+        FJpusbg4bnvnlJBTqgYNRYew46KmQRO6N0v5fB3dr147iZayV3tdSgu/eSN1nToCbTTxN13b
+        Tyl2XJX7RrbmnifQ3jhVXcVBSjnmhKZ2co5xlGWUeTgnRAifuOnk4z1unhFMuZdbOsFY+FEU
+        RiIXIuOM5SG7cO/b3hRtKSdu/Y8rrnJjpmVhlF4ptZsq4GGjjOo3qgPskYIPT3VbqUP/cfye
+        c6RS1z9klWvVgNP7xvU7+hlLWZQSQQNOhI9x6kVuhP2ABeE8cKnV/8ut3uS934+BBywnAXMx
+        DyMuMM5CgkWe8ijFnmA4gMhGgv6rlOnIlt+4vdS9NS6dI1vbLtr2xR/wLwZQllJg0QAAASdJ
+        REFUWIXtWEtKA1EQrHKhS71HPI5MziOeKHdJsvESxv/ESLkwy2mk6Xr4yKSgGagHRTH9eR9K
+        Qs+4+G8Df+H0DZJckdRErBwGWa1Bkk8ArieWdpJuSuLwpPgr4A8GbYvB94B/M2hbDH4G/GjQ
+        thiMjETGU3AYfA34blL8HfDdNMku4J8N2k3/YMSn0LIGXwzaFoP7JJ+Cw+BHkk+h5U7SjcFo
+        L+4mxVEzRM2TwiwGdTSQuxnU5/NgFefzYBVRKqPUp1C+1bXG6V/cW2MeBkkOJNckx+N3cOgC
+        ACSVAsAdAE3EUNWWZHmbWQNYTCxtJN2WxOF5PBoBXE4s7SVdlcThqcHHJJ+Cw+B9wD8YtOtN
+        ciyRJYAtfo/5WwBLh66lSVpjHoO6JX4AZswqmojMTWIAAAAASUVORK5CYII=
+      </shape>
+      <shape name='KPI/03.png'>
+        iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAACXBIWXMAAA7EAAAOxAGVKw4b
+        AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAhxpVFh0WE1MOmNvbS5h
+        ZG9iZS54bXAAAQBVVEYtOABYTUw6Y29tLmFkb2JlLnhtcAAokX1TwY6bMBD9Fct7aaUGGMCG
+        oKUrsEHdQ9pVNtL2SsC7QQkYGadh82s99JP6CzVpSFfVKrYPHvu9eTP2zO3d0BXlVmi0Fi91
+        G+PfP39hVFcxfiILZ9Exsam/HJV4PH5dlcdtOa/w3Wd0O0RD0zVCF2hodm0fDTEuKrkWkdmP
+        xzZGJ4jexjgZL9D3xQNiUglELG9WOgCIUgt8Qil8Qq4Dru2YRWfgR4RGboDOAxs1VT1HS56f
+        tYwV443WXWTbh8PBOniWVC82zOfz0Yfrzgxi1r+2uhhmbX8zeeCiL1Xd6Vq2aLSLtdzrGOMp
+        haZbLC6O2946JWSVsrGHorPBcuymsSd0r5fi+Tq6X712wl6KXu5VKQz85o3UdeoINNFE31Rt
+        PqXYcVnuG9Hqex5jc2NVdRX5CeXACU3M5BwgTFPKXMgJyTKPOMnk4z1unhKg3AsMnQBkXhgG
+        YZZnWcoZywN24d63vS7aUkzc+h+XXuVGTIlCS7WScjdVwMNGatlvZIfYI0Ufnuq2kof+4/g9
+        50iFqn+IKleyQaf3jep39FOWsDAhGfU5yTyAxA2dEDyf+cHcd6jR/8ut3uS934+B+ywnPnOA
+        ByHPANKAQJYnPEzAzRj42DaR2P9VynRkym/cXureGJfOEa1pF2X64g/OuQY0x2QNAgAAAVlJ
+        REFUWIXN2D1uwzAMBeDnDlk6BD1A7pcxSzPmRC1yjiQ9U9glLlxFEv+eEBPgZksfYJEUPIkI
+        1hxvrwZosXogROQvizgAuAH4GLj9FsAFwH7p+GdqAA8A7gAEwM8g5BbA9bHHvYWsAZe4OdnI
+        JW7OKrIE1nBsZA3XRJbAS+NFFrKHm/OrB7QsEEVa1v4GsNHO4AhkCNerYiYyjOsB54WzZzKF
+        04BZZBpnAUaRZhyAJs4K9CJdOBbQg3ThmEAr0oVjAzPIKm4EMIJs4kYBPchzD6cBszfqyfDM
+        DsB7eIfEJ9aq1dLMnwysIvHgVCS7zURwXSSzUWu4MwKzmzXqrBPCPbsZlwXv+HIhM8AIzo2M
+        AjM4GrIFZOAoyBqQiUsjS+AIXApZAkfhXMge8DQQZ0UetTNYQ7JwGvLTWsVLJBvXQj7htD54
+        GogrkVWciGByXLNeEqv/R7164C96sSVWO4KjCgAAAABJRU5ErkJggg==
+      </shape>
+      <shape name='KPI/04.png'>
+        iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAACXBIWXMAAA7EAAAOxAGVKw4b
+        AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAhxpVFh0WE1MOmNvbS5h
+        ZG9iZS54bXAAAQBVVEYtOABYTUw6Y29tLmFkb2JlLnhtcAAokX1TwY6bMBD9Fct7aaUGGMCG
+        oKUrsEHdQ9pVNtL2SsC7QQkYGadh82s99JP6CzVpSFfVKrYPHvu9eTP2zO3d0BXlVmi0Fi91
+        G+PfP39hVFcxfiILZ9Exsam/HJV4PH5dlcdtOa/w3Wd0O0RD0zVCF2hodm0fDTEuKrkWkdmP
+        xzZGJ4jexjgZL9D3xQNiUglELG9WOgCIUgt8Qil8Qq4Dru2YRWfgR4RGboDOAxs1VT1HS56f
+        tYwV443WXWTbh8PBOniWVC82zOfz0Yfrzgxi1r+2uhhmbX8zeeCiL1Xd6Vq2aLSLtdzrGOMp
+        haZbLC6O2946JWSVsrGHorPBcuymsSd0r5fi+Tq6X712wl6KXu5VKQz85o3UdeoINNFE31Rt
+        PqXYcVnuG9Hqex5jc2NVdRX5CeXACU3M5BwgTFPKXMgJyTKPOMnk4z1ungYeJOlIJwCZF4ZB
+        mOVZlnLG8oBduPdtr4u2FBO3/sd1rnIjpkShpVpJuZsq4GEjtew3skPskaIPT3VbyUP/cfye
+        c6RC1T9ElSvZoNP7RvU7+ilLWJiQjPqcZB5A4oZOCJ7P/GDuO9To/+VWb/Le78fAfZYTnznA
+        g5BnAGlAIMsTHibgZgx8bJtI7P8qZToy5TduL3VvjEvniNa0izJ98QfaxQY+qMi/ygAAAbRJ
+        REFUWIXN2LFSwjAcx/FvPVZ1g1HAUR7BgjM+ATyKp7yTCiej+Aw4i5M6AiN4cWiqaY7UpoSk
+        v7v/kOs1/dyV8k8SCSGoco5CA/5L5YG1sjdGUVQH+kAP6ABN4EReXgELYA7MgCnwaZor92cm
+        hLAqIAYegQ0gCtZW3hPbGmxgbWBsgTLVWM7lDggMgKUDXFpLYOgECIwcwvQa7QUEbg6IS+u2
+        FFC+1kPj0hpYAYEWyV+FL+AKaNkAXXyttjUuBAQuA+DSiosAHwIC73OBQB27DuG6NkBdNemL
+        hT579GcHqUnDb3Rgz5/FmCt1oAM7/hzGXKgDHdj05zCmpQ504LFHiCkZgw6MPEIKRQeugyiy
+        yRh04JtHiCkLdaADX/05jJmrAx347M9hzCwz0lpdg/CtrmFsdUKIL5ItYqhMpeEvO1YzMVVe
+        bgVcsE5sVtRt/C/527abpqFH4LDstvPOA25UatupIKu7cdde99ohbI2row8FeY6br3si58Ip
+        UIF2SY7Sthaob3lPlx3Je14kH2odeYB5zd8B5hlwKi8vgXeSxv8CPAEfprnyDKWBvlL5M+rK
+        A38AJRJHiz0chcgAAAAASUVORK5CYII=
+      </shape>
+      <shape name='KPI/05.png'>
+        iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAACXBIWXMAAA7EAAAOxAGVKw4b
+        AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAh1pVFh0WE1MOmNvbS5h
+        ZG9iZS54bXAAAQBVVEYtOABYTUw6Y29tLmFkb2JlLnhtcAAokX1T3W6bMBR+Fcu92aQFY8Dm
+        R2UV2KD1gq1KI3W3BNwGJWBknIXm1XaxR9orzGQhq6Yqti987O873zn2Obd3Y19WW6HBWrw0
+        XQx///wFQVPH8IkUdtEzsWm+HJV4PH5dVcdtFdbw7jO4HaOx7VuhSzC2u26IxhiWtVyLyOyn
+        YwTBCaK3MUymC/C9eABMKgGI5S4qG2NAqYU9Qin+BBwbO8g2iy6wFxEaOT44D2jUVP0cLXl+
+        1jJWDDda9xFCh8PBOriWVC8Ih2E4+XCchUEshtdOl+OiG25mD1wMlWp63cgOTHa5lnsdQzin
+        0PZFcXHcDdYpIauSLRrLHmHLRm2LZvSgl+L5OnpYvfYCLcUg96oSBn7zRuo6dQKaaKJvqjGf
+        Uu64rPat6PQ9j6G5seqmjryEcswJTczkHOMgTSlzcE5IlrnETmYf73HzNPQDxkJDJxhnbhD4
+        QZZnWcoZy3124d53gy67Sszc5h83uMqNmBKllmol5W6ugIeN1HLYyB6wRwo+PDVdLQ/Dx+l7
+        zpEK1fwQda5kC07vGzXv6KcsYUFCMupxkrkYJ05gB9j1mOeHnk2N/l9u/Sbv/X4K3GM58ZiN
+        uR/wDOPUJzjLEx4k2MkY9iAykaD/KmU+MuU3bS91b4xL54jOtIsyffEHFJwGbpDfEecAAAGy
+        SURBVFiFzdi/SwJhHMfx9yMiCIKChUMtLjU51ebm6OZWU20FQUKQ/Tk11VZTbW6OTrbU4lJb
+        gYNgiOjT0D1y2Hnej+d57r7wAU/vzhcfzsN7hJSSNE8macCmST0w694QQsQ5Vx54dV7XgJ+g
+        B/peZlLKZWLOJSCdtMMc6DasRhcwB3y4gJ/Oe6kBnrlwKudpAWaBoQdwyMo1nhTwxAOncpo0
+        MAO8+QDfCXArMwk88sGpHCcFFMAgAHDg7Gsd2AqAU2klAeyHAPZtA5shcCpNm8BeBGDPFrAR
+        AafSsAHsxgB2TQPrMXAqdZPAZw3AF1PAAw04lUMTwEeNwCfdwBqw0AhcOOfUBrzXiFN50AXc
+        A+YGgHNgXwfw1gBO5S4usArMDAJnQNUPuOnfboeAzxURJwvc+O7h0+AOMMVceypTYDdKgx1C
+        PNvGmBxwvfbTNQ1WgAnm21OZAJUwDV7xt9Zia/LOd/4fjwbLwBh77amMgXKQBttAIWITcaaA
+        16LTSoNFYIT99lRGQNGvwQugFLuL6FNyDMsR7l+vEOIL2LKMWp1vKeW22hAeN+hUTerXqFMP
+        /AVLJss8zee8nAAAAABJRU5ErkJggg==
+      </shape>
+      <shape name='KPI/06.png'>
+        iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAACXBIWXMAAA7EAAAOxAGVKw4b
+        AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAiBpVFh0WE1MOmNvbS5h
+        ZG9iZS54bXAAAQBVVEYtOABYTUw6Y29tLmFkb2JlLnhtcAAokX1T3W6bMBR+Fcu92aQFY8Dm
+        R2UV2KD1gq1KI3W3BNwGJWBknIXm1XqxR9orzGQhqqYqti987O873zn2Obd3Y19WW6HBWrw0
+        XQz/vP2GoKlj+EQKu+iZ2DTfjko8Hr+vquO2Cmt49xXcjtHY9q3QJRjbXTdEYwzLWq5FZPbT
+        MYLgBNHbGCbTBfhZPAAmlQDEcheVjTGg1MIeoRR/AY6NHWSbRRfYiwiNHB+cBzRqqn6Oljw/
+        axkrhhut+wihw+FgHVxLqheEwzCcfDjOwiAWw2uny3HRDTezBy6GSjW9bmQHJrtcy72OIZxT
+        aPuiuDjuBuuUkFXJFo1lj7Blo7ZFM3rQS/F8HT2sXnuBlmKQe1UJA795J3WdOgFNNNEP1ZhP
+        KXdcVvtWdPqex9DcWHVTR15COeaEJmZyjnGQppQ5OCcky1xiJ7OPj7h5mtqcucTQCcaZGwR+
+        kOVZlnLGcp9duPfdoMuuEjO3OXFDP2DcvsqNmBKllmol5W6ugIeN1HLYyB6wRwo+PTVdLQ/D
+        5+l7zpEK1fwSda5kC07vGzUf6KcsYUFCMupxkrkYJ05gB9j1mOeHnk2N/j9u/S7v/X4K3GM5
+        8ZiNuR/wDOPUJzjLEx4k2MkY9iAykaD/KmU+MuU3bS91b4xL54jOtIsyffEXBVYGYV78fTkA
+        AAEUSURBVFiFzdi7DsMgDAVQU/WXk6GdO/WP24EuNMoDsMHX4CshkSHWkUlIRIgxkufcZgO4
+        uAfeEUVCCP/pg4gCEb1a7q8+ZjFG9djhYhrPVmCxNgi4xzUjTYEFXBPSDMjgxEgToBAnQsKB
+        jTgWCQV24qpIGFCJKyIhQBAui1QDwbgLUgVMhdC4A7IbaIzbkF3AQTgW6QFXRXrBFZGecFnk
+        +Y/6Q/PzPVxllnihed1bpS/JDOQFx20zI5FZnGSjHoEs4qSfOkvkSsQ0iQMaIldKUQMNkBsO
+        BgQiDzgoEIC84OBABTKLMwF2IIs4M2ADsoozBQqQC4czB1aQItwo4BkpxnFAyAFmyrswVyXs
+        OuAy7s+o3QN/HTxebpAd/IAAAAAASUVORK5CYII=
+      </shape>
+      <shape name='KPI/07.png'>
+        iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAACXBIWXMAAA7EAAAOxAGVKw4b
+        AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAhxpVFh0WE1MOmNvbS5h
+        ZG9iZS54bXAAAQBVVEYtOABYTUw6Y29tLmFkb2JlLnhtcAAokX1T0W6bMBT9Fct92aQFY8CG
+        WGUV2KD1IVuVRupeCbgNSsDIOAvNr+1hn7RfmMlCVk1VbD/42ufcc6997+3d0BXlVhqwli91
+        G8PfP39BUFcxfCILd9Fxuam/HLV8PH5dlcdtOa/g3WdwO7Ch6RppCjA0u7ZnQwyLSq0ls/vx
+        GEFwgphtDJPxAnxfPACutATE8WelizGg1MEBoRR/Ap6LPeTaRWc4YIQyLwTnAa2arp7ZUuRn
+        LWvFcGNMxxA6HA7OwXeUfkF4Pp+PPjxvZhGz/rU1xTBr+5vJg5B9qevO1KoFo12s1d7EEE4p
+        NN1icXHc9s4pIadUDRqKDmHHRU2DJnRvlvL5OrpfvXYSLWWv9rqUFn7zRuo6dQTaaNg3XdtP
+        KXZClftGtuZexNDeOFVdsSChAgtCEzuFwDhKU8o9nBOSZT5xk8nHe9w8TV3BfWHpBOPMj6Iw
+        yvIsSwXnecgv3Pu2N0Vbyolb/+Pyq1zGtSyM0iuldlMFPGyUUf1GdYA/UvDhqW4rdeg/jt9z
+        jlTq+oescq0acHpfVr+jn/KERwnJaCBI5mOceJEbYT/gQTgPXGr1/3KrN3nv92PgAc9JwF0s
+        wkhkGKchwVmeiCjBXsZxAJGNBP1XKdORLb9xe6l7a1w6R7a2XbTtiz8qagaALBkM7gAABGRJ
+        REFUWIXtmH9olHUcx1/f7805t7lNb7d5+3G3qZvldIViUEGBlUKQBBHcdkIhJkUliZJCkUFE
+        9YdCgiDZoMxri/4YYSBUYAQxDLNh0+Z+uPO2eZu7/XDuh1s+329/3Cbb7Xm2u93a+Yfvv47P
+        5/18nxfPj8/3fY/QWnM/SyYaYC49AIxXSZM/PBXeRJw/GzgAnKip9vnNDIm+glVybfdBoM5T
+        4d1sZkgk4B5Z2LtDlnQhN7avAn71VHifjzQlCrAUOCpcvWGIgj5sm9vSgR88Fd7dU42JAFwC
+        nJYP30gTGaP3iiJnENuTTUmysO+kp8L7XiIBD0t3aIss6pnREBmjsHwUYOtkbbEBnwIOyZIu
+        06a+nYK6kj8CvDlZW0zALOCU7dHrNpYYpgYdyAY4UFPta5ysLSbgcbnmpls4B0ybqiUXFbD/
+        CJyYWl8swEqR118pS4OmTX0zA9W8qgvYXVPtm5ZeFgPQDRyXEyNlhrTA+LNYA7tqqn3dke3/
+        G9AGfC3XBbPEimFTg7rqBDheU+07a9a3ArQBHwHvAiIOwIPSHXparr5pDtduR7U5rkycx1RJ
+        FvXPpDu0Hw0qkF0A7J0H3BbgQys4PZqMaigYB7w11b5RU5MFoEc4B/bLdUGQGhBvq4C9Hzgc
+        A1wacFpubF9Cyr/mgG0OgPeB+tkWirzFjwBV0hUCmwKhkSVdSFfvB8C+GACPyuKeUlnQZ9pU
+        rTmo69nngCNzLTQVMAOolRs6UsXKKQ908l1EeFs6AuyKAm6HyBncIx+6YdrUfemoJmc/8Aqg
+        YgHcJFYOFcvCmeNApI1he6JZAF8AL82ynhP4UrpClgYVsAO8AbTPBRcJeEH3pTep1hxTo8gc
+        wfZYqw34FthmZgG+kiVdDuG4bQ531YkOZn0DfBcNXCTgEPCManJeU20WkPYhbJv8yUAt8HhE
+        e690hbbJtTNmLQC6cwXqWo4feCtauEhAgA7gWdXo7FB+hzlk7i1s5YFU4CxQPlHeAHwqiixu
+        7XgSxiWXAVQCg/EAArQBW9U/eV0qnC5mQub3I8s6MoFfgDLAJ8s6U0TamKlfteQCfAzUxQJn
+        BQjQDDynLuf3qHa7+YGuXuT6TgdQL9d3llu9GKrNgbqefZ7wzhSzrHYSgAZgu2ooOCekzhT5
+        M2eadIeQrt4khPnnE31rGaoxbwjYCdydD+BcYeEvYLtxqXBQB7PMHRZwcC+AvgO0zAcOoksz
+        54EXjHr3iO7OjHph1bQK1bGyFqiaLxxEH7d+A140LhaN6Z7lc5p1dyaqNTcIvBYPHMSWB38G
+        XjYurB7XvenWLiUwLhZp4FXAIqVGr1gD6xlgp/HHGkMPpJoaJgLoMeCn+NDCmk+i/h7YZdSV
+        KD24bFpDBewov6MBOLQQcDD/yH8KeN34vVTr4aUA6OGlqMsFdwjvFncWiC+u/yQngX3a74DR
+        ZLQ/G8JX7u8FIZvQbIM6Gn2uAvZlKmD/hPAzd2wBmKZJPPiIHqfue8D/ACwQY+JcyR6NAAAA
+        AElFTkSuQmCC
+      </shape>
+      <shape name='KPI/08.png'>
+        iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAACXBIWXMAAA7EAAAOxAGVKw4b
+        AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAhxpVFh0WE1MOmNvbS5h
+        ZG9iZS54bXAAAQBVVEYtOABYTUw6Y29tLmFkb2JlLnhtcAAokX1T0W6bMBT9Fct92aQFY8CG
+        oLIKbND6kK1KI3WvBNwGJWBkOwvNr+1hn7RfmMlCVk1VbD/42ufcc6997+3d0JfVVhiwFi9N
+        l8DfP39B0NQJfCILd9EzsWm+HJV4PH5dVcdtNa/h3WdwO8RD27fClGBod52OhwSWtVyL2O7H
+        YwTBCWK2CUzHC/B98QCYVAIQx59VLsaAUgcHhFL8CXgu9pBrF53hICY09kJwHtCqqfo5XvLi
+        rGWtBG6M6WOEDoeDc/AdqV4Qns/now/Pm1nETL92phxmnb6ZPHChK9X0ppEdGO1yLfcmgXBK
+        oe0Xi4vjTjunhJxKtmgoe4QdF7UtmtDaLMXzdbRevfYCLYWWe1UJC795I3WdOgJtNPE31dhP
+        KXdcVvtWdOaeJ9DeOHVTx0FKOeaEpnZyjnGUZZR5uCAkz33ippOP97hFxv2IcmrpBOPcj6Iw
+        yos8zzhjRcgu3PtOm7KrxMRt/nHJVW7MlCiNVCspd1MFPGykkXoje8AeKfjw1HS1POiP4/ec
+        IxWq+SHqQskWnN43bt7Rz1jKopTkNOAk9zFOvciNsB+wIJwHLrX6f7n1m7z3+zHwgBUkYC7m
+        YcRzjLOQ4LxIeZRiL2c4gMhGgv6rlOnIlt+4vdS9NS6dIzrbLsr2xR8BmAZedgi/9AAAAdlJ
+        REFUWIXtmD0vBFEUht8VFvsDVDpZySYUOioFWtqZbKUQ4hcIUSnwBwS90FLbfssVRFilhs4u
+        M3PnzodibiT32kRxX3GLPd05k7x5cs49H7ulPM/hsg38N8Bv5jzgoK2A59cvASz3+HR1cX62
+        YqtvDQhg/mh3DKMjpe9AGOXY3HubJ2hTSizTTG805ScEbQpgIGIdUPmfBG0KYCSNXCUpAEAQ
+        tCmAIkn1DMokB4CIoE0B/IiE2yVOzWWUZQAcapL3IMq0QFj4HYI2J4OZzgc1dVKCNucNmmNG
+        vckuQZsCGJtdrPyYoE0BDKXUA8oPCdqkTSL1DMbFHHQGUKZmiRO3StyNeu/iD4L234yZ1LFB
+        3QmFMaiFW4NapsZIdm3VBbF0+1iI1Hn1baqLHboHjWKqA5ZyDzJ+NH3ePAqs7rya8YCgjVL/
+        nwVL6wPaGqNJ4Pn1dQBbAMYBvAA4uDg/O2FoWzeJ59fXahPl06W5CqaqZdy1YzSaAe6f4w0G
+        JKPE24uzFczUhjE0WMJMbRgLsxWgyKi1MQDHpyfLWmCqWgaKclsbA/Dl9km/Te/bMVC8RWtj
+        AO43mgFaDwJJArQeBK6bAQAcErQ5m8Tz6xv42cXH1sLorzp7cx7wCztR4jstIoJvAAAAAElF
+        TkSuQmCC
+      </shape>
+      <shape name='KPI/09.png'>
+        iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAACXBIWXMAAA7EAAAOxAGVKw4b
+        AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAh1pVFh0WE1MOmNvbS5h
+        ZG9iZS54bXAAAQBVVEYtOABYTUw6Y29tLmFkb2JlLnhtcAAokX1T0W6bMBT9Fct92aQFY8CG
+        oLIKbKP1IVuVRupeCbgNSsDIOAvNr+1hn7RfmMlCVk1VbD/42ufcc6997+3d0BXlVhqwli91
+        m8DfP39BUFcJfCILd9Exuam/HLV8PH5dlcdtOa/g3WdwO8RD0zXSFGBodm0fDwksKrWWsd2P
+        xwiCE8RsE5iOF+D74gEwpSUgjj8rXYwBpQ4OCKX4E/Bc7CHXLjrDQUxo7IXgPKBV09VzvOT5
+        WctaCdwY08UIHQ4H5+A7Sr8gPJ/PRx+eN7OIWf/ammKYtf3N5IHLvtR1Z2rVgtEu1mpvEgin
+        FJpusbg4bnvnlJBTqgYNRYew46KmQRO6N0v5fB3dr147iZayV3tdSgu/eSN1nToCbTTxN13b
+        Tyl2XJX7RrbmnifQ3jhVXcVBSjnmhKZ2co5xlGWUeTgnRAifuOnk4z1unuWRlwtq6QRj4UdR
+        GIlciIwzlofswr1ve1O0pZy49T8uucqNmZaFUXql1G6qgIeNMqrfqA6wRwo+PNVtpQ79x/F7
+        zpFKXf+QVa5VA07vG9fv6GcsZVFKBA04ET7GqRe5EfYDFoTzwKVW/y+3epP3fj8GHrCcBMzF
+        PIy4wDgLCRZ5yqMUe4LhACIbCfqvUqYjW37j9lL31rh0jmxtu2jbF38ALPoGgtAaSM0AAAJT
+        SURBVFiF7dixi9NgGMfxb2pOPGgOEyyeaA9cahfFoc53CILWVaSlm4ubNyp0LA6u/g2WdlMH
+        BxHuijfqdEfxHC0qSMOBvd5dOIc4pfRyedM3ed9gB58t8JB8eJO8zy8xfN9nniv3rwGzau6B
+        5vRBrd6YPmwBD4HbwI+Mrr8MbAKvup3286gG0Qq2gOat0bAEbACXM8L1KqNhGWjV6o2mLLAF
+        NB9//2JU3QEZIQPctfvugEc/dw0RMgyc4JaPDwHIAHkCB1D0DoTIMPBBZTSc4ILSiDyFC6ro
+        HXBjf88A7sQB1z4vFb6+u7By6swakEIcwOvCVbYt5yNQjQP+AlYzQMri7nU77RO3L+ol0Y1M
+        jRMBp5G7ikglXBwwQK4pIJVxs4AqSGkcIMTJANMgteFkgUmR2nAQCguSyB5QDgOq7oDr472S
+        j8GKt68FB8njVuxKFr2xVlwa4EykThykD6wT5LdzlrBpx3LYtpyttDhQS9QGYBgxDef/HANc
+        BOy0F0kLnGwlUc9cUEVvrJyC0gBj97lwqaagpMBY3I7lEPVMqiCT7IMyE2ILKFRGw8h9Eih9
+        WipskOBDTHYFZcfXXdQCRipg0tmqmoISAdMOfm3IOKBqKpFG1uoNIVIE1BWZlJFRQK15ThUZ
+        BurGKSPDwCxwiZFxwPdHOZPf5lnduJlId2GRw5wJ8CYOuN7P2y8/OFcmSI04IdJdWKRnX6Kf
+        t190O+2n081Ro269n7cBnpzxfd24MLIHlI9yZoB7Fm4UzeIAeTMDXBTybRQOwPj/E12x5h74
+        F8U8DkvlrA52AAAAAElFTkSuQmCC
+      </shape>
+      <shape name='KPI/11.png'>
+        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
+        AAAAAElFTkSuQmCC
+      </shape>
+      <shape name='KPI/12.png'>
+        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
+        Xc5rPfBWb+cAAAAASUVORK5CYII=
+      </shape>
+      <shape name='KPI/13.png'>
+        iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAACXBIWXMAAA7EAAAOxAGVKw4b
+        AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAh1pVFh0WE1MOmNvbS5h
+        ZG9iZS54bXAAAQBVVEYtOABYTUw6Y29tLmFkb2JlLnhtcAAokX1T0W6bMBT9Fct92aQFY8CG
+        oLKK2EbrA1uVRupeCbgNSsDIOAvNr/Vhn7RfmMlCVE1VbD/42ufcc6997+3d0BXlVhqwli91
+        m8A/b78hqKsEPpHczTsmN/W3o5aPx++r8rgt5xW8+wpuh3houkaaAgzNru3jIYFFpdYytvvx
+        GEFwgphtAtPxAvzMHwBTWgLi+LPSxRhQ6uCAUIq/AM/FHnLtojMcxITGXgjOA1o1XT3HS56d
+        tayVwI0xXYzQ4XBwDr6j9AvC8/l89OF5M4uY9a+tKYZZ299MHrjsS113plYtGO1irfYmgXBK
+        oeny/OK47Z1TQk6pGjQUHcKOi5oGTejeLOXzdXS/eu0kWspe7XUpLfzmndR16gi00cQ/dG0/
+        pdhxVe4b2Zp7nkB741R1FQcp5ZgTmtrJOcbRYkGZhzNChPCJm04+PuJmzBMuI66lE4yFH0Vh
+        JDIhFpyxLGQX7n3bm6It5cStL9wgu8qNmZaFUXql1G6qgIeNMqrfqA6wRwo+PdVtpQ795/F7
+        zpFKXf+SVaZVA07vG9cf6C9YyqKUCBpwInyMUy9yI+wHLAjngUut/j9u9S7v/X4MPGAZCZiL
+        eRhxgfEiJFhkKY9S7AmGA4hsJOi/SpmObPmN20vdW+PSObK17aJtX/wF9TIGVo7wNFAAAAGM
+        SURBVFiF7di9boMwFAXgQ4WaKSgLSh8kazORqTwAiOdD8ABNhzBn4z1SKQvK1oaIDoU2UAy2
+        7+Vn6JksWb76dCRLlo2iKDDnPEwN6MvsgSbHEM8PquUBgAFgp3I+jkLhHmeDh83lvNtczg6A
+        hGsoS4Mocc/ZOwwUAOCklp1Ascm2kBv0/OAHZ+WfWOZXbLMTuJokAZu4KpxIbaAIx43UAvbh
+        OJHKQFkcF1IJqIrjQEoDdXFUpBSQiqMge4GeHyQcOF1kJ7DEOdvsxILTQQqB97hlfmXDtSE9
+        PxAiW4FD41SQf4Bj4WSRNeDYOBlks8EPALhN8NC+waiWtdtYk8RR6KaWvT+u1sjMxVg2ZOYj
+        jqsnpJb9FkfhixA4BbIL1wocE9mHEwLHQMrgOoFDIu9xAIS4XuAQSBWcFJATqYqTBnIgdXBK
+        QApSF6cM1EFScFpAFSQVpw2UQWbmgowjAbuQ37g1UsveU3BkYBuygXOp87l+t9zUsl9RtsWF
+        A/iAwC8SYMIBgPH/iU7M7IFfIdyNLuJOcwcAAAAASUVORK5CYII=
+      </shape>
+    </shapes>
+  </external>
+</workbook>
