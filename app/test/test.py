@@ -21,8 +21,16 @@ env_path = Path(__file__).resolve().parent.parent.parent/ ".env"  # adjust based
 load_dotenv(dotenv_path=env_path)
 # load_dotenv()
 
-print("DB_USER:", os.getenv('DB_USER'))
-print("DB_PASSWORD:", os.getenv('DB_PASSWORD'))
-print("DB_HOST:", os.getenv('DB_HOST'))
-print("DB_PORT:", os.getenv('DB_PORT'))
-print("DB_NAME:", os.getenv('DB_NAME'))
+# print("DB_USER:", os.getenv('DB_USER'))
+# print("DB_PASSWORD:", os.getenv('DB_PASSWORD'))
+# print("DB_HOST:", os.getenv('DB_HOST'))
+# print("DB_PORT:", os.getenv('DB_PORT'))
+# print("DB_NAME:", os.getenv('DB_NAME'))
+
+import random
+
+# def weighted_random_choice():
+#     return random.choices([1, 2, 3], weights=[3, 2, 1], k=1)[0]
+
+campaign_rentals = (random.choices([1, 2, 3], weights=[3, 2, 1], k=1)[0])
+print(campaign_rentals)

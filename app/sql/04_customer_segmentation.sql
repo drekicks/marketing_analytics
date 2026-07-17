@@ -251,26 +251,27 @@ customer_segments AS (
         cef.category_engagement_tier,
         -- Segment membership flags (NOT mutually exclusive — a customer can
         -- belong to more than one; use these for Tableau filter shelves)
+        (e.customer_tier = 'High Value' AND e.recency_segment = 'Active'
+            AND e.engagement_segment in ('High Engagement','Very High Engagement'))
+            AS is_champion,
         (e.customer_tier = 'High Value' AND e.recency_segment = 'Lapsed')
             AS is_winback_vip,
         (e.customer_tier = 'Medium Value' AND e.recency_segment = 'Lapsed')
             AS is_winback_growth,
         (e.customer_tier = 'Low Value' AND e.recency_segment = 'Lapsed')
             AS is_winback_reactivation,
-        (e.customer_tier = 'Low Value' AND e.engagement_segment in ('High Engagement','Very High Engagement') and e.recency_segment='Active')
+        (e.customer_tier = 'Low Value' AND e.engagement_segment in ('High Engagement','Very High Engagement','Moderate Engagement') and e.recency_segment='Active')
             AS is_upsell_core,
-        (e.customer_tier = 'Medium Value' AND e.engagement_segment in ('High Engagement','Very High Engagement') and e.recency_segment='Active')
+        (e.customer_tier = 'Medium Value' AND e.engagement_segment in ('High Engagement','Very High Engagement','Moderate Engagement') and e.recency_segment='Active')
             AS is_upsell_scale,
         --(e.customer_tier = 'Medium Value' AND e.engagement_segment in ('Very Low Engagement','Low Engagement'))
           --  AS is_engagement_growth_scale,
         (e.customer_tier in ('Low Value','Medium Value') AND e.engagement_segment in ('Very Low Engagement','Low Engagement'))
             AS is_engagement_growth,
-        (e.customer_tier = 'High Value' AND e.recency_segment = 'Active'
-            AND e.engagement_segment in ('High Engagement','Very High Engagement'))
-            AS is_champion,
-        (e.customer_tier in ('Medium Value','High Value') AND e.recency_segment = 'Pre-Lapsed'
-            AND e.engagement_segment in ('High Engagement','Very High Engagement'))
-            AS is_churn_watchlist,
+        (e.recency_segment = 'Pre-Lapsed') as is_churn_watchlist,
+        /*(e.customer_tier in ('Medium Value','High Value') AND e.recency_segment = 'Pre-Lapsed'
+            AND e.engagement_segment in ('High Engagement','Very High Engagement','Moderate Engagement'))
+            AS is_churn_watchlist,*/
         (cb.categories_touched <= 12)
             AS is_narrow_explorer
     FROM engagement_final e
@@ -295,8 +296,15 @@ SELECT
         WHEN is_upsell_core               THEN 'Upsell - Core'
         --WHEN is_engagement_growth_scale    THEN 'Engagement Growth - Scale'
         WHEN is_engagement_growth	      THEN 'Engagement Growth'
-       WHEN is_narrow_explorer           THEN 'Category Expansion'
         when is_churn_watchlist			  then 'Churn Watchlist'
+        WHEN is_narrow_explorer           THEN 'Category Expansion'
         ELSE 'Maintain'
-    END AS primary_segment
+    END AS primary_segment,
+    case 
+    	when is_champion or is_upsell_scale then 'Champion'
+    	when is_winback_vip or is_winback_growth or is_winback_reactivation then 'Win-Back'
+    	when is_upsell_core or is_engagement_growth then 'Growth'
+    	when is_churn_watchlist then 'Churn Watchlist'
+    	else 'Review'
+    end as market_segment
 FROM customer_segments;

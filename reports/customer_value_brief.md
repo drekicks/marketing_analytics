@@ -8,4 +8,4 @@ Is there an opportunity to shift those numbers? Can we acquire more Travel and A
 
 All customers are repeat customers with number of rentals ranging from 7 to 45.
 
-For repeat rental, I cateqorized based on quintiles. My analysis showed the top 40% of customers produced 49% of the revenue; next 40% of customers produced 37% of revenue and final 20% of customers produced 14% of revenue.
+For repeat rental, I categorized based on quintiles. My analysis showed the top 40% of customers produced 49% of the revenue; next 40% of customers produced 37% of revenue and final 20% of customers produced 14% of revenue.

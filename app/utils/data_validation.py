@@ -319,8 +319,8 @@ def validate_customer_segmentation_output(df: pd.DataFrame) -> dict:
             return "Upsell - Core"
         if row["is_engagement_growth"]:
             return "Engagement Growth"
-        if row["is_narrow_explorer"]:
-            return "Category Expansion"
+        # if row["is_narrow_explorer"]:
+        #     return "Category Expansion"
         if row["is_churn_watchlist"]:
             return "Churn Watchlist"
         return "Maintain"
@@ -332,6 +332,97 @@ def validate_customer_segmentation_output(df: pd.DataFrame) -> dict:
         "rows": df[segment_mismatch_mask][["customer_id", "primary_segment"]].assign(
             expected=recomputed[segment_mismatch_mask]
         ),
+    }
+
+    return results
+
+
+def customer_lvl_validation(df: pd.DataFrame) -> dict:
+    results = {}
+
+    results["_dataset_shape"] = {
+        "row_count": df.shape[0],
+        "column_count": df.shape[1],
+        "columns": list(df.columns),
+    }
+
+    valid_groups = ["TEST", "CONTROL"]
+    invalid_treatment_mask = ~df["treatment_grp"].isin(valid_groups)
+    results["invalid_treatment_group"] = {
+        "count": invalid_treatment_mask.sum(),
+        "rows": df[invalid_treatment_mask],
+    }
+
+    control_contacted_mask = (df["treatment_grp"] == "CONTROL") & (df["contacted_flg"] == "Y")
+    results["control_contacted"] = {
+        "count": control_contacted_mask.sum(),
+        "rows": df[control_contacted_mask],
+    }
+
+    negative_campaign_revenue_mask = df["cmpgn_rvn"] < 0
+    results["negative_campaign_revenue"] = {
+        "count": negative_campaign_revenue_mask.sum(),
+        "rows": df[negative_campaign_revenue_mask],
+    }
+
+    negative_campaign_cost_mask = df["offer_cost"] < 0
+    results["negative_campaign_cost"] = {
+        "count": negative_campaign_cost_mask.sum(),
+        "rows": df[negative_campaign_cost_mask],
+    }
+
+    duplicate_customer_mask = df.duplicated(subset="customer_id", keep=False)
+    results["duplicate_customer_ids"] = {
+        "count": duplicate_customer_mask.sum(),
+        "rows": df[duplicate_customer_mask].sort_values("customer_id"),
+    }
+
+    conversion_revenue_mismatch_mask = (df["cnvrsn_flg"] == "Y") & (df["cmpgn_rvn"] <= 0)
+    results["conversion_with_non_positive_revenue"] = {
+        "count": conversion_revenue_mismatch_mask.sum(),
+        "rows": df[conversion_revenue_mismatch_mask],
+    }
+
+    converted_offer_with_no_cost = (df["cnvrsn_flg"] == "Y") & (df["offer_cost"] <= 0) & (df["treatment_grp"]=="TEST")
+    results["converted_offer_with_no_cost"] = {
+        "count": converted_offer_with_no_cost.sum(),
+        "rows": df[converted_offer_with_no_cost],
+    }
+
+    return results
+
+
+def campaign_performance_validation(df: pd.DataFrame) -> dict:
+    results = {}
+
+    results["_dataset_shape"] = {
+        "row_count": df.shape[0],
+        "column_count": df.shape[1],
+        "columns": list(df.columns),
+    }
+
+    test_respn_rt_out_of_range = (df["test_respn_rt"] < 0) | (df["test_respn_rt"] > 1)
+    results["test_response_rate_out_of_range"] = {
+        "count": test_respn_rt_out_of_range.sum(),
+        "rows": df[test_respn_rt_out_of_range],
+    }
+
+    test_cnvrsn_rt_out_of_range = (df["test_cnvrsn_rt"] < 0) | (df["test_cnvrsn_rt"] > 1)
+    results["test_conversion_rate_out_of_range"] = {
+        "count": test_cnvrsn_rt_out_of_range.sum(),
+        "rows": df[test_cnvrsn_rt_out_of_range],
+    }
+
+    cntrl_respn_rt_out_of_range = (df["cntrl_respn_rt"] < 0) | (df["cntrl_respn_rt"] > 1)
+    results["control_response_rate_out_of_range"] = {
+        "count": cntrl_respn_rt_out_of_range.sum(),
+        "rows": df[cntrl_respn_rt_out_of_range],
+    }
+
+    cntrl_cnvrsn_rt_out_of_range = (df["cntrl_cnvrsn_rt"] < 0) | (df["cntrl_cnvrsn_rt"] > 1)
+    results["control_conversion_rate_out_of_range"] = {
+        "count": cntrl_cnvrsn_rt_out_of_range.sum(),
+        "rows": df[cntrl_cnvrsn_rt_out_of_range],
     }
 
     return results
