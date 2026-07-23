@@ -10,7 +10,7 @@ def main() -> None:
 
     # Build paths from THIS file location (works no matter where you run from)
     project_root = Path(__file__).resolve().parents[2]
-    conversion_path = project_root / "app" / "generation" / "conversion_rates.csv"
+    conversion_path = project_root / "app" / "data" / "conversion_rates.csv"
     segmentation_path = project_root / "data" / "customer_segmentation.csv"
     output_path = project_root / "data" / "campaign_results.csv"
 
@@ -23,7 +23,7 @@ def main() -> None:
                 "control_conversion": float(row["control_conversion"]),
             }
 
-    campaign_id = "CMP-2026-001"
+    campaign_id = "CMP-2026-003"
     campaign_name = "Summer Retention Offer"
     campaign_start_date = "2026-07-01"
     campaign_end_date = "2026-07-31"
@@ -79,8 +79,8 @@ def main() -> None:
             conversion_flag = "Y" if response_flag == "Y" and rng.random() < 0.7 else "N"
 
             campaign_revenue = rev_per_rentals * campaign_rentals if conversion_flag == "Y" else 0.0
-            offer_cost = 1.00 if conversion_flag == "Y" and treatment_group =="TEST" else 0.0
-            contact_cost = .30 if contacted_flag == "Y" else 0.0
+            offer_cost = .50 if conversion_flag == "Y" and treatment_group =="TEST" else 0.0
+            contact_cost = .10 if contacted_flag == "Y" else 0.0
 
             records.append(
                 {

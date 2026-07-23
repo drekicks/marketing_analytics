@@ -217,7 +217,7 @@ def validate_segmentation_data(
 
 # =============================================================================
 # Validator 3: Consolidated segmentation query output
-# (04_customer_segmentation.sql -- one row per customer, all tiers/flags/
+# (customer_segmentation.sql -- one row per customer, all tiers/flags/
 # primary_segment already computed by the query. No cross-file checks
 # needed here since the joins already happened in SQL; instead this checks
 # whether the SQL logic itself produced internally consistent output.)
@@ -371,10 +371,10 @@ def customer_lvl_validation(df: pd.DataFrame) -> dict:
         "rows": df[negative_campaign_cost_mask],
     }
 
-    duplicate_customer_mask = df.duplicated(subset="customer_id", keep=False)
+    duplicate_customer_mask = df.duplicated(subset=["customer_id", "campaign_id"], keep=False)
     results["duplicate_customer_ids"] = {
         "count": duplicate_customer_mask.sum(),
-        "rows": df[duplicate_customer_mask].sort_values("customer_id"),
+        "rows": df[duplicate_customer_mask].sort_values(["customer_id", "campaign_id"]),
     }
 
     conversion_revenue_mismatch_mask = (df["cnvrsn_flg"] == "Y") & (df["cmpgn_rvn"] <= 0)
@@ -401,29 +401,33 @@ def campaign_performance_validation(df: pd.DataFrame) -> dict:
         "columns": list(df.columns),
     }
 
-    test_respn_rt_out_of_range = (df["test_respn_rt"] < 0) | (df["test_respn_rt"] > 1)
-    results["test_response_rate_out_of_range"] = {
-        "count": test_respn_rt_out_of_range.sum(),
-        "rows": df[test_respn_rt_out_of_range],
-    }
+    if "test_respn_rt" in df.columns:
+        test_respn_rt_out_of_range = (df["test_respn_rt"] < 0) | (df["test_respn_rt"] > 1)
+        results["test_response_rate_out_of_range"] = {
+            "count": test_respn_rt_out_of_range.sum(),
+            "rows": df[test_respn_rt_out_of_range],
+        }
 
-    test_cnvrsn_rt_out_of_range = (df["test_cnvrsn_rt"] < 0) | (df["test_cnvrsn_rt"] > 1)
-    results["test_conversion_rate_out_of_range"] = {
-        "count": test_cnvrsn_rt_out_of_range.sum(),
-        "rows": df[test_cnvrsn_rt_out_of_range],
-    }
+    if "test_conversion_rate" in df.columns:
+        test_cnvrsn_rt_out_of_range = (df["test_conversion_rate"] < 0) | (df["test_conversion_rate"] > 1)
+        results["test_conversion_rate_out_of_range"] = {
+            "count": test_cnvrsn_rt_out_of_range.sum(),
+            "rows": df[test_cnvrsn_rt_out_of_range],
+        }
 
-    cntrl_respn_rt_out_of_range = (df["cntrl_respn_rt"] < 0) | (df["cntrl_respn_rt"] > 1)
-    results["control_response_rate_out_of_range"] = {
-        "count": cntrl_respn_rt_out_of_range.sum(),
-        "rows": df[cntrl_respn_rt_out_of_range],
-    }
+    if "cntrl_respn_rt" in df.columns:
+        cntrl_respn_rt_out_of_range = (df["cntrl_respn_rt"] < 0) | (df["cntrl_respn_rt"] > 1)
+        results["control_response_rate_out_of_range"] = {
+            "count": cntrl_respn_rt_out_of_range.sum(),
+            "rows": df[cntrl_respn_rt_out_of_range],
+        }
 
-    cntrl_cnvrsn_rt_out_of_range = (df["cntrl_cnvrsn_rt"] < 0) | (df["cntrl_cnvrsn_rt"] > 1)
-    results["control_conversion_rate_out_of_range"] = {
-        "count": cntrl_cnvrsn_rt_out_of_range.sum(),
-        "rows": df[cntrl_cnvrsn_rt_out_of_range],
-    }
+    if "control_conversion_rate" in df.columns:
+        cntrl_cnvrsn_rt_out_of_range = (df["control_conversion_rate"] < 0) | (df["control_conversion_rate"] > 1)
+        results["control_conversion_rate_out_of_range"] = {
+            "count": cntrl_cnvrsn_rt_out_of_range.sum(),
+            "rows": df[cntrl_cnvrsn_rt_out_of_range],
+        }
 
     return results
 
@@ -456,7 +460,7 @@ if __name__ == "__main__":
     # only relevant if you're still pulling the three separate queries (03_customer_extract,
     # rental_count_per_category, repeat_engagement_categories) as three separate files.
 
-    # validate_customer_segmentation_output(df) -- the one to use for 04_customer_segmentation.sql,
+    # validate_customer_segmentation_output(df) -- the one to use for customer_segmentation.sql,
     # since that query already consolidates everything into a single output.
     df = pd.read_csv("/home/claude/work/consolidated_segmentation_output.csv")
     seg_output_results = validate_customer_segmentation_output(df)

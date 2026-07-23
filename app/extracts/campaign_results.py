@@ -1,9 +1,9 @@
-# sprint 5 file -- replaced with campaign_results.py, so not used
 import pandas as pd
 
 from app.utils import database
 import app.utils.data_validation as validation
 from app.utils.file_utils import load_sql_extracts, file_export
+
 
 db_conn = database.engine
 
@@ -20,10 +20,15 @@ has_customer_level_errors = any(
 )
 
 if not has_customer_level_errors:
-    performance_query = load_sql_extracts(["05_campaign_performance"])
-    performance_df = performance_query["05_campaign_performance"]
+    performance_query = load_sql_extracts(["campaign_performance_summary"])
+    performance_df = performance_query["campaign_performance_summary"]
     performance_results = validation.campaign_performance_validation(performance_df)
     validation.print_validation_summary(performance_results, title="CAMPAIGN PERFORMANCE VALIDATION")
-
+    segment_query = load_sql_extracts(["campaign_segment_summary"])
+    segment_df = segment_query["campaign_segment_summary"]
+    analytic_query = load_sql_extracts(["analytic_layer"])
+    analytic_df = analytic_query["analytic_layer"]
     # Export summary file
-    file_export(performance_df,"campaign_segment_performance.csv")
+    file_export(performance_df,"campaign_performance_summary.csv")
+    file_export(segment_df,"campaign_segment_summary.csv")
+    file_export(analytic_df,"campaign_analytic_layer.csv")

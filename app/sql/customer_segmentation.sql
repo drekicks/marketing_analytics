@@ -4,7 +4,6 @@
 -- Output: one row per customer with segment flags + a single
 --         priority-ordered primary_segment field for categorical viz
 -- =====================================================================
-
 WITH
 -- ---------------------------------------------------------------------
 -- 0) Snapshot date: "today" for this dataset = the most recent rental.
@@ -252,7 +251,7 @@ customer_segments AS (
         -- Segment membership flags (NOT mutually exclusive — a customer can
         -- belong to more than one; use these for Tableau filter shelves)
         (e.customer_tier = 'High Value' AND e.recency_segment = 'Active'
-            AND e.engagement_segment in ('High Engagement','Very High Engagement'))
+            AND e.engagement_segment in ('High Engagement','Very High Engagement','Moderate Engagement'))
             AS is_champion,
         (e.customer_tier = 'High Value' AND e.recency_segment = 'Lapsed')
             AS is_winback_vip,
@@ -277,8 +276,7 @@ customer_segments AS (
     FROM engagement_final e
     LEFT JOIN category_breadth cb          ON cb.customer_id = e.customer_id
     LEFT JOIN top_category tc              ON tc.customer_id = e.customer_id
-    LEFT JOIN category_engagement_final cef ON cef.category = tc.top_rental_category
-)
+    LEFT JOIN category_engagement_final cef ON cef.category = tc.top_rental_category)
 -- =======================================================================
 -- FINAL OUTPUT — point Tableau at this
 -- primary_segment = single categorical field, priority-ordered so every
@@ -307,4 +305,5 @@ SELECT
     	when is_churn_watchlist then 'Churn Watchlist'
     	else 'Review'
     end as market_segment
-FROM customer_segments;
+FROM customer_segments
+;

@@ -24,6 +24,8 @@ group by 1,2
 )
 select * from rr;
 
+select * from campaign_results cr 
+
 
 
 

@@ -22,7 +22,7 @@ Growth     			$85.42               	149%           	15% vs 12%
 Churn Watchlist     $37.62				 	75%				16% vs 11%
 Win-Back			$35.10					82%				10% vs 9%
 
-Champion drove the campaign. It's less than 15% of total contacts (73 of 599) but generated 43% of incremental revenue, at a segment ROMI nearly 8x the overall average. 
+Champion drove the campaign. It's less than 15% of total contacts (73 of 599) but generated 43% of incremental revenue, making it the highest-return investment opportunity in the campaign. 
 Win-Back diluted efficiency — smallest conversion lift (1 point) and lowest segment ROMI, despite similar cost allocation to other segments. 
 Growth is the best "scale" candidate: strong lift and a large enough segment (196 contacts) to matter at volume.
 
