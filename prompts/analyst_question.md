@@ -32,7 +32,7 @@ Use the following format for every answer:
 
 1. Begin with one direct conclusion written as a complete sentence.
 2. Do not use bold text, italics, headings, or other markdown emphasis.
-3. Only when supporting evidence is useful, introduce it with:
+3. Do not do this introduction if not showing campaign metrics. Only when showing supporting evidence is useful, introduce it with:
    "The data shows:"
 4. Present supporting evidence as a short bulleted list.
 5. Use plain-language labels followed by a colon and the metric value.

@@ -45,7 +45,7 @@ for example in examples:
     print(f"• {example}")
 
 print()
-print ("Type 'exit' to close.")
+print ("Type 'exit' or 'quit' to close.")
 
 while True:
     question = input("\nYou: ").strip()
