@@ -1,8 +1,6 @@
 from openai import OpenAI, OpenAIError
-# from dotenv import load_dotenv
 from app.config.settings import MODEL_NAME, openai_api_key
 
-# load_dotenv()  # make sure .env is loaded
 
 if not openai_api_key:
     raise RuntimeError("OPENAI_API_KEY is not set. Check your .env loading.")
@@ -42,12 +40,3 @@ def generate_analysis(prompt: str) -> str:
         return analysis.strip()
     except OpenAIError as e:
         raise RuntimeError(f"LLM request failed: {e}") from e
-
-    # # analysis = response.output_text
-    #
-    # if not analysis or not analysis.strip():
-    #     raise RuntimeError("LLM request returned no text.")
-    #
-    # return analysis.strip()
-    #
-    #

@@ -1,11 +1,15 @@
-# import pandas as pd
-# from app.config.paths import DATA_DIR
+import pandas as pd
+from app.config.paths import DATA_DIR
 
 def build_campaign_context(campaign_df, campaign_id: str) -> str:
     campaign_rows = campaign_df[campaign_df["campaign_id"] == campaign_id]
+    goal_rows = campaign_goals_df[campaign_goals_df["campaign_id"] == campaign_id]
 
     if campaign_rows.empty:
         raise ValueError(f"{campaign_id} not found")
+
+    if goal_rows.empty:
+        raise ValueError(f"Goal data for {campaign_id} not found")
 
     campaign_name = campaign_rows["campaign_name"].dropna().unique()
 
@@ -18,13 +22,25 @@ def build_campaign_context(campaign_df, campaign_id: str) -> str:
     campaign_name = campaign_rows['campaign_name'].iloc[0]
     start_date = campaign_rows['start_date'].iloc[0]
     end_date = campaign_rows['end_date'].iloc[0]
+    goal_row = goal_rows.iloc[0]
 
     context_lines = [f"Campaign Name: {campaign_name}",
                      f"Campaign ID: {campaign_id}",
                      f"Start Date: {start_date}",
-                     f"End Date: {end_date}",
+                     f"End Date: {end_date}\n",
+                     "Campaign Metadata\n"
+                     f"------------------",
+                     f"Campaign Goal: {goal_row['campaign_goal']}",
+                     f"Offer: {goal_row['offer']}",
+                     f"Channel: {goal_row['channel']}",
+                     f"Duration: {goal_row['duration']}",
+                     f"Budget: ${goal_row['budget']:,}",
+                     f"Target KPI: {goal_row['target_kpi']}",
+                     f"Secondary KPI: {goal_row['secondary_kpi']}",
+                     f"Audience: {goal_row['audience']}",
                      "",
-                     "Segment Performance:"
+                     "Segment Performance:\n"
+                     f"---------------------",
                      ]
 
     for _, row in campaign_rows.iterrows():
@@ -50,8 +66,12 @@ def build_campaign_context(campaign_df, campaign_id: str) -> str:
 
     return "\n".join(context_lines)
 
-# file_name="campaign_performance_summary.csv"
-# campaign_path = DATA_DIR / file_name
-# campaign_df = pd.read_csv(campaign_path,encoding='utf-8')
-#
+file_name="campaign_performance_summary.csv"
+campaign_path = DATA_DIR / file_name
+campaign_df = pd.read_csv(campaign_path,encoding='utf-8')
+
+goals_file_name = "campaign_goals.csv"
+goals_path = DATA_DIR / goals_file_name
+campaign_goals_df = pd.read_csv(goals_path, encoding='utf-8')
+
 # print(build_campaign_context(campaign_df,"CMP-2026-003"))
