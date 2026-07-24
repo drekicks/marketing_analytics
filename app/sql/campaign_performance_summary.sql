@@ -44,6 +44,6 @@ combined as
 	and c.customer_segment = t.customer_segment
 ),
 c2 as 
-(select *, test_rpc-control_rpc absolute_lift, control_rpc*test_audience expct_rvn, test_revenue-(control_rpc*test_audience) incremental_rev from combined
-) select *, round((incremental_rev - total_cmpgn_cost)/total_cmpgn_cost,2) as ROMI from c2 ;
+(select *, to_char((test_conversion_rate-control_conversion_rate)* 100,'FM999990.0')||' percentage points' absolute_lift, control_rpc*test_audience expct_rvn, test_revenue-(control_rpc*test_audience) incremental_rev from combined
+) select *, round((incremental_rev - total_cmpgn_cost)/total_cmpgn_cost,2) as marketing_roi, round((test_conversion_rate-control_conversion_rate) * test_audience,0)::integer incremental_conversions from c2 ;
 

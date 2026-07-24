@@ -2,18 +2,19 @@ from app.utils import database as db
 from pathlib import Path
 import pandas as pd
 from sqlalchemy import text
+from app.config.paths import DATA_DIR, SQL_DIR
 
 db_conn = db.engine
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent  # adjust based on where utils.py actually lives
+# PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent  # adjust based on where utils.py actually lives
+# # DATA_DIR = PROJECT_ROOT / "data"
+# # DATA_DIR.mkdir(exist_ok=True)
+#
+# BASE_DIR = Path(__file__).resolve().parent.parent
+# SQL_DIR = BASE_DIR / "sql"
+#
 # DATA_DIR = PROJECT_ROOT / "data"
-# DATA_DIR.mkdir(exist_ok=True)
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-SQL_DIR = BASE_DIR / "sql"
-
-DATA_DIR = PROJECT_ROOT / "data"
-DATA_DIR.mkdir(parents=True, exist_ok=True)
+# DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
 
