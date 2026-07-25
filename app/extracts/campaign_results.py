@@ -4,7 +4,6 @@ from app.utils import database
 import app.utils.data_validation as validation
 from app.utils.file_utils import load_sql_extracts, file_export
 
-
 db_conn = database.engine
 
 df = pd.read_sql("select * from public.campaign_results", db_conn)
@@ -28,7 +27,10 @@ if not has_customer_level_errors:
     segment_df = segment_query["campaign_segment_summary"]
     analytic_query = load_sql_extracts(["analytic_layer"])
     analytic_df = analytic_query["analytic_layer"]
+    unique_campaigns_query = load_sql_extracts(["unique_campaigns_list"])
+    unique_campaigns_df = unique_campaigns_query["unique_campaigns_list"]
     # Export summary file
     file_export(performance_df,"campaign_performance_summary.csv")
     file_export(segment_df,"campaign_segment_summary.csv")
     file_export(analytic_df,"campaign_analytic_layer.csv")
+    file_export(unique_campaigns_df,"unique_campaigns.csv")

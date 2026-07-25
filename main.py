@@ -5,13 +5,32 @@ from app.ai.context_builder import build_campaign_context
 from app.config.paths import DATA_DIR
 from app.ai.llm_client_api import generate_analysis
 from app.ai.analyst_chat import ask_analyst
+from app.utils.file_utils import load_sql_extracts
+from app.ui.campaign_selector import select_campaign
+
 
 
 file_name="campaign_performance_summary.csv"
 campaign_path = DATA_DIR / file_name
 campaign_df = pd.read_csv(campaign_path,encoding='utf-8')
 
-context = build_campaign_context(campaign_df,"CMP-2026-003")
+unique_campaigns_query = load_sql_extracts(["unique_campaigns_list"])
+unique_campaigns_df = unique_campaigns_query["unique_campaigns_list"]
+
+campaign_id, campaign_name = select_campaign(
+    unique_campaigns_df
+)
+print(f"\nCampaign Selected: {campaign_name} ({campaign_id})")
+print()
+print("Generating Executive Summary...........")
+print()
+
+context = build_campaign_context(
+    campaign_df,
+    campaign_id
+)
+
+# context = build_campaign_context(campaign_df,"CMP-2026-003")
 
 template = load_prompt("executive_summary")
 question_template = load_prompt("analyst_question")
@@ -39,6 +58,7 @@ examples = [
     "Why did Win-Back underperform?",
     "What are the biggest business risks?",
     "Did the campaign achieve its objective?",
+    "What were the goals of the campaign?",
 ]
 
 for example in examples:

@@ -1,36 +1,14 @@
-# from pathlib import Path
-#
-# print("utils.py is located at:", Path(__file__).resolve())
-# print("Its parent folder is:", Path(__file__).resolve().parent)
-import os
-from dotenv import load_dotenv
-from pathlib import Path
+from app.utils.file_utils import load_sql_extracts
+from app.ui.campaign_selector import select_campaign
+# from app.test.selector_test import select_campaign
 
-# def find_project_root(start: Path, marker: str = ".env") -> Path:
-#     current = start
-#     for _ in range(6):
-#         if (current / marker).is_file():
-#             return current
-#         current = current.parent
-#     raise FileNotFoundError(f"Could not find '{marker}' above {start}")
-#
-# env_path = find_project_root(Path(__file__).resolve().parent) / ".env"
-# load_dotenv(dotenv_path=env_path)
+# unique_campaigns_query = load_sql_extracts(["unique_campaigns_list"])
+# unique_campaigns_df = unique_campaigns_query["unique_campaigns_list"]
 
-env_path = Path(__file__).resolve().parent.parent.parent/ ".env"  # adjust based on where .env actually lives
-load_dotenv(dotenv_path=env_path)
-# load_dotenv()
 
-# print("DB_USER:", os.getenv('DB_USER'))
-# print("DB_PASSWORD:", os.getenv('DB_PASSWORD'))
-# print("DB_HOST:", os.getenv('DB_HOST'))
-# print("DB_PORT:", os.getenv('DB_PORT'))
-# print("DB_NAME:", os.getenv('DB_NAME'))
+# if __name__ == "__main__":
+extracts = load_sql_extracts(["unique_campaigns_list"])
+unique_campaigns_df = extracts["unique_campaigns_list"]
 
-import random
-
-# def weighted_random_choice():
-#     return random.choices([1, 2, 3], weights=[3, 2, 1], k=1)[0]
-
-campaign_rentals = (random.choices([1, 2, 3], weights=[3, 2, 1], k=1)[0])
-print(campaign_rentals)
+campaign_id, campaign_name = select_campaign(unique_campaigns_df)
+print(f"\nSelected: {campaign_id} | {campaign_name}")
