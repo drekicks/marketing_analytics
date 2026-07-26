@@ -1,6 +1,5 @@
 from app.config.paths import PROMPT_DIR
 
-
 def load_prompt(prompt_name: str):
     prompt_path = PROMPT_DIR / f'{prompt_name}.md'
 

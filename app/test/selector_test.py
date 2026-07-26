@@ -4,7 +4,7 @@ def select_campaign(
     campaign_df: pd.DataFrame
 ) -> tuple[str, str]:
 
-    campaigns = _prepare_campaigns(campaign_df)
+    campaigns = _build_campaign_catalog(campaign_df)
 
     print("How would you like to find a campaign?")
     print("1. Enter Campaign ID")

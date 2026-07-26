@@ -7,8 +7,7 @@ from app.ai.llm_client_api import generate_analysis
 from app.ai.analyst_chat import ask_analyst
 from app.utils.file_utils import load_sql_extracts
 from app.ui.campaign_selector import select_campaign
-
-
+from datetime import datetime
 
 file_name="campaign_performance_summary.csv"
 campaign_path = DATA_DIR / file_name
@@ -67,6 +66,8 @@ for example in examples:
 print()
 print ("Type 'exit' or 'quit' to close.")
 
+conversation_history = []
+
 while True:
     question = input("\nYou: ").strip()
 
@@ -82,5 +83,13 @@ while True:
         campaign_context=context,
         question=question,
         prompt_template=question_template,
+        conversation_history=conversation_history,
+    )
+
+    conversation_history.append({
+        "question": question,
+        "answer": answer,
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
     )
     print(f"\nAnalyst: {answer}")
