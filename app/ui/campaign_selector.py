@@ -163,12 +163,12 @@ def _prompt_for_choice(
 
 def _select_from_campaign_list(
     campaigns: pd.DataFrame
-) -> tuple[str, str]:
+) -> tuple[str, str]: 
     campaigns_for_selection = campaigns.reset_index(
         drop=True
     )
 
-    if campaigns.empty:
+    if campaigns_for_selection.empty:
         print("No campaigns matched your selections.")
         return None
 

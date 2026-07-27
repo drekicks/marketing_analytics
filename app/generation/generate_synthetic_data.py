@@ -36,7 +36,7 @@ from app.utils import database
 # ============================================================
 # CONFIG — adjust these
 # ============================================================
-NUM_NEW_CUSTOMERS = 9_000
+NUM_NEW_CUSTOMERS = 3_000
 AVG_RENTALS_PER_CUSTOMER = 15  # Poisson lambda; actual avg will be ~lambda+1
 NEW_DATA_START = datetime(2023, 1, 1)
 NEW_DATA_END = datetime(2026, 7, 1)   # adjust to "today" if you want ongoing recency

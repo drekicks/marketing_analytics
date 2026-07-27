@@ -1,6 +1,7 @@
 import csv
 import random
 from pathlib import Path
+from app.config.paths import DATA_DIR,APP_DIR
 
 RANDOM_SEED = 42
 
@@ -9,10 +10,9 @@ def main() -> None:
     rng = random.Random(RANDOM_SEED)
 
     # Build paths from THIS file location (works no matter where you run from)
-    project_root = Path(__file__).resolve().parents[2]
-    conversion_path = project_root / "app" / "data" / "conversion_rates.csv"
-    segmentation_path = project_root / "data" / "customer_segmentation.csv"
-    output_path = project_root / "data" / "campaign_results.csv"
+    conversion_path = DATA_DIR / "conversion_rates.csv"
+    segmentation_path = DATA_DIR / "customer_segmentation.csv"
+    output_path = DATA_DIR / "campaign_results_pm.csv"
 
     conversion_lookup = {}
     with conversion_path.open(newline="", encoding="utf-8") as conversion_file:
@@ -23,10 +23,11 @@ def main() -> None:
                 "control_conversion": float(row["control_conversion"]),
             }
 
-    campaign_id = "CMP-2026-003"
-    campaign_name = "Summer Retention Offer"
-    campaign_start_date = "2026-07-01"
-    campaign_end_date = "2026-07-31"
+    campaign_id = "CMP-2026-004"
+    campaign_name = "Spring Reactivation TM"
+    campaign_start_date = "2026-03-01"
+    campaign_end_date = "2026-04-30"
+    channel = "Outbound"
 
     ordered_columns = [
         "customer_id",
@@ -42,6 +43,7 @@ def main() -> None:
         "offer_cost",
         "campaign_start_date",
         "campaign_end_date",
+        "channel",
     ]
 
     segment_rows = {}
@@ -97,6 +99,7 @@ def main() -> None:
                     "offer_cost": f"{offer_cost:.2f}",
                     "campaign_start_date": campaign_start_date,
                     "campaign_end_date": campaign_end_date,
+                    "channel": channel,
                 }
             )
 

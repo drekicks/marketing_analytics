@@ -62,6 +62,9 @@ def build_campaign_context(campaign_df, campaign_id: str) -> str:
             f"Incremental Revenue: ${row['incremental_rev']:,.2f}",
             f"Campaign Cost: ${row['total_cmpgn_cost']:,.2f}",
             f"Marketing ROI: {row['marketing_roi']:.1%}",
+            f"Campaign Revenue: ${row['campaign_revenue']:,.2f}",
+            f"Campaign Conversion: {row['campaign_conversions']:,}",
+            f"Campaign RPC: {row['campaign_rpc']:.2f}",
         ])
 
     return "\n".join(context_lines)
@@ -74,4 +77,4 @@ goals_file_name = "campaign_goals.csv"
 goals_path = DATA_DIR / goals_file_name
 campaign_goals_df = pd.read_csv(goals_path, encoding='utf-8')
 
-# print(build_campaign_context(campaign_df,"CMP-2026-003"))
+print(build_campaign_context(campaign_df,"CMP-2026-004"))

@@ -13,4 +13,4 @@ from campaign_results cr
 --where cr.campaign_name ='Summer Win Big Offer'
 group by 1,2,3,4,5,6
 )
-select *, round(cmpgn_rvn/audience,2) rvn_per_customer, round(cmpgn_rvn/conversions,2) rvn_per_converter from  cmpgn_trtmnt order by 3,4;
+select *, round(cmpgn_rvn/audience,2) rvn_per_customer, round(cmpgn_rvn/conversions,2) rvn_per_converter from  cmpgn_trtmnt order by 1,3,4;

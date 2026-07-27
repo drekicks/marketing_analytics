@@ -16,5 +16,6 @@ from campaign_results cr join customer_segment cs
 	on cr.customer_id = cs.customer_id
 --where cr.campaign_name ='Summer Win Big Offer'
 )
-select *, offer_cost+contact_cost as total_cost from analytic_layer order by 1;
+select *, offer_cost+contact_cost as total_cost from analytic_layer order by 2,1;
+
 

@@ -47,6 +47,11 @@ combined as
 ),
 c2 as 
 (select *, to_char((test_conversion_rate-control_conversion_rate)* 100,'FM999990.0')||' percentage points' absolute_lift, control_rpc*test_audience expct_rvn, test_revenue-(control_rpc*test_audience) incremental_rev from combined
-) select *, round((incremental_rev - total_cmpgn_cost)/total_cmpgn_cost,2) as marketing_roi, round((test_conversion_rate-control_conversion_rate) * test_audience,0)::integer incremental_conversions from c2;
+), c3 as
+(select *, round((incremental_rev - total_cmpgn_cost)/total_cmpgn_cost,2) as marketing_roi,
+round((test_conversion_rate-control_conversion_rate) * test_audience,0)::integer incremental_conversions, 
+test_revenue + control_revenue as campaign_revenue, 
+(test_cnvrsn + control_cnvrsn)::integer as campaign_conversions
+from c2) select *, round(campaign_revenue/campaign_conversions,2) campaign_rpc from c3 order by 1;
 
 

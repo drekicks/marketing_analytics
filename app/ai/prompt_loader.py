@@ -5,7 +5,7 @@ def load_prompt(prompt_name: str):
 
     if not prompt_path.exists():
         raise FileNotFoundError(
-            f"Prompt file '{prompt_name}.md' not found as {prompt_path}."
+            f"Prompt file '{prompt_name}.md' not found at {prompt_path}."
         )
 
     with prompt_path.open('r', encoding="utf-8") as file:

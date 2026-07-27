@@ -29,7 +29,6 @@ context = build_campaign_context(
     campaign_id
 )
 
-# context = build_campaign_context(campaign_df,"CMP-2026-003")
 
 template = load_prompt("executive_summary")
 question_template = load_prompt("analyst_question")
