@@ -1833,7 +1833,7 @@
             <groupfilter function='level-members' level='[country]' user:ui-action-filter='[Action6_37D4ACFAEE464812BE848FA7350F1B04]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[Action (Customer Tier)]'>
-            <groupfilter function='member' level='[customer_tier]' member='&quot;Medium Value&quot;' user:ui-action-filter='[Action7_EBE830B917B94DF7AEF857AA3871DD32]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+            <groupfilter function='level-members' level='[customer_tier]' user:ui-action-filter='[Action7_EBE830B917B94DF7AEF857AA3871DD32]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:customer_tier:nk]'>
             <groupfilter function='level-members' level='[none:customer_tier:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
@@ -2334,7 +2334,7 @@
             <column-instance column='[Calculation_2650944327987202]' derivation='User' name='[usr:Calculation_2650944327987202:qk]' pivot='key' type='quantitative' />
           </datasource-dependencies>
           <filter class='categorical' column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[Action (Customer Tier)]'>
-            <groupfilter function='member' level='[customer_tier]' member='&quot;Medium Value&quot;' user:ui-action-filter='[Action7_EBE830B917B94DF7AEF857AA3871DD32]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+            <groupfilter function='level-members' level='[customer_tier]' user:ui-action-filter='[Action7_EBE830B917B94DF7AEF857AA3871DD32]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <filter class='quantitative' column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[Latitude (generated)]' included-values='non-null' />
           <filter class='quantitative' column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[Longitude (generated)]' included-values='non-null' />
@@ -2706,7 +2706,7 @@
             <groupfilter function='level-members' level='[country]' user:ui-action-filter='[Action6_37D4ACFAEE464812BE848FA7350F1B04]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[Action (Customer Tier)]'>
-            <groupfilter function='member' level='[customer_tier]' member='&quot;Medium Value&quot;' user:ui-action-filter='[Action7_EBE830B917B94DF7AEF857AA3871DD32]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+            <groupfilter function='level-members' level='[customer_tier]' user:ui-action-filter='[Action7_EBE830B917B94DF7AEF857AA3871DD32]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:customer_tier:nk]'>
             <groupfilter function='level-members' level='[none:customer_tier:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
@@ -3405,7 +3405,7 @@
             <groupfilter function='level-members' level='[country]' user:ui-action-filter='[Action6_37D4ACFAEE464812BE848FA7350F1B04]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <filter class='categorical' column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[Action (Customer Tier)]'>
-            <groupfilter function='member' level='[customer_tier]' member='&quot;Medium Value&quot;' user:ui-action-filter='[Action7_EBE830B917B94DF7AEF857AA3871DD32]' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+            <groupfilter function='level-members' level='[customer_tier]' user:ui-action-filter='[Action7_EBE830B917B94DF7AEF857AA3871DD32]' user:ui-enumeration='all' user:ui-marker='enumerate' />
           </filter>
           <manual-sort column='[federated.13gp20y04uuppf1fg0sam1ff6w3v].[none:category_engagement_tier:nk]' direction='ASC'>
             <dictionary>
@@ -5049,7 +5049,7 @@
       <simple-id uuid='{5A0BD89E-A26D-4C92-843C-18ED6DE742C4}' />
     </dashboard>
   </dashboards>
-  <windows film-mode='true' pres-mode='true' source-height='72'>
+  <windows film-mode='true' source-height='72'>
     <window class='worksheet' name='Customer Tier Revenue'>
       <cards>
         <edge name='left'>
@@ -5387,7 +5387,7 @@
           <zoom type='entire-view' />
         </viewpoint>
       </viewpoints>
-      <active id='35' />
+      <active id='-1' />
       <simple-id uuid='{7FEA434E-77DA-476F-87D7-C038C67E9C2D}' />
     </window>
     <window class='worksheet' name='Sheet 3'>
