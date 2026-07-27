@@ -17,7 +17,8 @@ CREATE TABLE public.campaign_results (
 	contact_cost numeric(5, 2) NOT NULL,
 	offer_cost numeric(5, 2) NOT NULL,
 	start_date timestamp NOT NULL,
-	end_date timestamp NOT null
+	end_date timestamp NOT null,
+    channel varchar(15) not null
 	--CONSTRAINT cmpgn_pkey PRIMARY KEY (customer_id)
 );
 CREATE INDEX idx_fk_cmpgn_customer_id ON public.campaign_results USING btree (customer_id)

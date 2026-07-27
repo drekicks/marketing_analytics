@@ -1,5 +1,6 @@
 import pandas as pd
 from app.config.paths import DATA_DIR
+from app.utils.file_utils import load_sql_extracts
 
 def build_campaign_context(campaign_df, campaign_id: str) -> str:
     campaign_rows = campaign_df[campaign_df["campaign_id"] == campaign_id]
@@ -69,12 +70,12 @@ def build_campaign_context(campaign_df, campaign_id: str) -> str:
 
     return "\n".join(context_lines)
 
-file_name="campaign_performance_summary.csv"
-campaign_path = DATA_DIR / file_name
-campaign_df = pd.read_csv(campaign_path,encoding='utf-8')
+# switched to query instead of csv
+performance_query = load_sql_extracts(["campaign_performance_summary"])
+campaign_df = performance_query["campaign_performance_summary"]
 
 goals_file_name = "campaign_goals.csv"
 goals_path = DATA_DIR / goals_file_name
 campaign_goals_df = pd.read_csv(goals_path, encoding='utf-8')
 
-print(build_campaign_context(campaign_df,"CMP-2026-004"))
+# print(build_campaign_context(campaign_df,"CMP-2026-004"))
