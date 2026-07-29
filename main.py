@@ -1,11 +1,15 @@
 from app.ai.prompt_builder import build_prompt
 from app.ai.prompt_loader import load_prompt
-from app.ai.context_builder import  build_campaign_context
+from app.ai.context_builder import (
+    build_campaign_context,
+    build_campaign_comparison_context,
+)
 from app.ai.llm_client_api import generate_analysis
 from app.ai.analyst_chat import ask_analyst
 from app.ui.campaign_selector import select_campaign
 from datetime import datetime
 from app.ai.context_loader import summary_df, campaign_goals_df, unique_campaigns_df
+from app.config.router import route_question
 
 campaign_id, campaign_name = select_campaign(
     unique_campaigns_df
@@ -15,11 +19,19 @@ print()
 print("Generating Executive Summary...........")
 print()
 
-context = build_campaign_context(
-    summary_df,
-    campaign_goals_df,
-    campaign_id
-)
+try:
+    # route = route_question(question)
+
+    context = build_campaign_context(
+        summary_df,
+        campaign_goals_df,
+        campaign_id
+    )
+
+except ValueError as e:
+    print(f"Analyst:{e}")
+    raise SystemExit(1)
+
 
 template = load_prompt("executive_summary")
 question_template = load_prompt("analyst_guidelines")
@@ -69,19 +81,30 @@ while True:
         print("Please enter a question.")
         continue
 
-    # answer = ask_analyst(
-    #     campaign_context=context,
-    #     question=question,
-    #     prompt_template=question_template,
-    #     conversation_history=conversation_history,
-    # )
+    route = route_question(question)
 
-    answer = ask_analyst(
-        campaign_id=campaign_id,
-        question=question,
-        prompt_template=question_template,
-        conversation_history=conversation_history,
-    )
+    if route.context_type == "campaign" and route.analysis_type == "comparison" and len(route.campaign_ids) >= 2:
+        try:
+            build_campaign_comparison_context(
+                summary_df,
+                campaign_goals_df,
+                route.campaign_ids,
+            )
+        except ValueError as e:
+            print(f"Analyst: {e}")
+            continue
+
+
+    try:
+        answer = ask_analyst(
+            campaign_id=campaign_id,
+            question=question,
+            prompt_template=question_template,
+            conversation_history=conversation_history,
+        )
+    except ValueError as e:
+        print(f"Analyst: {e}")
+        continue
 
     conversation_history.append({
         "question": question,

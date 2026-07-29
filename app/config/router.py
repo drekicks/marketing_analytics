@@ -46,6 +46,8 @@ def route_question(question: str) -> RouteResult:
         "customer segment",
         "audience segment",
         "audience",
+        "group",
+        "groups",
     )
 
     is_comparison = any(
@@ -71,7 +73,9 @@ def route_question(question: str) -> RouteResult:
 
     if campaign_ids:
         return RouteResult(
-            analysis_type="summary",
+            analysis_type=(
+                "comparison" if is_comparison and len(campaign_ids) >= 2 else "summary"
+            ),
             context_type="campaign",
             campaign_ids=campaign_ids,
         )

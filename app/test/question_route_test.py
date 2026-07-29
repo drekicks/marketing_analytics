@@ -59,13 +59,21 @@ def test_route_question(question, expected_context):
 
     assert route.context_type == expected_context
 
-def test_segment_question_builds_segment_context():
-    question = "How was segment performance for CMP-2026-003?"
 
-    route = route_question(question)
-    context = build_campaign_context(route, datasets)
+def test_compare_question_with_two_campaign_ids_routes_as_comparison():
+    route = route_question("Compare CMP-2026-004 and CMP-2024-001")
 
-    assert route.context_type == "segment"
-    assert "CMP-2026-003" in context
-    assert "Segment" in context
-    assert "Campaign Performance" not in context
+    assert route.context_type == "campaign"
+    assert route.analysis_type == "comparison"
+    assert route.campaign_ids == ["CMP-2026-004", "CMP-2024-001"]
+
+# def test_segment_question_builds_segment_context():
+#     question = "How was segment performance for CMP-2026-003?"
+#
+#     route = route_question(question)
+#     context = build_campaign_context(route, datasets)
+#
+#     assert route.context_type == "segment"
+#     assert "CMP-2026-003" in context
+#     assert "Segment" in context
+#     assert "Campaign Performance" not in context

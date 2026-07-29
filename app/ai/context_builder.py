@@ -1,7 +1,8 @@
 import pandas as pd
 from app.ai.context_loader import campaign_goals_df
+from app.ai.campaign_id_validation import validate_campaign_ids
 
-# from app.ai.context_loader import summary_df, segment_df, campaign_goals_df, customer_df
+from app.ai.context_loader import summary_df, segment_df, campaign_goals_df, customer_df
 
 def build_segment_context(campaign_df:pd.DataFrame,
                           goals_df: pd.DataFrame,
@@ -162,6 +163,11 @@ def build_campaign_comparison_context(
             "Campaign comparison requires at least two campaign IDs"
         )
 
+    validate_campaign_ids(
+        summary_df=summary_df,
+        campaign_ids=campaign_ids,
+    )
+
     campaign_contexts = [
         build_campaign_context(
             summary_df=summary_df,
@@ -253,3 +259,4 @@ def build_customer_context(customer_df:pd.DataFrame,
         )
     return "\n".join(context_lines)
 
+# print(build_campaign_comparison_context(summary_df,campaign_goals_df,["CMP-2025-006","CMP-2026-003"]))
