@@ -307,3 +307,5 @@ SELECT
     end as market_segment
 FROM customer_segments
 ;
+
+SELECT * FROM customer_segment cs

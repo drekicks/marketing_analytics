@@ -1,21 +1,11 @@
 from app.ai.prompt_builder import build_prompt
 from app.ai.prompt_loader import load_prompt
-from app.ai.context_builder import build_campaign_context
+from app.ai.context_builder import  build_campaign_context
 from app.ai.llm_client_api import generate_analysis
 from app.ai.analyst_chat import ask_analyst
-from app.utils.file_utils import load_sql_extracts
 from app.ui.campaign_selector import select_campaign
 from datetime import datetime
-
-extracts = load_sql_extracts(
-    [
-        "campaign_performance_summary",
-        "unique_campaigns_list",
-    ]
-)
-
-campaign_df = extracts["campaign_performance_summary"]
-unique_campaigns_df = extracts["unique_campaigns_list"]
+from app.ai.context_loader import summary_df, campaign_goals_df, unique_campaigns_df
 
 campaign_id, campaign_name = select_campaign(
     unique_campaigns_df
@@ -26,12 +16,13 @@ print("Generating Executive Summary...........")
 print()
 
 context = build_campaign_context(
-    campaign_df,
+    summary_df,
+    campaign_goals_df,
     campaign_id
 )
 
 template = load_prompt("executive_summary")
-question_template = load_prompt("analyst_question")
+question_template = load_prompt("analyst_guidelines")
 
 final_prompt = build_prompt(template = template, variables={"campaign_metrics": context})
 
@@ -78,8 +69,15 @@ while True:
         print("Please enter a question.")
         continue
 
+    # answer = ask_analyst(
+    #     campaign_context=context,
+    #     question=question,
+    #     prompt_template=question_template,
+    #     conversation_history=conversation_history,
+    # )
+
     answer = ask_analyst(
-        campaign_context=context,
+        campaign_id=campaign_id,
         question=question,
         prompt_template=question_template,
         conversation_history=conversation_history,

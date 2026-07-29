@@ -9,13 +9,13 @@ cs.customer_tier,
 cr.customer_segment,
 cr.treatment_grp,
 cr.cnvrsn_flg,
-cr.cmpgn_rvn,
+cr.cmpgn_rvn as campaign_revenue,
 offer_cost,
 contact_cost
 from campaign_results cr join customer_segment cs
 	on cr.customer_id = cs.customer_id
 --where cr.campaign_name ='Summer Win Big Offer'
 )
-select *, offer_cost+contact_cost as total_cost from analytic_layer order by 2,1;
+select *, offer_cost+contact_cost as total_campaign_cost from analytic_layer order by 2,1;
 
 

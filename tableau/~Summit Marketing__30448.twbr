@@ -43,72 +43,6 @@
         <calculation class='tableau' formula='0.24324324324324326' />
       </column>
     </datasource>
-    <datasource inline='true' name='Clipboard_20260715T172705' version='18.1'>
-      <connection class='federated'>
-        <named-connections>
-          <named-connection caption='Clipboard_20260715T172705' name='Clipboard_20260715T172705leaf'>
-            <connection class='textscan' directory='C:/Users/aferr/OneDrive/Documents/My Tableau Repository/Datasources' filename='Clipboard_20260715T172705.txt' />
-          </named-connection>
-        </named-connections>
-        <relation connection='Clipboard_20260715T172705leaf' name='Clipboard_20260715T172705#txt' table='[Clipboard_20260715T172705#txt]' type='table'>
-          <columns character-set='UTF-8' header='yes' locale='en_US'>
-            <column datatype='string' name='Box' ordinal='0' />
-          </columns>
-        </relation>
-        <metadata-records>
-          <metadata-record class='capability'>
-            <remote-name />
-            <remote-type>0</remote-type>
-            <parent-name>[Clipboard_20260715T172705#txt]</parent-name>
-            <remote-alias />
-            <aggregation>Count</aggregation>
-            <contains-null>true</contains-null>
-            <attributes>
-              <attribute datatype='string' name='character-set'>&quot;UTF-8&quot;</attribute>
-              <attribute datatype='string' name='collation'>&quot;en_US&quot;</attribute>
-              <attribute datatype='string' name='header-row'>&quot;true&quot;</attribute>
-              <attribute datatype='string' name='locale'>&quot;en_US&quot;</attribute>
-              <attribute datatype='string' name='single-char'>&quot;&quot;</attribute>
-            </attributes>
-          </metadata-record>
-          <metadata-record class='column'>
-            <remote-name>Box</remote-name>
-            <remote-type>129</remote-type>
-            <local-name>[Box]</local-name>
-            <parent-name>[Clipboard_20260715T172705#txt]</parent-name>
-            <remote-alias>Box</remote-alias>
-            <ordinal>0</ordinal>
-            <local-type>string</local-type>
-            <aggregation>Count</aggregation>
-            <approx-count>1</approx-count>
-            <scale>1</scale>
-            <width>1073741823</width>
-            <contains-null>true</contains-null>
-            <collation flag='0' name='LEN_RUS' />
-            <object-id>[Clipboard_20260715T172705]</object-id>
-          </metadata-record>
-        </metadata-records>
-      </connection>
-      <aliases enabled='yes' />
-      <column caption='Clipboard_20260715T172705' datatype='table' name='[__tableau_internal_object_id__].[Clipboard_20260715T172705]' role='measure' type='quantitative' />
-      <layout dim-ordering='alphabetic' measure-ordering='alphabetic' show-structure='true' />
-      <semantic-values>
-        <semantic-value key='[Country].[Name]' value='&quot;United States&quot;' />
-      </semantic-values>
-      <object-graph>
-        <objects>
-          <object caption='Clipboard_20260715T172705' id='Clipboard_20260715T172705'>
-            <properties context=''>
-              <relation connection='Clipboard_20260715T172705leaf' name='Clipboard_20260715T172705#txt' table='[Clipboard_20260715T172705#txt]' type='table'>
-                <columns character-set='UTF-8' header='yes' locale='en_US'>
-                  <column datatype='string' name='Box' ordinal='0' />
-                </columns>
-              </relation>
-            </properties>
-          </object>
-        </objects>
-      </object-graph>
-    </datasource>
     <datasource caption='customer_segmentation' inline='true' name='federated.13gp20y04uuppf1fg0sam1ff6w3v' version='18.1'>
       <connection class='federated'>
         <named-connections>
@@ -1487,6 +1421,72 @@
                   <column datatype='real' name='cntrl_respn_rt' ordinal='17' />
                   <column datatype='real' name='cntrl_cnvrsn_rt' ordinal='18' />
                   <column datatype='real' name='control_campaign_revenue' ordinal='19' />
+                </columns>
+              </relation>
+            </properties>
+          </object>
+        </objects>
+      </object-graph>
+    </datasource>
+    <datasource inline='true' name='Clipboard_20260715T172705' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='Clipboard_20260715T172705' name='Clipboard_20260715T172705leaf'>
+            <connection class='textscan' directory='C:/Users/aferr/OneDrive/Documents/My Tableau Repository/Datasources' filename='Clipboard_20260715T172705.txt' />
+          </named-connection>
+        </named-connections>
+        <relation connection='Clipboard_20260715T172705leaf' name='Clipboard_20260715T172705#txt' table='[Clipboard_20260715T172705#txt]' type='table'>
+          <columns character-set='UTF-8' header='yes' locale='en_US'>
+            <column datatype='string' name='Box' ordinal='0' />
+          </columns>
+        </relation>
+        <metadata-records>
+          <metadata-record class='capability'>
+            <remote-name />
+            <remote-type>0</remote-type>
+            <parent-name>[Clipboard_20260715T172705#txt]</parent-name>
+            <remote-alias />
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='character-set'>&quot;UTF-8&quot;</attribute>
+              <attribute datatype='string' name='collation'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='header-row'>&quot;true&quot;</attribute>
+              <attribute datatype='string' name='locale'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='single-char'>&quot;&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Box</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[Box]</local-name>
+            <parent-name>[Clipboard_20260715T172705#txt]</parent-name>
+            <remote-alias>Box</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <approx-count>1</approx-count>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <object-id>[Clipboard_20260715T172705]</object-id>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+      <aliases enabled='yes' />
+      <column caption='Clipboard_20260715T172705' datatype='table' name='[__tableau_internal_object_id__].[Clipboard_20260715T172705]' role='measure' type='quantitative' />
+      <layout dim-ordering='alphabetic' measure-ordering='alphabetic' show-structure='true' />
+      <semantic-values>
+        <semantic-value key='[Country].[Name]' value='&quot;United States&quot;' />
+      </semantic-values>
+      <object-graph>
+        <objects>
+          <object caption='Clipboard_20260715T172705' id='Clipboard_20260715T172705'>
+            <properties context=''>
+              <relation connection='Clipboard_20260715T172705leaf' name='Clipboard_20260715T172705#txt' table='[Clipboard_20260715T172705#txt]' type='table'>
+                <columns character-set='UTF-8' header='yes' locale='en_US'>
+                  <column datatype='string' name='Box' ordinal='0' />
                 </columns>
               </relation>
             </properties>
@@ -5387,7 +5387,7 @@
           <zoom type='entire-view' />
         </viewpoint>
       </viewpoints>
-      <active id='-1' />
+      <active id='27' />
       <simple-id uuid='{7FEA434E-77DA-476F-87D7-C038C67E9C2D}' />
     </window>
     <window class='worksheet' name='Sheet 3'>

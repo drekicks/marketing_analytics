@@ -35,18 +35,20 @@ def export_campaign_results() -> None:
 
     extracts = load_sql_extracts(
         [
-            "campaign_performance_summary",
+            "campaign_summary",
             "campaign_segment_summary",
             "analytic_layer",
+            "campaign_tableau_summary",
         ]
     )
 
-    performance_df = extracts["campaign_performance_summary"]
+    summary_df = extracts["campaign_summary"]
     segment_df = extracts["campaign_segment_summary"]
     analytic_df = extracts["analytic_layer"]
+    tableau_df = extracts["campaign_tableau_summary"]
 
     performance_results = (
-        validation.campaign_performance_validation(performance_df)
+        validation.campaign_performance_validation(segment_df)
     )
 
     validation.print_validation_summary(
@@ -59,8 +61,8 @@ def export_campaign_results() -> None:
         return
 
     file_export(
-        performance_df,
-        "campaign_performance_summary.csv",
+        summary_df,
+        "campaign_summary.csv",
     )
     file_export(
         segment_df,
@@ -69,6 +71,10 @@ def export_campaign_results() -> None:
     file_export(
         analytic_df,
         "campaign_analytic_layer.csv",
+    )
+    file_export(
+        tableau_df,
+        "campaign_tableau_summary.csv",
     )
 
     print("Campaign Tableau extracts exported successfully.")
