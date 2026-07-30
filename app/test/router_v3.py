@@ -179,34 +179,3 @@ def route_question(question: str) -> RouteResult:
         campaign_ids=campaign_ids,
     )
 
-
-# def get_insight_response_mode(question: str) -> str:
-#     normalized = question.lower()
-#
-#     broad_insight_terms = (
-#         "what stands out",
-#         "key insights",
-#         "important insights",
-#         "what should we know",
-#         "what happened",
-#         "anything unusual",
-#         "anything unexpected",
-#         "opportunities",
-#         "recommendations",
-#         "what should we do",
-#         "takeaways",
-#         "overall",
-#         "big picture",
-#         "across all",
-#     )
-#
-#     if any(term in normalized for term in broad_insight_terms):
-#         return "full"
-
-    return "concise"
-
-# a = get_insight_response_mode(
-#     "What stands out across all campaigns?"
-# )
-#
-# print(a)

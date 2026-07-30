@@ -26,6 +26,11 @@ def route_question(question: str) -> RouteResult:
         " vs ",
         "difference",
         "better",
+        "highest",
+        "lowest",
+        "best",
+        "worst",
+        "most",
     )
 
     customer_terms = (
@@ -60,7 +65,7 @@ def route_question(question: str) -> RouteResult:
         "takeaways",
     )
 
-    evaluation_terms = (
+    evaluation_terms = {
         "best",
         "worst",
         "highest",
@@ -74,17 +79,7 @@ def route_question(question: str) -> RouteResult:
         "prioritize",
         "delivered",
         "generated",
-    )
-
-    scope_terms = (
-        "overall",
-        "across all",
-        "across campaigns",
-        "across segments",
-        "portfolio-wide",
-        "big picture",
-        "holistically",
-    )
+    }
 
     has_multiple_campaigns = len(campaign_ids) > 1
 
@@ -93,85 +88,110 @@ def route_question(question: str) -> RouteResult:
         for term in comparison_terms
     )
 
-    has_customer_term = any(
-        term in normalized
-        for term in customer_terms
-    )
-
-    has_segment_term = any(
-        term in normalized
-        for term in segment_terms
-    )
+    is_comparison = (
+            has_multiple_campaigns and
+            has_comparison_term)
 
     has_evaluation_term = any(
         term in normalized
         for term in evaluation_terms
     )
 
-    has_scope_term = any(
-        term in normalized
-        for term in scope_terms
-    )
-
-    has_explicit_insight_term = any(
+    has_insight_term = any(
         term in normalized
         for term in insight_terms
     )
 
-    is_broad_insight = (
-            has_scope_term
-            or has_explicit_insight_term
-    )
+    is_insight_intent = (
+            has_evaluation_term or
+            has_insight_term)
 
-    # Explicit multi-campaign comparison
-    if has_multiple_campaigns and has_comparison_term:
+    if is_comparison:
         return RouteResult(
             analysis_type="comparison",
             context_type="campaign",
             campaign_ids=campaign_ids,
         )
-    # Broad synthesis request
-    if is_broad_insight:
+
+    if is_insight_intent:
         return RouteResult(
             analysis_type="insight",
             context_type="insight",
             campaign_ids=campaign_ids,
         )
 
-    # Explicit segment subject.
-    if has_segment_term:
+    if any(term in normalized for term in segment_terms):
         return RouteResult(
-            analysis_type=(
-                "evaluation"
-                if has_evaluation_term
-                else "summary"
-            ),
+            analysis_type="segment",
             context_type="segment",
             campaign_ids=campaign_ids,
         )
 
-    # Explicit customer subject.
-    if has_customer_term:
+    if any(term in normalized for term in customer_terms):
         return RouteResult(
             analysis_type="detail",
             context_type="customer_campaign",
             campaign_ids=campaign_ids,
         )
 
-    # Campaign-level evaluation
-    if has_evaluation_term:
+    # if any(term in normalized for term in segment_terms):
+    #     return RouteResult(
+    #         analysis_type="segment",
+    #         context_type="segment",
+    #         campaign_ids=campaign_ids,
+    #     )
+
+    # return RouteResult(
+    #     analysis_type=(
+    #         "comparison" if is_comparison else "summary"
+    #     ),
+    #     context_type="campaign",
+    #     campaign_ids=campaign_ids,
+    # )
+
+    # if any(term in normalized for term in insight_terms):
+    #     return RouteResult(
+    #         analysis_type="insight",
+    #         context_type="insight",
+    #         campaign_ids=campaign_ids,
+    #     )
+
+    # if any(term in normalized for term in evaluation_terms):
+    #     return RouteResult(
+    #         analysis_type="insight",
+    #         context_type="insight",
+    #         campaign_ids=campaign_ids,
+    #     )
+
+    # if any(term in normalized for term in segment_terms):
+    #     return RouteResult(
+    #         analysis_type=(
+    #             "comparison" if is_comparison else "summary"
+    #         ),
+    #         context_type="segment",
+    #         campaign_ids=campaign_ids,
+    #     )
+
+    if campaign_ids:
         return RouteResult(
-            analysis_type="campaign",
+            analysis_type="comparison" ,
             context_type="campaign",
             campaign_ids=campaign_ids,
         )
 
-    if campaign_ids:
-        return RouteResult(
-            analysis_type="comparison",
-            context_type="campaign",
-            campaign_ids=campaign_ids,
-        )
+    # if campaign_ids:
+    #     return RouteResult(
+    #         analysis_type="insight",
+    #         context_type="insight",
+    #         campaign_ids=campaign_ids,
+    #     )
+    #
+    # if campaign_ids:
+    #     return RouteResult(
+    #         analysis_type="summary" ,
+    #         context_type="campaign",
+    #         campaign_ids=campaign_ids,
+    #     )
 
     return RouteResult(
         analysis_type="summary",
@@ -179,34 +199,3 @@ def route_question(question: str) -> RouteResult:
         campaign_ids=campaign_ids,
     )
 
-
-# def get_insight_response_mode(question: str) -> str:
-#     normalized = question.lower()
-#
-#     broad_insight_terms = (
-#         "what stands out",
-#         "key insights",
-#         "important insights",
-#         "what should we know",
-#         "what happened",
-#         "anything unusual",
-#         "anything unexpected",
-#         "opportunities",
-#         "recommendations",
-#         "what should we do",
-#         "takeaways",
-#         "overall",
-#         "big picture",
-#         "across all",
-#     )
-#
-#     if any(term in normalized for term in broad_insight_terms):
-#         return "full"
-
-    return "concise"
-
-# a = get_insight_response_mode(
-#     "What stands out across all campaigns?"
-# )
-#
-# print(a)

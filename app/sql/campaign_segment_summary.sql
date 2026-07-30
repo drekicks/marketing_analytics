@@ -46,12 +46,14 @@ combined as
 	and c.customer_segment = t.customer_segment
 ),
 c2 as 
-(select *, to_char((test_conversion_rate-control_conversion_rate)* 100,'FM999990.0')||' percentage points' absolute_lift, control_rpc*test_audience expct_rvn, test_revenue-(control_rpc*test_audience) incremental_rev from combined
+(select *, to_char((test_conversion_rate-control_conversion_rate)* 100,'FM999990.0')||' percentage points' absolute_lift_char, (test_conversion_rate-control_conversion_rate)*100 absolute_lift,  control_rpc*test_audience expct_rvn, test_revenue-(control_rpc*test_audience) incremental_rev from combined
 ), c3 as
 (select *, round((incremental_rev - total_campaign_cost)/total_campaign_cost,2) as marketing_roi,
 round((test_conversion_rate-control_conversion_rate) * test_audience,0)::integer incremental_conversions, 
 test_revenue + control_revenue as campaign_revenue, 
-(test_cnvrsn + control_cnvrsn)::integer as campaign_conversions
-from c2) select *, round(campaign_revenue/campaign_conversions,2) revenue_per_conversion from c3 order by 1;
+(test_cnvrsn + control_cnvrsn)::integer as campaign_conversions,
+(test_audience + control_audience) segment_audience
+from c2) select *, round(campaign_revenue/campaign_conversions,2) segment_rpr, round(100*campaign_conversions/segment_audience,2)/100 segment_conversion_rate
+from c3 order by 1;
 
 

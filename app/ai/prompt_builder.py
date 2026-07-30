@@ -8,7 +8,7 @@ def build_prompt(template: str, variables: dict) -> str:
         final_prompt = final_prompt.replace(placeholder, str(variable_value))
 
     unresolved_variables = re.findall(
-        r"\{\{([a-zA-Z_][a-zA-Z0-9_]*)\}\}",final_prompt
+        r"\{\{([a-zA-Z_][a-zA-Z0-9_]*)}}",final_prompt
     )
 
     if unresolved_variables:

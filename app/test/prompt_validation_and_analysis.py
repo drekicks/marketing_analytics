@@ -8,23 +8,22 @@ if not openai_api_key:
 
 client = OpenAI(api_key=openai_api_key)
 
+# Conservative character-based guard.
+# This is intentionally lower than many model limits because tokens are not
+# equal to characters, and analytics prompts can contain dense tabular data.
 MAX_PROMPT_CHARACTERS = 80_000
 
 
-def _get_prompt_size_message(prompt: str) -> str:
-    prompt_characters = len(prompt)
-    estimated_tokens = prompt_characters // 4
-
-    return (
-        f"Prompt size: {prompt_characters:,} characters "
-        f"(approximately {estimated_tokens:,} tokens)"
-    )
-
-
 def _validate_prompt_size(prompt: str) -> None:
-    prompt_length = len(prompt)
+    """
+    Validate prompt size before sending it to the LLM.
 
-    # print(_get_prompt_size_message(prompt))
+    This uses a conservative character limit because this project does not
+    currently depend on a tokenizer package. The goal is to catch obviously
+    oversized prompts locally and provide a useful error message before the
+    API request fails with context_length_exceeded.
+    """
+    prompt_length = len(prompt)
 
     if prompt_length > MAX_PROMPT_CHARACTERS:
         raise ValueError(

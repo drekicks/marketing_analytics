@@ -1,5 +1,5 @@
 from app.config.router import route_question
-from app.ai.context_builder import build_campaign_context, build_segment_context, build_customer_context
+from app.ai.context_builder import build_campaign_context, build_segment_context, build_customer_context, build_insight_context
 from app.ai.context_loader import summary_df, segment_df, campaign_goals_df, customer_df
 
 questions = [
@@ -10,9 +10,12 @@ questions = [
     "Compare churn vs growth segments for campaign CMP-2026-003 and CMP-2026-004",
     "Which campaign performed better, CMP-2026-004 or CMP-2026-003?",
     "How did CMP-2026-003 perform?",
-    "Tell me what stands out.",
-    "How did CMP-2026-999 perform?",
-    "Tell me about CMP-2026-999."
+    "Tell me what stands out about CMP-2026-003.",
+    "What are the key takeaways from CMP-2026-004 and CMP-2026-003?",
+    "Overall, which campaign performed better?",
+    "Across all campaigns, which campaign had the highest conversion rate?",
+    # "How did CMP-2026-999 perform?",
+    # "Tell me about CMP-2026-999."
 ]
 
 for question in questions:
@@ -37,6 +40,13 @@ for question in questions:
             campaign_id
         )
 
+    elif route.context_type == "insight":
+        context = build_insight_context(
+            summary_df,
+            segment_df,
+            campaign_goals_df,
+            campaign_id
+        )
     else:
         context = build_customer_context(
             customer_df,

@@ -3,13 +3,16 @@ from app.ai.prompt_loader import load_prompt
 from app.ai.context_builder import (
     build_campaign_context,
     build_campaign_comparison_context,
+    build_insight_context
 )
 from app.ai.llm_client_api import generate_analysis
+# from app.test.prompt_validation_and_analysis import generate_analysis
 from app.ai.analyst_chat import ask_analyst
 from app.ui.campaign_selector import select_campaign
 from datetime import datetime
-from app.ai.context_loader import summary_df, campaign_goals_df, unique_campaigns_df
+from app.ai.context_loader import summary_df, campaign_goals_df, unique_campaigns_df, segment_df
 from app.config.router import route_question
+
 
 campaign_id, campaign_name = select_campaign(
     unique_campaigns_df
@@ -37,6 +40,10 @@ template = load_prompt("executive_summary")
 question_template = load_prompt("analyst_guidelines")
 
 final_prompt = build_prompt(template = template, variables={"campaign_metrics": context})
+
+# print(f"Final prompt size: {len(final_prompt):,} characters")
+# print(f"Approximate prompt tokens: {len(final_prompt) // 4:,}")
+
 
 analysis = generate_analysis(final_prompt)
 
@@ -83,28 +90,36 @@ while True:
 
     route = route_question(question)
 
-    if route.context_type == "campaign" and route.analysis_type == "comparison" and len(route.campaign_ids) >= 2:
-        try:
-            build_campaign_comparison_context(
+    try:
+        prebuilt_context = None
+
+        if route.context_type == "campaign" and route.analysis_type == "comparison" and len(route.campaign_ids) >= 2:
+            prebuilt_context = build_campaign_comparison_context(
                 summary_df,
                 campaign_goals_df,
                 route.campaign_ids,
             )
-        except ValueError as e:
-            print(f"Analyst: {e}")
-            continue
+        elif route.context_type == "insight":
+            resolved_campaign_id = (route.campaign_ids or [campaign_id])[0]
+            prebuilt_context = build_insight_context(
+                summary_df,
+                segment_df,
+                campaign_goals_df,
+                resolved_campaign_id,
+            )
 
-
-    try:
         answer = ask_analyst(
-            campaign_id=campaign_id,
+            campaign_id=(route.campaign_ids or [campaign_id])[0],
             question=question,
             prompt_template=question_template,
             conversation_history=conversation_history,
+            context=prebuilt_context,
         )
+
     except ValueError as e:
         print(f"Analyst: {e}")
         continue
+
 
     conversation_history.append({
         "question": question,
