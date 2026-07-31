@@ -5,6 +5,16 @@ from app.ai.context_builder import build_campaign_context, build_segment_context
 from app.ai.context_loader import summary_df, segment_df, campaign_goals_df, customer_df
 import re
 
+SCOPE_TERMS = (
+    "overall",
+    "across all",
+    "across campaigns",
+    "across segments",
+    "portfolio-wide",
+    "big picture",
+    "holistically",
+)
+
 STANDARD_RESPONSE_FORMAT = """Use the following format for every answer:
 
 1. Begin with one direct conclusion written as a complete sentence.
@@ -138,6 +148,8 @@ def ask_analyst(campaign_id: str,
     conversation_context = _format_conversation_history(conversation_history)
 
     route = route_question(question)
+    normalized_question = question.lower()
+    is_scope_request = any(term in normalized_question for term in SCOPE_TERMS)
 
     resolved_campaign_ids = route.campaign_ids or [campaign_id]
     resolved_campaign_id = resolved_campaign_ids[0]
@@ -169,7 +181,7 @@ def ask_analyst(campaign_id: str,
                 summary_df,
                 segment_df,
                 campaign_goals_df,
-                resolved_campaign_id
+                None if is_scope_request and not route.campaign_ids else resolved_campaign_id
             )
 
         elif route.context_type in {"customer", "customer_campaign"}:

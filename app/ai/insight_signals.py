@@ -3,8 +3,10 @@ import pandas as pd
 from app.ai.context_loader import segment_df
 
 
-def calculate_segment_signals(segment_df: pd.DataFrame,
-                              campaign_id) -> dict[str, Any]:
+def calculate_segment_signals(
+    segment_df: pd.DataFrame,
+    campaign_id: str | None = None,
+) -> dict[str, Any]:
     """
     Calculate insights for a given segment of data.
 
@@ -34,13 +36,27 @@ def calculate_segment_signals(segment_df: pd.DataFrame,
         If the campaign has no segment data.
 
     """
-    campaign_id = str(campaign_id).strip()
+    campaign_label_column = "customer_segment"
 
-    campaign_segments = segment_df.loc[
-        segment_df["campaign_id"].astype(str).str.strip() == campaign_id
+    if campaign_id is None:
+        campaign_segments = segment_df.copy()
+        campaign_segments["campaign_id"] = (
+            campaign_segments["campaign_id"].astype(str).str.strip()
+        )
+        campaign_segments["customer_segment"] = (
+            campaign_segments["campaign_id"]
+            + " - "
+            + campaign_segments["customer_segment"].astype(str)
+        )
+    else:
+        campaign_id = str(campaign_id).strip()
+        campaign_segments = segment_df.loc[
+            segment_df["campaign_id"].astype(str).str.strip() == campaign_id
         ].copy()
 
     if campaign_segments.empty:
+        if campaign_id is None:
+            raise ValueError("No segment data found across campaigns.")
         raise ValueError(f"No segment data found for campaign {campaign_id}")
 
     required_columns = [
@@ -87,27 +103,27 @@ def calculate_segment_signals(segment_df: pd.DataFrame,
 
     return {
         "highest_conversions": {
-            "segment": highest_conversions["customer_segment"],
+            "segment": highest_conversions[campaign_label_column],
             "value":float(highest_conversions["campaign_conversions"])
             },
         "highest_revenue": {
-            "segment": highest_revenue["customer_segment"],
+            "segment": highest_revenue[campaign_label_column],
             "value": float(highest_revenue["campaign_revenue"])
         },
         "highest_conversion_rate": {
-            "segment":highest_conversion_rate["customer_segment"],
+            "segment":highest_conversion_rate[campaign_label_column],
             "value": float(highest_conversion_rate["segment_conversion_rate"])
         },
         "highest_absolute_lift": {
-            "segment":highest_absolute_lift["customer_segment"],
+            "segment":highest_absolute_lift[campaign_label_column],
             "value":float(highest_absolute_lift["absolute_lift"])
             },
         "highest_revenue_per_conversion": {
-            "segment":highest_revenue_per_conversion["customer_segment"],
+            "segment":highest_revenue_per_conversion[campaign_label_column],
             "value":float(highest_revenue_per_conversion["segment_rpr"])
             },
         "lowest_conversion_rate": {
-            "segment":lowest_conversion_rate["customer_segment"],
+            "segment":lowest_conversion_rate[campaign_label_column],
             "value":float(lowest_conversion_rate["segment_conversion_rate"])
             },
     }
@@ -152,9 +168,7 @@ def format_segment_signals(signals: dict[str, Any]) -> str:
         ]
     )
 signals = calculate_segment_signals(
-    segment_df=segment_df,
-    campaign_id="CMP-2026-003",
+    segment_df=segment_df
 )
 
-
-# print(format_segment_signals(signals))
+print(signals)

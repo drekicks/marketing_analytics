@@ -6,17 +6,27 @@ from app.ai.context_builder import (
     build_insight_context
 )
 from app.ai.llm_client_api import generate_analysis
-# from app.test.prompt_validation_and_analysis import generate_analysis
 from app.ai.analyst_chat import ask_analyst
+from app.ai.session_state_manager import (
+    resolve_campaign_id,
+    resolve_comparison_campaign_ids,
+)
 from app.ui.campaign_selector import select_campaign
 from datetime import datetime
 from app.ai.context_loader import summary_df, campaign_goals_df, unique_campaigns_df, segment_df
 from app.config.router import route_question
+from app.config.settings import SessionState
 
+session_state = SessionState()
 
 campaign_id, campaign_name = select_campaign(
     unique_campaigns_df
 )
+valid_campaign_ids = {
+    str(campaign).strip()
+    for campaign in unique_campaigns_df["campaign_id"].dropna().tolist()
+}
+session_state.active_campaign_id = campaign_id
 print(f"\nCampaign Selected: {campaign_name} ({campaign_id})")
 print()
 print("Generating Executive Summary...........")
@@ -44,7 +54,6 @@ final_prompt = build_prompt(template = template, variables={"campaign_metrics": 
 # print(f"Final prompt size: {len(final_prompt):,} characters")
 # print(f"Approximate prompt tokens: {len(final_prompt) // 4:,}")
 
-
 analysis = generate_analysis(final_prompt)
 
 print(analysis)
@@ -63,10 +72,9 @@ print("Examples:")
 examples = [
     "Which audience performed best?",
     "Should this campaign be scaled?",
-    "Why did Win-Back underperform?",
     "What are the biggest business risks?",
     "Did the campaign achieve its objective?",
-    "What were the goals of the campaign?",
+    "Across all campaigns, which audience performed best?",
 ]
 
 for example in examples:
@@ -76,6 +84,16 @@ print()
 print ("Type 'exit' or 'quit' to close.")
 
 conversation_history = []
+
+scope_terms = (
+    "overall",
+    "across all",
+    "across campaigns",
+    "across segments",
+    "portfolio-wide",
+    "big picture",
+    "holistically",
+)
 
 while True:
     question = input("\nYou: ").strip()
@@ -89,27 +107,41 @@ while True:
         continue
 
     route = route_question(question)
+    previous_active_campaign_id = session_state.active_campaign_id
+    resolved_campaign_id = resolve_campaign_id(
+        session_state=session_state,
+        route=route,
+        default_campaign_id=campaign_id,
+        valid_campaign_ids=valid_campaign_ids,
+    )
+    normalized_question = question.lower()
+    is_scope_request = any(term in normalized_question for term in scope_terms)
 
     try:
         prebuilt_context = None
 
-        if route.context_type == "campaign" and route.analysis_type == "comparison" and len(route.campaign_ids) >= 2:
+        comparison_campaign_ids = resolve_comparison_campaign_ids(
+            explicit_campaign_ids=route.campaign_ids,
+            previous_active_campaign_id=previous_active_campaign_id,
+            fallback_campaign_id=campaign_id,
+        )
+
+        if route.context_type == "campaign" and route.analysis_type == "comparison" and len(comparison_campaign_ids) >= 2:
             prebuilt_context = build_campaign_comparison_context(
                 summary_df,
                 campaign_goals_df,
-                route.campaign_ids,
+                comparison_campaign_ids,
             )
         elif route.context_type == "insight":
-            resolved_campaign_id = (route.campaign_ids or [campaign_id])[0]
             prebuilt_context = build_insight_context(
                 summary_df,
                 segment_df,
                 campaign_goals_df,
-                resolved_campaign_id,
+                None if is_scope_request and not route.campaign_ids else resolved_campaign_id,
             )
 
         answer = ask_analyst(
-            campaign_id=(route.campaign_ids or [campaign_id])[0],
+            campaign_id=resolved_campaign_id,
             question=question,
             prompt_template=question_template,
             conversation_history=conversation_history,
@@ -117,6 +149,7 @@ while True:
         )
 
     except ValueError as e:
+        print(f"Campaign: {resolved_campaign_id}")
         print(f"Analyst: {e}")
         continue
 
@@ -127,4 +160,6 @@ while True:
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
     )
-    print(f"\nAnalyst: {answer}")
+    if not (route.context_type == "insight" and is_scope_request and not route.campaign_ids):
+        print(f"\nCampaign: {resolved_campaign_id}")
+    print(f"Analyst: {answer}")

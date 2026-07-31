@@ -263,8 +263,52 @@ def build_insight_context(
     summary_df,
     segment_df,
     campaign_goals_df,
-    campaign_id: str,
+    campaign_id: str | None,
 ) -> str:
+    if campaign_id is None:
+        if summary_df.empty:
+            raise ValueError("No campaign summary data was found.")
+        if segment_df.empty:
+            raise ValueError("No segment-level data was found.")
+
+        signals = calculate_segment_signals(
+            segment_df=segment_df,
+            campaign_id=None,
+        )
+        signal_context = format_segment_signals(signals)
+
+        audience_size = int(summary_df["audience_size"].sum())
+        conversions = int(summary_df["conversions"].sum())
+        revenue = float(summary_df["campaign_revenue"].sum())
+        campaign_cost = float(summary_df["total_campaign_cost"].sum())
+        revenue_per_customer = (
+            revenue / audience_size
+            if audience_size
+            else 0.0
+        )
+
+        context_lines = [
+            "INSIGHT EXPLORER CONTEXT",
+            "========================",
+            "",
+            "PORTFOLIO-WIDE SCOPE",
+            "--------------------",
+            "Campaign Span: All campaigns",
+            f"Campaign Count: {summary_df['campaign_id'].nunique()}",
+            "",
+            "OVERALL PERFORMANCE",
+            "-------------------",
+            f"Audience Size: {audience_size:,}",
+            f"Conversions: {conversions:,}",
+            f"Revenue: ${revenue:,.2f}",
+            f"Campaign Cost: ${campaign_cost:,.2f}",
+            f"Revenue Per Customer: ${revenue_per_customer:,.2f}",
+            "",
+            signal_context,
+        ]
+
+        return "\n".join(context_lines)
+
     campaign_id = str(campaign_id)
 
     campaign_summary_rows = summary_df[
