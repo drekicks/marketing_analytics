@@ -67,10 +67,10 @@ from app.ai.context_builder import build_campaign_context, build_segment_context
 #             "Overall, which segment had the highest revenue?",
 #             "insight"
 #          ),
-#         (
-#             "Which campaign had the highest revenue, CMP-2026-004 or CMP-2026-003?",
-#             "campaign"
-#         ),
+        (
+            "Which campaign had the highest revenue, CMP-2026-004 or CMP-2026-003?",
+            "campaign"
+        ),
 #         (
 #             "Across all campaigns, what delivered the most scale?",
 #             "insight"

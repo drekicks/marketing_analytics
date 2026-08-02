@@ -3,17 +3,17 @@ from app.ai.context_builder import build_campaign_context, build_segment_context
 from app.utils.data_loader import summary_df, segment_df, campaign_goals_df, customer_df
 
 questions = [
-    "How was performance by segment for CMP-2026-003?",
-    "How was segment performance for CMP-2026-003?",
+    # "How was performance by segment for CMP-2026-003?",
+    # "How was segment performance for CMP-2026-003?",
     "Compare audience size for campaign CMP-2026-003 and CMP-2026-004",
-    "Compare churn vs growth for campaign CMP-2026-003",
-    "Compare churn vs growth segments for campaign CMP-2026-003 and CMP-2026-004",
-    "Which campaign performed better, CMP-2026-004 or CMP-2026-003?",
-    "How did CMP-2026-003 perform?",
-    "Tell me what stands out about CMP-2026-003.",
-    "What are the key takeaways from CMP-2026-004 and CMP-2026-003?",
-    "Overall, which campaign performed better?",
-    "Across all campaigns, which campaign had the highest conversion rate?",
+    # "Compare churn vs growth for campaign CMP-2026-003",
+    # "Compare churn vs growth segments for campaign CMP-2026-003 and CMP-2026-004",
+    # "Which campaign performed better, CMP-2026-004 or CMP-2026-003?",
+    # "How did CMP-2026-003 perform?",
+    # "Tell me what stands out about CMP-2026-003.",
+    # "What are the key takeaways from CMP-2026-004 and CMP-2026-003?",
+    # "Overall, which campaign performed better?",
+    # "Across all campaigns, which campaign had the highest conversion rate?",
     # "How did CMP-2026-999 perform?",
     # "Tell me about CMP-2026-999."
 ]

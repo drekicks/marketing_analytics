@@ -164,13 +164,17 @@ def route_question(question: str) -> RouteResult:
         term in normalized for term in revenue_terms
     )
 
+    has_conversion_rate_term = any(
+        term in normalized for term in conversion_rate_terms
+    )
+
     has_conversion_term = any(
         term in normalized for term in conversion_terms
     )
 
-    has_conversion_rate_term = any(
-        term in normalized for term in conversion_rate_terms
-    )
+    # has_conversion_rate_term = any(
+    #     term in normalized for term in conversion_rate_terms
+    # )
 
     # print(f"Question: {normalized}")
     # print(f"Visualization match: {has_visualization_term}")
@@ -199,10 +203,14 @@ def route_question(question: str) -> RouteResult:
             metric = "revenue"
         elif has_conversion_rate_term:
             metric = "conversion_rate"
-        elif has_conversion_term:
-            metric = "conversions"
+        # elif has_conversion_term:
+        #     metric = "conversions"
         else:
-            metric = "conversion_rate" if subject=="segment" else "revenue"
+            raise ValueError(
+                "That visualization is not currently supported. "
+                "Available charts are campaign or segment revenue "
+                "and conversion rate."
+            )
 
         return RouteResult(
             analysis_type="visualization",

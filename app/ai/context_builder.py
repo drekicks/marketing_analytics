@@ -146,6 +146,7 @@ def build_campaign_context(summary_df:pd.DataFrame,
                      f"Campaign Revenue: ${summary_row['campaign_revenue']:,.2f}",
                      f"Campaign Cost: ${summary_row['total_campaign_cost']:,.2f}",
                      f"Conversions: {summary_row['conversions']:,}",
+                     f"Conversion Rate: {summary_row['conversion_rate']:.1%}",
                      f"Revenue Per Customer: ${summary_row['revenue_per_customer']:.2f}",
                      f"Revenue Per Conversion: ${summary_row['revenue_per_conversion']:.2f}",
                      ]

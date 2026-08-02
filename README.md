@@ -94,6 +94,19 @@ These files are intended to serve as controlled Tableau data sources.
 
 Ask Analyst provides a natural-language interface for exploring the curated analytical data. The application is intentionally separated from the Tableau export process so users can move between a stable dashboard and conversational analysis without triggering a data refresh. The application supports configurable OpenAI models. During development, GPT-5.4 mini was used to minimize cost, while GPT-5.5 can be substituted for higher-quality analysis.
 
+## Visual Analytics
+
+Ask Analyst can generate and interpret bar charts for:
+
+- Campaign revenue
+- Campaign conversion rate
+- Segment revenue
+- Segment conversion rate
+
+Example questions:
+
+- `Chart conversion rate by segment`
+- `Plot campaign revenue`
 
 ## Example Project Structure
 

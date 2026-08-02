@@ -20,24 +20,27 @@ from app.config.paths import OUTPUT_DIR
 
 from pathlib import Path
 from app.config.paths import OUTPUT_DIR
-from app.utils.data_loader import segment_df
+from app.utils.data_loader import summary_df, segment_df
 from app.config.router import VisualizationRequest
 from app.visualization.chart_dispatcher import (
     create_visualization,
 )
 
+
 output = OUTPUT_DIR
 
 request = VisualizationRequest(
-    subject="segment",
-    metric="revenue",
+    subject="campaign",
+    metric="conversion_rate",
     chart_type="bar",
 )
 
 chart_path = create_visualization(
     request=request,
-    campaign_id="CMP-2025-002",
+    campaign_id="",
+    campaign_ids=[],
     segment_df=segment_df,
+    summary_df=summary_df,
     output_dir=output
 )
 

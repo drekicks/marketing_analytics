@@ -105,19 +105,21 @@ while True:
         print("Please enter a question.")
         continue
 
-    route = route_question(question)
-    previous_active_campaign_id = session_state.active_campaign_id
-    resolved_campaign_id = resolve_campaign_id(
-        session_state=session_state,
-        route=route,
-        default_campaign_id=campaign_id,
-        valid_campaign_ids=valid_campaign_ids,
-    )
-    normalized_question = question.lower()
-    is_scope_request = any(term in normalized_question for term in scope_terms)
-
     try:
+        route = route_question(question)
+        previous_active_campaign_id = session_state.active_campaign_id
+        resolved_campaign_id = resolve_campaign_id(
+            session_state=session_state,
+            route=route,
+            default_campaign_id=campaign_id,
+            valid_campaign_ids=valid_campaign_ids,
+        )
+        normalized_question = question.lower()
+        is_scope_request = any(term in normalized_question for term in scope_terms)
+
+    # try:
         prebuilt_context = None
+        # route = route_question(question)
 
         if route.analysis_type == "visualization":
             if route.visualization_request is None:
@@ -128,14 +130,18 @@ while True:
             chart_path = create_visualization(
                 request=route.visualization_request,
                 campaign_id=resolved_campaign_id,
+                campaign_ids=route.campaign_ids,
                 segment_df=segment_df,
+                summary_df=summary_df,
                 output_dir=chart_dir
             )
 
             visualization_context = build_visualization_context(
                 request=route.visualization_request,
                 campaign_id=resolved_campaign_id,
+                campaign_ids=route.campaign_ids,
                 segment_df=segment_df,
+                summary_df=summary_df
             )
 
             analysis_instruction = f"""
@@ -160,9 +166,9 @@ while True:
                 context=visualization_context,
             )
             chart_name = f"{route.visualization_request.subject.title()} {route.visualization_request.metric.title()} - {resolved_campaign_id.upper()}.png"
-            print(f"\nCampaign: {resolved_campaign_id}")
-            print(f"Chart created: {chart_name}")
-            print(f"Saved to: {chart_path.resolve()}")
+            print(f"\nChart created: {chart_name}")
+            print(f"Saved to: {chart_path.resolve()}\n")
+            print(f"Campaign: {resolved_campaign_id}")
             print(f"Analyst: {answer}")
             continue
 
@@ -195,7 +201,7 @@ while True:
         )
 
     except ValueError as e:
-        print(f"Campaign: {resolved_campaign_id}")
+        # print(f"Campaign: {resolved_campaign_id}")
         print(f"Analyst: {e}")
         continue
 
