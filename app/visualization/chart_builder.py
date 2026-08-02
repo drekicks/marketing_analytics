@@ -40,4 +40,30 @@ def build_visualization_context(
 
         return "\n".join(context_lines)
 
+    if (
+            request.subject == "segment"
+            and request.metric == "revenue"
+    ):
+        rows = segment_df.loc[segment_df["campaign_id"].astype(str) == campaign_id].copy()
+
+        if rows.empty:
+            raise ValueError(f"No data found for campaign ID {campaign_id}.")
+
+        rows = rows.sort_values("campaign_revenue", ascending=False, )
+
+        context_lines = [
+            "VISUALIZATION DATA",
+            f"Campaign ID: {campaign_id}",
+            "Metric: Revenue by Segment",
+            "",
+        ]
+
+        for _, row in rows.iterrows():
+            context_lines.append(
+                f"{row['customer_segment']}: "
+                f"${row['campaign_revenue']:.,}"
+            )
+
+        return "\n".join(context_lines)
+
     raise ValueError(f"Invalid visualization request: {request}")

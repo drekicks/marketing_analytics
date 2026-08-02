@@ -30,15 +30,17 @@ output = OUTPUT_DIR
 
 request = VisualizationRequest(
     subject="segment",
-    metric="conversion_rate",
+    metric="revenue",
     chart_type="bar",
 )
 
 chart_path = create_visualization(
     request=request,
-    campaign_id="CMP-2026-004",
+    campaign_id="CMP-2025-002",
     segment_df=segment_df,
     output_dir=output
 )
 
-print(f"Chart created: {chart_path}")
+chart_name = f"{request.subject.title()} {request.metric.title()} -"
+print(chart_name)
+print(f"Saved to: {chart_path}")

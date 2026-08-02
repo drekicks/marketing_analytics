@@ -159,9 +159,10 @@ while True:
                 conversation_history=conversation_history,
                 context=visualization_context,
             )
-
+            chart_name = f"{route.visualization_request.subject.title()} {route.visualization_request.metric.title()} - {resolved_campaign_id.upper()}.png"
             print(f"\nCampaign: {resolved_campaign_id}")
-            print(f"Chart created: {chart_path.resolve()}")
+            print(f"Chart created: {chart_name}")
+            print(f"Saved to: {chart_path.resolve()}")
             print(f"Analyst: {answer}")
             continue
 

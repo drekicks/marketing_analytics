@@ -79,3 +79,67 @@ def create_segment_conversion_rate_chart(
     plt.close(fig)
 
     return output_path
+
+def create_segment_revenue_chart(
+        segment_df: pd.DataFrame,
+        campaign_id: str,
+        output_path: Path,
+) -> Path:
+    """Create and save a segment conversion-rate bar chart."""
+
+    campaign_rows = segment_df.loc[
+        segment_df["campaign_id"].astype(str) == str(campaign_id)
+    ].copy()
+
+    if campaign_rows.empty:
+        raise ValueError(
+            f"No segment data found for campaign ID: {campaign_id}"
+        )
+
+    required_columns = ["customer_segment", "campaign_revenue"]
+
+    # missing_columns = [col for col in required_columns if col not in campaign_rows.columns]
+
+    if not all(column in campaign_rows.columns for column in required_columns):
+        raise ValueError(
+            f"Missing required columns in segment data: {required_columns}"
+        )
+
+    campaign_rows = campaign_rows.sort_values("campaign_revenue", ascending=False)
+
+    output_path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    fig, ax = plt.subplots(figsize=(9, 5))
+    ax.bar(campaign_rows["customer_segment"], campaign_rows["campaign_revenue"], color="#4C72B0")
+
+    ax.set_title(f"Revenue by Customer Segment - {campaign_id}")
+    ax.set_xlabel("Customer Segment")
+    ax.set_ylabel("Revenue")
+
+    # Format y-axis as percentage
+    ax.yaxis.set_major_formatter(FuncFormatter(lambda x, _: f"${x:,.0f}"))
+
+    # Label each bar with its value
+    for i, value in enumerate(campaign_rows["campaign_revenue"]):
+        ax.annotate(
+            f"${value:,.0f}",
+            xy=(i, value),
+            xytext=(0, 3),
+            textcoords="offset points",
+            ha="center",
+            fontsize=9,
+        )
+
+    fig.tight_layout()
+    fig.savefig(
+        output_path,
+        dpi=150,
+        bbox_inches='tight'
+    )
+
+    plt.close(fig)
+
+    return output_path
