@@ -1,11 +1,19 @@
 from dataclasses import dataclass
+# from app.config.settings import VisualizationRequest
 import re
+
+@dataclass(frozen=True)
+class VisualizationRequest:
+    subject: str
+    metric: str
+    chart_type: str = "bar"
 
 @dataclass(frozen=True)
 class RouteResult:
     context_type: str
     analysis_type: str
     campaign_ids:list[str]
+    visualization_request: VisualizationRequest | None = None
 
 def extract_campaign_ids(question: str) -> list[str]:
     # Matches CMP-2026-004 and legacy C001/c123 formats.
@@ -86,6 +94,30 @@ def route_question(question: str) -> RouteResult:
         "holistically",
     )
 
+    visual_terms = (
+        "chart",
+        "plot",
+        "graph",
+        "visualize",
+        "visualization",
+        "diagram",
+    )
+
+    revenue_terms = (
+        "revenue",
+        "sales",
+    )
+
+    conversion_rate_terms = (
+        "conversion rate",
+        "conversion rates",
+    )
+
+    conversion_terms = (
+        "conversions",
+        "conversion volume",
+    )
+
     has_multiple_campaigns = len(campaign_ids) > 1
 
     has_comparison_term = any(
@@ -96,6 +128,11 @@ def route_question(question: str) -> RouteResult:
     has_customer_term = any(
         term in normalized
         for term in customer_terms
+    )
+
+    has_visualization_term = any(
+        term in normalized
+        for term in visual_terms
     )
 
     has_segment_term = any(
@@ -123,6 +160,29 @@ def route_question(question: str) -> RouteResult:
             or has_explicit_insight_term
     )
 
+    has_revenue_term = any(
+        term in normalized for term in revenue_terms
+    )
+
+    has_conversion_term = any(
+        term in normalized for term in conversion_terms
+    )
+
+    has_conversion_rate_term = any(
+        term in normalized for term in conversion_rate_terms
+    )
+
+    # print(f"Question: {normalized}")
+    # print(f"Visualization match: {has_visualization_term}")
+    # print(
+    #     "Matched visual terms:",
+    #     [
+    #         term
+    #         for term in visual_terms
+    #         if term in normalized
+    #     ],
+    # )
+
     # Explicit multi-campaign comparison
     if has_multiple_campaigns and has_comparison_term:
         return RouteResult(
@@ -130,6 +190,31 @@ def route_question(question: str) -> RouteResult:
             context_type="campaign",
             campaign_ids=campaign_ids,
         )
+
+    # Visualization request
+    if has_visualization_term:
+        subject = "segment" if has_segment_term else "campaign"
+
+        if has_revenue_term:
+            metric = "revenue"
+        elif has_conversion_rate_term:
+            metric = "conversion_rate"
+        elif has_conversion_term:
+            metric = "conversions"
+        else:
+            metric = "conversion_rate" if subject=="segment" else "revenue"
+
+        return RouteResult(
+            analysis_type="visualization",
+            context_type=subject,
+            campaign_ids=campaign_ids,
+            visualization_request=VisualizationRequest(
+                subject=subject,
+                metric=metric,
+                chart_type="bar"
+            ),
+        )
+
     # Broad synthesis request
     if is_broad_insight:
         return RouteResult(

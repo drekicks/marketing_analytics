@@ -2,7 +2,7 @@ from app.ai.llm_client_api import generate_analysis
 from app.ai.prompt_builder import build_prompt
 from app.config.router import route_question
 from app.ai.context_builder import build_campaign_context, build_segment_context, build_customer_context, build_campaign_comparison_context, build_insight_context
-from app.ai.context_loader import summary_df, segment_df, campaign_goals_df, customer_df
+from app.utils.data_loader import summary_df, segment_df, campaign_goals_df, customer_df
 import re
 
 SCOPE_TERMS = (

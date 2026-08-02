@@ -119,52 +119,6 @@ while True:
     try:
         prebuilt_context = None
 
-        if route.analysis_type == "visualization":
-            if route.visualization_request is None:
-                raise ValueError(
-                    "The visualization request could not be determined."
-                )
-
-            chart_path = create_visualization(
-                request=route.visualization_request,
-                campaign_id=resolved_campaign_id,
-                segment_df=segment_df,
-                output_dir=chart_dir
-            )
-
-            visualization_context = build_visualization_context(
-                request=route.visualization_request,
-                campaign_id=resolved_campaign_id,
-                segment_df=segment_df,
-            )
-
-            analysis_instruction = f"""
-            The application has already created the requested visualization.
-
-            Original user request:
-            {question}
-
-            Interpret the supplied visualization data. Identify the clearest
-            pattern, the highest and lowest values, and meaningful differences.
-
-            Do not attempt to create the chart.
-            Do not say that plotting or visualization is unavailable.
-            Do not claim to have visually inspected the chart image.
-            """.strip()
-
-            answer = ask_analyst(
-                campaign_id=resolved_campaign_id,
-                question=analysis_instruction,
-                prompt_template=question_template,
-                conversation_history=conversation_history,
-                context=visualization_context,
-            )
-
-            print(f"\nCampaign: {resolved_campaign_id}")
-            print(f"Chart created: {chart_path.resolve()}")
-            print(f"Analyst: {answer}")
-            continue
-
         comparison_campaign_ids = resolve_comparison_campaign_ids(
             explicit_campaign_ids=route.campaign_ids,
             previous_active_campaign_id=previous_active_campaign_id,
@@ -192,6 +146,31 @@ while True:
             conversation_history=conversation_history,
             context=prebuilt_context,
         )
+
+        if route.context_type == "visualization":
+            chart_path = create_visualization(
+                request=route.visualization_request,
+                campaign_id=resolved_campaign_id,
+                segment_df=segment_df,
+                output_dir=chart_dir
+            )
+
+            visualization_context = build_visualization_context(
+                request=route.visualization_request,
+                campaign_id=resolved_campaign_id,
+                segment_df=segment_df,
+            )
+            answer = ask_analyst(
+                campaign_id=resolved_campaign_id,
+                question=question,
+                prompt_template=question_template,
+                conversation_history=conversation_history,
+                context=visualization_context,
+            )
+
+            print(f"\nChart created: {chart_path}")
+            print(f"Analyst: {answer}")
+            continue
 
     except ValueError as e:
         print(f"Campaign: {resolved_campaign_id}")

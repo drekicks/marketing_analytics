@@ -1,6 +1,6 @@
 from typing import Any
 import pandas as pd
-from app.ai.context_loader import segment_df
+from app.utils.data_loader import segment_df
 
 
 def calculate_segment_signals(
@@ -171,4 +171,4 @@ signals = calculate_segment_signals(
     segment_df=segment_df
 )
 
-print(signals)
+# print(signals)
