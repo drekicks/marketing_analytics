@@ -4,7 +4,7 @@ A portfolio analytics project built with PostgreSQL, SQL, Python, Tableau, and a
 
 The project extends the PostgreSQL `dvdrental` sample database with simulated campaign data, customer segmentation, reusable SQL extracts, validation checks, Tableau-ready datasets, and a conversational analysis layer. It is designed to demonstrate an end-to-end analytics workflow: from source data and transformation through reporting, validation, and natural-language insight generation. 
 
-The application supports configurable OpenAI models. During development, GPT-5.4 mini was used to minimize cost, while GPT-5.5 can be substituted for higher-quality analysis.
+The application supports configurable OpenAI models, allowing development to balance response quality, latency, and API cost.
 
 ## Project Goals
 
@@ -19,35 +19,68 @@ This project demonstrates how an analyst can:
 - Add an AI-assisted experience for answering business questions
 - Apply production-minded practices such as modular code, validation, environment configuration, and version control
 
+## Demo Mode
+
+The portfolio release will include a Streamlit web interface hosted on
+Streamlit Community Cloud.
+
+The hosted version will use synthetic demonstration data and allow users to:
+
+- Select a campaign
+- Generate an executive summary
+- Ask natural-language business questions
+- Compare campaigns
+- Explore segment performance
+- Generate and interpret charts
+
+No local installation will be required for the hosted demo.
+
 ## Technology Stack
 
 - **Database:** PostgreSQL
 - **SQL client:** DBeaver
 - **Programming language:** Python
-- **Python libraries:** pandas, SQLAlchemy, psycopg2
-- **Visualization:** Tableau
-- **AI analysis:** Ask Analyst workflow
+- **Data processing:** pandas
+- **Database access:** SQLAlchemy, psycopg2
+- **Dashboarding:** Tableau
+- **Python visualization:** Matplotlib
+- **AI integration:** OpenAI API
+- **Application interface:** Python CLI; Streamlit planned for Demo Mode
 - **Development environment:** PyCharm
+- **Testing:** pytest
 - **Version control:** Git and GitHub
 
 ## Project Workflow
 
-```text
-PostgreSQL dvdrental database
-        |
-        v
-SQL transformations and analytical extracts
-        |
-        +------------------------------+
-        |                              |
-        v                              v
-Validated Tableau CSV snapshots     Python DataFrames
-        |                              |
-        v                              v
-Tableau dashboards                  Ask Analyst
-```
+flowchart TD
 
-The Tableau extracts are refreshed through a separate export script rather than automatically through `main.py`. This keeps the dashboard data stable and prevents the underlying CSV files from being overwritten whenever the Ask Analyst application is run.
+    A[User Question]
+
+    B[Router]
+    C[Session Manager]
+    D[Context Builder]
+
+    E[Visualization]
+    F[Ask Analyst]
+
+    G[Matplotlib]
+    H[OpenAI API]
+
+    I[CLI / Streamlit UI]
+
+    A --> B
+    B --> C
+    C --> D
+
+    D --> E
+    D --> F
+
+    E --> G
+    F --> H
+
+    G --> I
+    H --> I
+
 
 ## Key Features
 
@@ -80,6 +113,9 @@ Current validation includes:
 
 ### Tableau Extracts
 
+The Tableau extracts are refreshed through a separate export script rather than automatically through `main.py`. 
+This keeps the dashboard data stable and prevents the underlying CSV files from being overwritten whenever the Ask Analyst application is run.
+
 The extract workflow creates curated CSV files such as:
 
 ```text
@@ -92,9 +128,22 @@ These files are intended to serve as controlled Tableau data sources.
 
 ### Ask Analyst
 
-Ask Analyst provides a natural-language interface for exploring the curated analytical data. The application is intentionally separated from the Tableau export process so users can move between a stable dashboard and conversational analysis without triggering a data refresh. The application supports configurable OpenAI models. During development, GPT-5.4 mini was used to minimize cost, while GPT-5.5 can be substituted for higher-quality analysis.
+Ask Analyst provides a conversational interface for exploring curated
+campaign data.
 
-## Visual Analytics
+Current capabilities include:
+
+- Campaign performance summaries
+- Segment-level performance analysis
+- Campaign-to-campaign comparisons
+- Customer-level campaign analysis
+- Portfolio-level insights and derived signals
+- Session-aware follow-up questions
+- Active-campaign switching
+- Campaign and segment visualizations
+- AI interpretation grounded in the same data used to create each chart
+
+### Visual Analytics
 
 Ask Analyst can generate and interpret bar charts for:
 
@@ -113,33 +162,31 @@ Example questions:
 ```text
 project-root/
 |
-|-- app/
-|   |-- main.py
-|   |
-|   |-- analysis/
-|   |
-|   |-- extracts/
-|   |   `-- campaign_extract.py
-|   |
-|	|-- generation/
-|   |   `-- campaign_generation.py
-|   |
-|   |-- prompts/
-|   |
-|   |-- sql/
-|   |   |-- extracts/
-|   |   `-- ...
-|   |
-|   `-- utils/
-|       |-- database.py
-|       |-- data_validation.py
-|       |-- file_utils.py
-|       `-- prompt_loader.py
-|
-|-- data/
-|   |-- tableau/
-|   `-- ...
-|
+app/
+├── ai/
+│   ├── analyst_chat.py
+│   ├── context_builder.py
+│   ├── prompt_builder.py
+│   ├── prompt_loader.py
+│   ├── session_state_manager.py
+│   └── llm_client_api.py
+├── analysis/
+├── config/
+│   ├── paths.py
+│   ├── router.py
+│   └── settings.py
+├── extracts/
+├── generation/
+├── prompts/
+├── sql/
+├── ui/
+├── utils/
+└── visualization/
+    ├── chart_builder.py
+    ├── chart_dispatcher.py
+    ├── campaign_charts.py
+    └── segment_charts.py
+|-- main.py
 |-- .env
 |-- .gitignore
 |-- requirements.txt
@@ -270,32 +317,38 @@ Tableau outputs are only created after the underlying campaign data passes valid
 
 The project uses Git tags and GitHub Releases for meaningful milestones.
 
-Example version sequence:
+Version sequence:
 
-```text
-v0.1.0  Initial database and SQL setup
-v0.2.0  Python extraction workflow
-v0.3.0  Tableau analytical layer
-v0.4.0  Campaign generation and validation
-v0.5.0  Ask Analyst integration
-v1.0.0  Portfolio-ready release
-```
+v0.5.0  Initial Ask Analyst integration
+v0.6.0  Campaign and segment analysis
+v0.7.0  Insight Explorer and derived signals
+v0.8.0  Session management and conversational context
+v0.9.0  Visual analytics
+v1.0.0  Hosted Streamlit portfolio demo
 
 Normal development changes should use descriptive commit messages. Tags should be reserved for meaningful project versions.
 
 ## Roadmap
 
-Planned or potential enhancements include:
+### Before v1.0
 
-- Expand the Ask Analyst prompt catalog
-- Add more campaign and customer-level questions
-- Improve response grounding and validation
-- Add metadata describing each analytical dataset
-- Add automated tests for utility functions
-- Improve logging and exception handling
-- Add configuration-driven extract definitions
-- Document Tableau dashboards and business use cases
-- Package a complete portfolio-ready release
+- Complete visual-analytics regression testing
+- Harden error handling and supported-request validation
+- Refresh project documentation and architecture diagrams
+- Add synthetic, demo-safe datasets
+- Build the Streamlit presentation layer
+- Deploy to Streamlit Community Cloud
+- Add API usage safeguards
+- Validate the hosted application with external users
+
+### Post-v1 Backlog
+
+- Scenario-planning workflows
+- Cross-object analytical datasets
+- Data-quality assistant
+- Forecasting and planning modules
+- Additional chart types
+- Agent-based multi-step analysis
 
 ## Business Value
 
