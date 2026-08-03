@@ -35,23 +35,10 @@ The hosted version will use synthetic demonstration data and allow users to:
 
 No local installation will be required for the hosted demo.
 
-## Technology Stack
-
-- **Database:** PostgreSQL
-- **SQL client:** DBeaver
-- **Programming language:** Python
-- **Data processing:** pandas
-- **Database access:** SQLAlchemy, psycopg2
-- **Dashboarding:** Tableau
-- **Python visualization:** Matplotlib
-- **AI integration:** OpenAI API
-- **Application interface:** Python CLI; Streamlit planned for Demo Mode
-- **Development environment:** PyCharm
-- **Testing:** pytest
-- **Version control:** Git and GitHub
 
 ## Project Workflow
 
+```mermaid
 flowchart TD
 
     A[User Question]
@@ -80,7 +67,7 @@ flowchart TD
 
     G --> I
     H --> I
-
+```
 
 ## Key Features
 
@@ -98,33 +85,6 @@ The project includes simulated campaign-result data loaded into PostgreSQL. Thes
 - Revenue and conversion metrics
 - Engagement and recency patterns
 - Campaign targeting opportunities
-
-
-### Data Validation
-
-Validation is performed before Tableau extracts are created.
-
-Current validation includes:
-
-- Customer-level campaign-result checks
-- Campaign-performance checks
-- Dataset shape summaries
-- Prevention of exports when critical validation errors are found
-
-### Tableau Extracts
-
-The Tableau extracts are refreshed through a separate export script rather than automatically through `main.py`. 
-This keeps the dashboard data stable and prevents the underlying CSV files from being overwritten whenever the Ask Analyst application is run.
-
-The extract workflow creates curated CSV files such as:
-
-```text
-campaign_performance_summary.csv
-campaign_segment_summary.csv
-campaign_analytic_layer.csv
-```
-
-These files are intended to serve as controlled Tableau data sources.
 
 ### Ask Analyst
 
@@ -157,7 +117,51 @@ Example questions:
 - `Chart conversion rate by segment`
 - `Plot campaign revenue`
 
-## Example Project Structure
+### Data Validation
+
+Validation is performed before Tableau extracts are created.
+
+Current validation includes:
+
+- Customer-level campaign-result checks
+- Campaign-performance checks
+- Dataset shape summaries
+- Prevention of exports when critical validation errors are found
+
+### Tableau Extracts
+
+The Tableau extracts are refreshed through a separate export script rather than automatically through `main.py`. 
+This keeps the dashboard data stable and prevents the underlying CSV files from being overwritten whenever the Ask Analyst application is run.
+
+The extract workflow creates curated CSV files such as:
+
+```text
+campaign_performance_summary.csv
+campaign_segment_summary.csv
+campaign_analytic_layer.csv
+campaign_tableau_summary.csv
+```
+
+These files are intended to serve as controlled Tableau data sources.
+
+
+
+## Technology Stack
+
+- **Database:** PostgreSQL
+- **SQL client:** DBeaver
+- **Programming language:** Python
+- **Data processing:** pandas
+- **Database access:** SQLAlchemy, psycopg2
+- **Dashboarding:** Tableau
+- **Python visualization:** Matplotlib
+- **AI integration:** OpenAI API
+- **Application interface:** Python CLI; Streamlit planned for Demo Mode
+- **Development environment:** PyCharm
+- **Testing:** pytest
+- **Version control:** Git and GitHub
+
+## Project Structure
 
 ```text
 project-root/
@@ -192,6 +196,8 @@ app/
 |-- requirements.txt
 `-- README.md
 ```
+
+
 
 The exact structure may evolve as the Ask Analyst functionality is expanded.
 
