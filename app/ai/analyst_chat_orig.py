@@ -51,21 +51,17 @@ State any limitations in the supplied data or analysis.
 Do not omit or rename these sections.
 Do not begin with an unstructured summary."""
 
-DERIVED_SIGNAL_RESPONSE_FORMAT = """Answer the user's specific question directly.
-1. Answer key insights with full sentence.
-2. Do not use bold text, italics, headings, or other markdown emphasis.
-
+DERIVED_SIGNAL_RESPONSE_FORMAT = """Answer the question using the DERIVED SEGMENT SIGNALS section.
 Use the following headings:
-Key Insights
-What This Means
-Limitations
+- Key Insights
+- What This Means
+- Limitations
 
 Keep each section short and concise. 
 Only include Recommended Actions whe the evidence supports a meaningful and specific action.
 Do not expand into a broad campaign review"""
 
-DERIVED_SIGNAL_PRIORITY_INSTRUCTIONS = """When the question asks for a top or bottom segment and this is an insight-scoped request, 
-use only the DERIVED SEGMENT SIGNALS section for the ranking answer.
+DERIVED_SIGNAL_PRIORITY_INSTRUCTIONS = """When the question asks for a top or bottom segment and this is an insight-scoped request, use only the DERIVED SEGMENT SIGNALS section for the ranking answer.
 Return exactly one segment name for the requested rank and do not provide tied alternatives unless the derived signal itself explicitly shows a tie."""
 
 
@@ -105,14 +101,9 @@ def _get_derived_signal_metric_instruction(
     )
 
 # response_mode = get_insight_response_mode(question)
-def _is_scope_request(question: str) -> bool:
-    normalized = question.lower()
-    return any(term in normalized for term in SCOPE_TERMS)
 
-def _get_response_format_instructions(context_type: str, question: str) -> str:
+def _get_response_format_instructions(context_type: str) -> str:
     if context_type == "insight":
-        if _is_scope_request(question):
-            return DERIVED_SIGNAL_RESPONSE_FORMAT
         return INSIGHT_RESPONSE_FORMAT
 
     return STANDARD_RESPONSE_FORMAT
@@ -218,10 +209,10 @@ def ask_analyst(campaign_id: str,
     if not route.context_type:
         raise ValueError("No context was provided to analyst_chat().")
 
-    final_prompt = build_prompt(    
+    final_prompt = build_prompt(
         template=prompt_template,
         variables={
-            "response_format_instructions": _get_response_format_instructions(route.context_type, question),
+            "response_format_instructions": _get_response_format_instructions(route.context_type),
             "campaign_context": context,
             "conversation_history": conversation_context,
             "question": _build_question_with_instructions(

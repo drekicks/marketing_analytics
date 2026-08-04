@@ -43,7 +43,6 @@ except ValueError as e:
 
 
 template = load_prompt("executive_summary")
-question_template = load_prompt("analyst_guidelines")
 
 final_prompt = build_prompt(template = template, variables={"campaign_metrics": context})
 
@@ -78,6 +77,8 @@ for example in examples:
 
 print()
 print ("Type 'exit' or 'quit' to close.")
+
+question_template = load_prompt("analyst_guidelines")
 
 conversation_history = []
 
