@@ -112,11 +112,32 @@ def route_question(question: str) -> RouteResult:
         "conversion rate",
         "conversion rates",
     )
-
+    # demo mode doesn't have conversions...will add later
     conversion_terms = (
         "conversions",
         "conversion volume",
     )
+
+    pie_terms = (
+        "pie",
+        "pie chart",
+        "pie plot",
+        "pie diagram",
+    )
+
+    scatter_terms = (
+        "scatter",
+        "scatter plot",
+        "scatter diagram",
+    )
+
+    line_term = (
+        "line",
+        "line chart",
+        "line plot",
+        "line diagram",
+    )
+
 
     has_multiple_campaigns = len(campaign_ids) > 1
 
@@ -168,24 +189,22 @@ def route_question(question: str) -> RouteResult:
         term in normalized for term in conversion_rate_terms
     )
 
-    has_conversion_term = any(
-        term in normalized for term in conversion_terms
+# demo mode doesn't have conversions...will add later
+#     has_conversion_term = any(
+#         term in normalized for term in conversion_terms
+#     )
+
+    has_pie_term = any(
+        term in normalized for term in pie_terms
     )
 
-    # has_conversion_rate_term = any(
-    #     term in normalized for term in conversion_rate_terms
-    # )
+    has_scatter_term = any(
+        term in normalized for term in scatter_terms
+    )
 
-    # print(f"Question: {normalized}")
-    # print(f"Visualization match: {has_visualization_term}")
-    # print(
-    #     "Matched visual terms:",
-    #     [
-    #         term
-    #         for term in visual_terms
-    #         if term in normalized
-    #     ],
-    # )
+    has_line_term = any(
+        term in normalized for term in line_term
+    )
 
     # Explicit multi-campaign comparison
     if has_multiple_campaigns and has_comparison_term:
@@ -196,6 +215,18 @@ def route_question(question: str) -> RouteResult:
         )
 
     # Visualization request
+    # setting default chart type to bar as it is only one supported in v1
+    chart_type = "bar"
+
+    if has_pie_term:
+        chart_type = "pie"
+
+    if has_line_term:
+        chart_type = "line"
+
+    if has_scatter_term:
+        chart_type = "scatter"
+
     if has_visualization_term:
         subject = "segment" if has_segment_term else "campaign"
 
@@ -207,9 +238,15 @@ def route_question(question: str) -> RouteResult:
         #     metric = "conversions"
         else:
             raise ValueError(
-                "That visualization is not currently supported. "
                 "Available charts are campaign or segment revenue "
                 "and conversion rate."
+            )
+
+        if chart_type != "bar":
+            raise ValueError(
+                f"{chart_type} is not currently supported. "
+                "Available charts are campaign or segment revenue "
+                "and conversion rate bar charts."
             )
 
         return RouteResult(
@@ -271,35 +308,3 @@ def route_question(question: str) -> RouteResult:
         context_type="campaign",
         campaign_ids=campaign_ids,
     )
-
-
-# def get_insight_response_mode(question: str) -> str:
-#     normalized = question.lower()
-#
-#     broad_insight_terms = (
-#         "what stands out",
-#         "key insights",
-#         "important insights",
-#         "what should we know",
-#         "what happened",
-#         "anything unusual",
-#         "anything unexpected",
-#         "opportunities",
-#         "recommendations",
-#         "what should we do",
-#         "takeaways",
-#         "overall",
-#         "big picture",
-#         "across all",
-#     )
-#
-#     if any(term in normalized for term in broad_insight_terms):
-#         return "full"
-
-    return "concise"
-
-# a = get_insight_response_mode(
-#     "What stands out across all campaigns?"
-# )
-#
-# print(a)

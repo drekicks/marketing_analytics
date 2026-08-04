@@ -9,13 +9,11 @@ from datetime import datetime
 from app.utils.data_loader import summary_df,campaign_goals_df,unique_campaigns_df,segment_df
 from app.config.router import route_question
 from app.config.settings import SessionState
-# from app.config.settings import VisualizationRequest
 from app.visualization.chart_builder import build_visualization_context
 from app.visualization.chart_dispatcher import create_visualization
 from app.config.paths import OUTPUT_DIR
 
 session_state = SessionState()
-# visualization_request = VisualizationRequest()
 chart_dir = OUTPUT_DIR
 
 campaign_id, campaign_name = select_campaign(
@@ -32,7 +30,6 @@ print("Generating Executive Summary...........")
 print()
 
 try:
-    # route = route_question(question)
 
     context = build_campaign_context(
         summary_df,
@@ -117,9 +114,7 @@ while True:
         normalized_question = question.lower()
         is_scope_request = any(term in normalized_question for term in scope_terms)
 
-    # try:
         prebuilt_context = None
-        # route = route_question(question)
 
         if route.analysis_type == "visualization":
             if route.visualization_request is None:
@@ -201,7 +196,6 @@ while True:
         )
 
     except ValueError as e:
-        # print(f"Campaign: {resolved_campaign_id}")
         print(f"Analyst: {e}")
         continue
 

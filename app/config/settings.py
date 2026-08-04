@@ -9,7 +9,6 @@ if TYPE_CHECKING:
 
 load_dotenv()
 
-# MODEL_NAME = os.getenv("OPENAI_MODEL", "gpt-5.4-mini")
 MODEL_NAME = os.getenv("OPENAI_MODEL")
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
