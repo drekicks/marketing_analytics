@@ -56,9 +56,9 @@ DERIVED_SIGNAL_RESPONSE_FORMAT = """Answer the user's specific question directly
 2. Do not use bold text, italics, headings, or other markdown emphasis.
 
 Use the following headings:
-Key Insights
-What This Means
-Limitations
+## Key Insights
+## What This Means
+## Limitations
 
 Keep each section short and concise. 
 Only include Recommended Actions whe the evidence supports a meaningful and specific action.
@@ -218,7 +218,7 @@ def ask_analyst(campaign_id: str,
     if not route.context_type:
         raise ValueError("No context was provided to analyst_chat().")
 
-    final_prompt = build_prompt(    
+    final_prompt = build_prompt(
         template=prompt_template,
         variables={
             "response_format_instructions": _get_response_format_instructions(route.context_type, question),

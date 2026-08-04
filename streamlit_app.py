@@ -5,6 +5,8 @@ from app.ai.prompt_builder import build_prompt
 from app.ai.prompt_loader import load_prompt
 from app.ai.llm_client_api import generate_analysis
 from app.config.settings import SessionState
+from app.services.analyst_service import process_analyst_question
+from datetime import datetime
 
 
 st.set_page_config(page_title="AI Marketing Analytics Assistant",
@@ -43,6 +45,11 @@ if "messages" not in st.session_state:
     # Stores the visible Ask Analyst conversation.
     st.session_state.messages = []
 
+if "analyst_history" not in st.session_state:
+    # Ask Analyst format: completed question/answer exchanges.
+    st.session_state.analyst_history = []
+
+
 analytics_session = st.session_state.analytics_session
 
 # -------------------------------------------------------------------
@@ -76,9 +83,15 @@ if "last_campaign" not in st.session_state:
 
 # Clear outputs that belong to the previous campaign when the user
 # manually selects a different campaign from the dropdown.
+# if selected_campaign_id != st.session_state.last_campaign:
+#     st.session_state.executive_summary = None
+#     st.session_state.messages = []
+#     st.session_state.last_campaign = selected_campaign_id
+
 if selected_campaign_id != st.session_state.last_campaign:
     st.session_state.executive_summary = None
     st.session_state.messages = []
+    st.session_state.analyst_history = []
     st.session_state.last_campaign = selected_campaign_id
 
 # Synchronize the Streamlit selector with the application's existing
@@ -159,17 +172,56 @@ if question:
         st.markdown(question)
 
     # Temporary response used only to validate the chat interface.
-    placeholder_answer = (
-        "Ask Analyst integration is coming next."
-    )
+    # placeholder_answer = (
+    #     "Ask Analyst integration is coming next."
+    # )
 
-    assistant_message = {
-        "role": "assistant",
-        "content": placeholder_answer,
+    valid_campaign_ids = {
+        str(campaign).strip()
+        for campaign in unique_campaigns_df["campaign_id"].dropna().tolist()
     }
+
+    try:
+        result=process_analyst_question(
+            question=question,
+            session_state=analytics_session,
+            default_campaign_id=selected_campaign_id,
+            valid_campaign_ids=valid_campaign_ids,
+            conversation_history=st.session_state.analyst_history,
+        )
+
+        # Save the completed exchange in the format expected by ask_analyst().
+        st.session_state.analyst_history.append(
+            {
+                "question": question,
+                "answer": result.answer,
+                "timestamp": datetime.now().strftime(
+                    "%Y-%m-%d %H:%M:%S"
+                ),
+            }
+        )
+
+        assistant_message= {
+            "role": "assistant",
+            "content": result.answer,
+            "chart_path": (
+                str(result.chart_path)
+                if result.chart_path else None
+            ),
+        }
+
+    except ValueError as error:
+        assistant_message = {
+            "role": "assistant",
+            "content": f"Analyst: {error}",
+            "chart_path": None,
+        }
 
     st.session_state.messages.append(assistant_message)
 
     with st.chat_message("assistant"):
-        st.markdown(placeholder_answer)
+        st.markdown(assistant_message["content"])
+
+        if assistant_message["chart_path"]:
+            st.image(assistant_message["chart_path"])
 
