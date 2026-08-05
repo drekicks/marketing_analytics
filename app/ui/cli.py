@@ -6,23 +6,8 @@ from app.ai.prompt_loader import load_prompt
 from app.ai.prompt_builder import build_prompt
 from app.ai.llm_client_api import generate_analysis
 
-# session_state = SessionState()
-# chart_dir = OUTPUT_DIR
 
-# campaign_id, campaign_name = select_campaign(
-#     unique_campaigns_df
-# )
-
-# valid_campaign_ids = {
-#     str(campaign).strip()
-#     for campaign in unique_campaigns_df["campaign_id"].dropna().tolist()
-# }
-
-# session_state.active_campaign_id = campaign_id
-
-# question_template = load_prompt("analyst_guidelines")
-# conversation_history = []
-
+# Select the campaign and build the Executive Summary
 def show_executive_summary(default_campaign_id: str,campaign_name) -> None:
     print(f"\nCampaign Selected: {campaign_name} ({default_campaign_id})")
     print()
@@ -77,7 +62,8 @@ def show_executive_summary(default_campaign_id: str,campaign_name) -> None:
     print()
     print("Type 'exit' or 'quit' to close.")
 
-
+# Ask the Analyst
+# This calls process_analyst_question which is also used in the Streamlit app
 def run_cli_chat(
         session_state: SessionState,
         default_campaign_id: str,
