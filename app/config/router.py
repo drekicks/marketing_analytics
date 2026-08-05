@@ -18,7 +18,7 @@ class RouteResult:
 def extract_campaign_ids(question: str) -> list[str]:
     # Matches CMP-2026-004 and legacy C001/c123 formats.
     matches = re.findall(
-        r"\b(?:CMP-\d{4}-\d{3}|C\d{3})\b",
+        r"\bCMP-\d+(?:-\d+)*\b",
         question,
         flags=re.IGNORECASE,
     )
@@ -34,6 +34,14 @@ def route_question(question: str) -> RouteResult:
         " vs ",
         "difference",
         "better",
+    )
+
+    comparison_reference_terms = (
+        "compare to",
+        "compare with",
+        "compared to",
+        "versus",
+        "vs"
     )
 
     customer_terms = (
@@ -146,6 +154,11 @@ def route_question(question: str) -> RouteResult:
         for term in comparison_terms
     )
 
+    has_comparison_reference_term = any(
+        term in normalized
+        for term in comparison_reference_terms
+    )
+
     has_customer_term = any(
         term in normalized
         for term in customer_terms
@@ -208,6 +221,18 @@ def route_question(question: str) -> RouteResult:
 
     # Explicit multi-campaign comparison
     if has_multiple_campaigns and has_comparison_term:
+        return RouteResult(
+            analysis_type="comparison",
+            context_type="campaign",
+            campaign_ids=campaign_ids,
+        )
+
+    # Conversational comparison containing one campaign ID.
+    # The comparison resolver will combine it with the active campaign.
+    if (
+            len(campaign_ids) == 1
+            and has_comparison_reference_term
+    ):
         return RouteResult(
             analysis_type="comparison",
             context_type="campaign",

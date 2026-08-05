@@ -2,21 +2,39 @@ def validate_campaign_ids(
     summary_df,
     campaign_ids: list[str],
 ) -> None:
-    requested_ids = {str(value) for value in campaign_ids}
+    """
+    Confirm that every requested campaign ID exists in the summary data.
 
-    available_ids = set(
-        summary_df["campaign_id"]
+    Raises:
+        ValueError: If one or more requested campaign IDs are missing.
+    """
+
+    requested_ids = {
+        str(value).strip()
+        for value in campaign_ids
+    }
+
+    available_ids = {
+        str(value).strip()
+        for value in summary_df["campaign_id"]
         .dropna()
-        .astype(str)
-        .unique()
-    )
+        .tolist()
+    }
 
     missing_ids = requested_ids - available_ids
 
-    if missing_ids:
-        missing_list = ", ".join(sorted(missing_ids))
+    if not missing_ids:
+        return
+
+    if len(missing_ids) == 1:
+        missing_id = next(iter(missing_ids))
 
         raise ValueError(
-            f"The following campaign IDs were not found: "
-            f"{missing_list}"
+            f"Campaign ID {missing_id} does not exist."
         )
+
+    raise ValueError(
+        "The following campaign IDs do not exist: "
+        + ", ".join(sorted(missing_ids))
+        + "."
+    )

@@ -43,6 +43,9 @@ def process_analyst_question(
     # Load the instructions used for Ask Analyst responses.
     question_template = load_prompt("analyst_guidelines")
 
+    # Maintain the previous active campaign ID.
+    previous_active_campaign_id = session_state.active_campaign_id
+
     # For this first checkpoint, let ask_analyst build the
     # normal campaign or segment context internally.
     resolved_campaign_id = resolve_campaign_id(
@@ -64,7 +67,7 @@ def process_analyst_question(
         "holistically",
     )
 
-    previous_active_campaign_id = session_state.active_campaign_id
+    # previous_active_campaign_id = session_state.active_campaign_id
 
     normalized_question = question.lower()
     is_scope_request = any(term in normalized_question for term in scope_terms)
@@ -158,3 +161,4 @@ def process_analyst_question(
         campaign_id=resolved_campaign_id,
         chart_path=chart_path,
     )
+

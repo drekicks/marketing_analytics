@@ -52,6 +52,36 @@ if "analyst_history" not in st.session_state:
 
 analytics_session = st.session_state.analytics_session
 
+def handle_campaign_change() -> None:
+    """
+    Update the active analytics campaign only when the user manually
+    changes the Streamlit campaign selector.
+
+    Manual campaign changes start a new analysis session, so outputs
+    associated with the previous campaign are cleared.
+    """
+
+    selected_display = st.session_state.campaign_selector
+
+    selected_row = campaign_options.loc[
+        campaign_options["display_name"] == selected_display
+    ].iloc[0]
+
+    new_campaign_id = str(
+        selected_row["campaign_id"]
+    ).strip()
+
+    # Synchronize the application's reusable session object with
+    # the campaign manually selected in the UI.
+    st.session_state.analytics_session.active_campaign_id = (
+        new_campaign_id
+    )
+
+    # Clear content created for the previously selected campaign.
+    st.session_state.executive_summary = None
+    st.session_state.messages = []
+    st.session_state.analyst_history = []
+
 # -------------------------------------------------------------------
 # CAMPAIGN SELECTOR
 # -------------------------------------------------------------------
@@ -65,8 +95,28 @@ campaign_options['display_name'] = (
         + campaign_options['campaign_name'].astype(str)
 )
 
+# initialize the selector to the active campaign:
+if "campaign_selector" not in st.session_state:
+    active_campaign_row = campaign_options.loc[
+        campaign_options["campaign_id"]
+        .astype(str)
+        .str.strip()
+        == str(analytics_session.active_campaign_id).strip()
+    ]
+
+    if active_campaign_row.empty:
+        st.session_state.campaign_selector = (
+            campaign_options.iloc[0]["display_name"]
+        )
+    else:
+        st.session_state.campaign_selector = (
+            active_campaign_row.iloc[0]["display_name"]
+        )
+
 selected_display_name = st.selectbox(
-    'Select a campaign', campaign_options['display_name'].tolist()
+    'Select a campaign', campaign_options['display_name'].tolist(),
+    key="campaign_selector",
+    on_change=handle_campaign_change
 )
 
 # Retrieve the campaign ID associated with the selected display label.
@@ -75,6 +125,13 @@ selected_row = campaign_options.loc[
 ].iloc[0]
 
 selected_campaign_id = selected_row['campaign_id'].strip()
+
+if analytics_session.active_campaign_id is None:
+    first_campaign_id = str(
+        campaign_options.iloc[0]["campaign_id"]
+    ).strip()
+
+    analytics_session.active_campaign_id = first_campaign_id
 
 
 # Initialize the campaign-change tracker on the first app run.
@@ -86,17 +143,12 @@ if "last_campaign" not in st.session_state:
 # if selected_campaign_id != st.session_state.last_campaign:
 #     st.session_state.executive_summary = None
 #     st.session_state.messages = []
+#     st.session_state.analyst_history = []
 #     st.session_state.last_campaign = selected_campaign_id
-
-if selected_campaign_id != st.session_state.last_campaign:
-    st.session_state.executive_summary = None
-    st.session_state.messages = []
-    st.session_state.analyst_history = []
-    st.session_state.last_campaign = selected_campaign_id
 
 # Synchronize the Streamlit selector with the application's existing
 # analytics session object.
-analytics_session.active_campaign_id = selected_campaign_id
+# analytics_session.active_campaign_id = selected_campaign_id
 
 st.write(f"Active campaign: {selected_campaign_id}")
 
@@ -138,7 +190,6 @@ else:
         "to analyze the selected campaign."
     )
 
-
 # -------------------------------------------------------------------
 # ASK ANALYST — CHAT SHELL
 #
@@ -170,11 +221,6 @@ if question:
 
     with st.chat_message("user"):
         st.markdown(question)
-
-    # Temporary response used only to validate the chat interface.
-    # placeholder_answer = (
-    #     "Ask Analyst integration is coming next."
-    # )
 
     valid_campaign_ids = {
         str(campaign).strip()

@@ -1,5 +1,4 @@
 import pandas as pd
-# from app.ai.context_loader import campaign_goals_df
 from app.ai.campaign_id_validation import validate_campaign_ids
 from app.utils.data_loader import campaign_goals_df
 from app.ai.insight_signals import calculate_segment_signals, format_segment_signals
@@ -405,3 +404,4 @@ def build_insight_context(
 
     # print(signal_context)
     return "\n".join(context_lines)
+
