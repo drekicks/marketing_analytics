@@ -5,7 +5,7 @@ from app.utils.file_utils import load_sql_extracts
 
 
 DATA_SOURCE = os.getenv("DATA_SOURCE",
-                        "postgres",
+                        "csv",
                         ).strip().lower()
 
 
