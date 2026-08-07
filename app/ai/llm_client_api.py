@@ -8,7 +8,7 @@ if not openai_api_key:
 
 client = OpenAI(api_key=openai_api_key)
 
-MAX_PROMPT_CHARACTERS = 80_000
+MAX_PROMPT_CHARACTERS = 400_000
 
 
 def _get_prompt_size_message(prompt: str) -> str:

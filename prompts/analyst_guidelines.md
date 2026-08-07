@@ -84,6 +84,19 @@ When interpreting visualization data:
 - Base the response only on the supplied chart data.
 - Keep the interpretation concise.
 
+[//]: # (When interpreting a segment conversion rate chart:)
+
+[//]: # ()
+[//]: # (- Compare test conversion rate with control conversion rate.)
+
+[//]: # (- Identify segments with the highest and lowest test conversion rates.)
+
+[//]: # (- Discuss the size and direction of the test-versus-control difference.)
+
+[//]: # (- Use absolute lift when available.)
+
+[//]: # (- Do not discuss test performance in isolation when control performance is supplied.)
+
 ## Visualization Interpretation
 
 When the application indicates that a visualization has already been created:
@@ -95,13 +108,6 @@ When the application indicates that a visualization has already been created:
 - Keep the interpretation concise.
 - Do not claim to have visually inspected the chart image.
 
-When interpreting a segment conversion rate chart:
-
-- Compare test conversion rate with control conversion rate.
-- Identify segments with the highest and lowest test conversion rates.
-- Discuss the size and direction of the test-versus-control difference.
-- Use absolute lift when available.
-- Do not discuss test performance in isolation when control performance is supplied.
 
 # CAMPAIGN CONTEXT
 
