@@ -24,10 +24,3 @@ class SessionState:
     active_segment: str | None = None
     last_route: "RouteResult | None" = None
 
-# @dataclass(frozen=True)
-# class VisualizationRequest:
-#     subject: str
-#     metric: str
-#     chart_type: str
-#     campaign_ids: list[str]
-#     group_by: str | None = None

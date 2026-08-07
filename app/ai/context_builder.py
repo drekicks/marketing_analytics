@@ -402,6 +402,5 @@ def build_insight_context(
         signal_context,
     ])
 
-    # print(signal_context)
     return "\n".join(context_lines)
 

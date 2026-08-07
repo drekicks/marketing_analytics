@@ -170,5 +170,3 @@ def format_segment_signals(signals: dict[str, Any]) -> str:
 signals = calculate_segment_signals(
     segment_df=segment_df
 )
-
-# print(signals)

@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-# from app.config.settings import VisualizationRequest
 import re
 
 @dataclass(frozen=True)
@@ -121,10 +120,10 @@ def route_question(question: str) -> RouteResult:
         "conversion rates",
     )
     # demo mode doesn't have conversions...will add later
-    conversion_terms = (
-        "conversions",
-        "conversion volume",
-    )
+    # conversion_terms = (
+    #     "conversions",
+    #     "conversion volume",
+    # )
 
     pie_terms = (
         "pie",

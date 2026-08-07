@@ -31,7 +31,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from faker import Faker
 from sqlalchemy import text
-from app.utils import database
+from app.utils.database import get_database_engine
 
 # ============================================================
 # CONFIG — adjust these
@@ -55,7 +55,7 @@ load_dotenv()
 #     f"{os.getenv('DB_PORT')}/"
 #     f"{os.getenv('DB_NAME')}"
 # )
-engine = database.engine
+db_conn = get_database_engine()
 
 fake = Faker()
 Faker.seed(RANDOM_SEED)

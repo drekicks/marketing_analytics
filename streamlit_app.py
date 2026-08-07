@@ -82,11 +82,14 @@ def handle_campaign_change() -> None:
     st.session_state.messages = []
     st.session_state.analyst_history = []
 
+
 # -------------------------------------------------------------------
-# CAMPAIGN SELECTOR
+# CAMPAIGN OPTIONS
+#
+# Create a user-friendly label that combines the campaign ID and name.
+# This DataFrame is used by both the selector and its change callback.
 # -------------------------------------------------------------------
 
-# Create a user-friendly label containing both campaign ID and name.
 campaign_options = unique_campaigns_df[["campaign_id", "campaign_name"]].copy()
 
 campaign_options['display_name'] = (
@@ -95,7 +98,28 @@ campaign_options['display_name'] = (
         + campaign_options['campaign_name'].astype(str)
 )
 
-# initialize the selector to the active campaign:
+# -------------------------------------------------------------------
+# ACTIVE CAMPAIGN INITIALIZATION
+#
+# Set the first available campaign as the default only when the
+# analytics session does not already have an active campaign.
+# -------------------------------------------------------------------
+
+if analytics_session.active_campaign_id is None:
+    first_campaign_id = str(
+        campaign_options.iloc[0]["campaign_id"]
+    ).strip()
+
+    analytics_session.active_campaign_id = first_campaign_id
+
+
+# -------------------------------------------------------------------
+# SELECTOR INITIALIZATION
+#
+# Streamlit uses the value stored under "campaign_selector" to decide
+# which option appears in the dropdown when the page reruns.
+# -------------------------------------------------------------------
+
 if "campaign_selector" not in st.session_state:
     active_campaign_row = campaign_options.loc[
         campaign_options["campaign_id"]
@@ -113,49 +137,68 @@ if "campaign_selector" not in st.session_state:
             active_campaign_row.iloc[0]["display_name"]
         )
 
-selected_display_name = st.selectbox(
-    'Select a campaign', campaign_options['display_name'].tolist(),
-    key="campaign_selector",
-    on_change=handle_campaign_change
-)
+selected_campaign_id = analytics_session.active_campaign_id
+# -------------------------------------------------------------------
+# SIDEBAR — CAMPAIGN CONTROLS
+# -------------------------------------------------------------------
 
-# Retrieve the campaign ID associated with the selected display label.
-selected_row = campaign_options.loc[
-    campaign_options['display_name'] == selected_display_name
-].iloc[0]
+with st.sidebar:
+    st.header("Campaign")
 
-selected_campaign_id = selected_row['campaign_id'].strip()
+    selected_display_name = st.selectbox(
+        "Select a campaign",
+        options=campaign_options["display_name"].to_list(),
+        key="campaign_selector",
+        on_change=handle_campaign_change,
+    )
 
-if analytics_session.active_campaign_id is None:
-    first_campaign_id = str(
-        campaign_options.iloc[0]["campaign_id"]
-    ).strip()
+    st.caption("Active Campaign")
 
-    analytics_session.active_campaign_id = first_campaign_id
+    active_row = campaign_options.loc[
+        campaign_options["campaign_id"]
+        .astype(str)
+        .str.strip()
+        == str(analytics_session.active_campaign_id).strip()
+        ].iloc[0]
 
+    st.success(
+        f"{active_row['campaign_id']} — "
+        f"{active_row['campaign_name']}"
+    )
+    # st.success(
+    #     f"{analytics_session.active_campaign_id}"
+    # )
 
-# Initialize the campaign-change tracker on the first app run.
-if "last_campaign" not in st.session_state:
-    st.session_state.last_campaign = selected_campaign_id
+    st.divider()
 
-# Clear outputs that belong to the previous campaign when the user
-# manually selects a different campaign from the dropdown.
-# if selected_campaign_id != st.session_state.last_campaign:
-#     st.session_state.executive_summary = None
-#     st.session_state.messages = []
-#     st.session_state.analyst_history = []
-#     st.session_state.last_campaign = selected_campaign_id
+    if st.button(
+            "Clear Conversation",
+            use_container_width=True,
+    ):
+        st.session_state.messages = []
+        st.session_state.analyst_history = []
+        st.rerun()
 
-# Synchronize the Streamlit selector with the application's existing
-# analytics session object.
-# analytics_session.active_campaign_id = selected_campaign_id
+    st.divider()
 
-st.write(f"Active campaign: {selected_campaign_id}")
+    st.subheader("Example Questions")
 
+    st.markdown("""
+        - How did this campaign perform?
+        - Which segment performed best?
+        - Compare to CMP-2026-003
+        - What are the key takeaways?
+        - Chart revenue by segment
+        """)
+
+    st.divider()
+
+    st.caption("Portfolio demonstration using synthetic campaign data")
 
 # -------------------------------------------------------------------
 # EXECUTIVE SUMMARY
 # -------------------------------------------------------------------
+
 if st.button("Generate Executive Summary"):
     with st.spinner("Generating Executive Summary..."):
         try:
@@ -181,14 +224,16 @@ if st.button("Generate Executive Summary"):
             # Display expected business/data errors without crashing the app.
             st.error(f"Analyst:{e}")
 
+st.header("Executive Summary")
+
 # Display the saved summary, or instructions when no summary exists.
 if st.session_state.executive_summary:
     st.markdown(st.session_state.executive_summary)
-else:
-    st.info(
-        "Click **Generate Executive Summary** "
-        "to analyze the selected campaign."
-    )
+# else:
+#     st.info(
+#         "Click **Generate Executive Summary** "
+#         "to analyze the selected campaign."
+#     )
 
 # -------------------------------------------------------------------
 # ASK ANALYST — CHAT SHELL
@@ -199,7 +244,12 @@ else:
 # -------------------------------------------------------------------
 
 st.divider()
-st.subheader("Ask Analyst")
+st.header("Ask Analyst")
+
+st.write(
+    "Ask about campaign performance, segments, comparisons, "
+    "portfolio insights, or visualizations."
+)
 
 # Rebuild the visible conversation from saved session-state messages.
 for message in st.session_state.messages:

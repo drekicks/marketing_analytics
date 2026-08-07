@@ -1,8 +1,5 @@
 import pandas as pd
-# from app.config.paths import OUTPUT_DIR
 from app.config.router import VisualizationRequest
-
-# output = OUTPUT_DIR
 
 def build_visualization_context(
         request: VisualizationRequest,
@@ -20,7 +17,7 @@ def build_visualization_context(
         if rows.empty:
             raise ValueError(f"No data found for campaign ID {campaign_id}.")
 
-        rows = rows.sort_values("segment_conversion_rate", ascending=False,)
+        rows = rows.sort_values("test_conversion_rate", ascending=False,)
 
         context_lines = [
             "VISUALIZATION DATA",
@@ -32,7 +29,7 @@ def build_visualization_context(
         for _, row in rows.iterrows():
             context_lines.append(
                 f"{row['customer_segment']}: "
-                f"{row['segment_conversion_rate']:.1%}"
+                f"{row['test_conversion_rate']:.1%}"
             )
 
         return "\n".join(context_lines)
@@ -101,7 +98,7 @@ def build_visualization_context(
         for _, row in rows.iterrows():
             context_lines.append(
                 f"Campaign ID: {row['campaign_id']}"
-                f"Conversion Rate: {row['conversion_rate']:.2%}",
+                f"Conversion Rate: {row['conversion_rate']:.1%}",
             )
 
         return "\n".join(context_lines)

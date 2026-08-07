@@ -2,12 +2,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from app.config.router import route_question
 from app.config.settings import SessionState
-from app.ai.context_builder import build_campaign_context,build_campaign_comparison_context,build_insight_context
-from app.utils.data_loader import summary_df,campaign_goals_df,unique_campaigns_df,segment_df
-from app.ai.llm_client_api import generate_analysis
+from app.ai.context_builder import build_campaign_comparison_context,build_insight_context
+from app.utils.data_loader import summary_df,campaign_goals_df,segment_df
 from app.ai.analyst_chat import ask_analyst
 from app.ai.prompt_loader import load_prompt
-from datetime import datetime
 from app.ai.session_state_manager import resolve_campaign_id,resolve_comparison_campaign_ids
 from app.visualization.chart_builder import build_visualization_context
 from app.visualization.chart_dispatcher import create_visualization
@@ -55,8 +53,6 @@ def process_analyst_question(
         valid_campaign_ids=valid_campaign_ids,
     )
 
-    # conversation_history=st.session_state.messages,
-
     scope_terms = (
         "overall",
         "across all",
@@ -66,8 +62,6 @@ def process_analyst_question(
         "big picture",
         "holistically",
     )
-
-    # previous_active_campaign_id = session_state.active_campaign_id
 
     normalized_question = question.lower()
     is_scope_request = any(term in normalized_question for term in scope_terms)

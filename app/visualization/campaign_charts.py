@@ -1,6 +1,4 @@
 import pandas as pd
-
-from app.utils.data_loader import summary_df
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
 from app.config.paths import OUTPUT_DIR
@@ -49,7 +47,7 @@ def create_campaign_conversion_rate_chart(
     )
 
     fig, ax = plt.subplots(figsize=(9, 5))
-    ax.bar(campaign_rows["campaign_id"], campaign_rows["conversion_rate"], color="#4C72B0")
+    ax.bar(campaign_rows["campaign_id"], campaign_rows["conversion_rate"], color="#648FFF")
 
     ax.set_title(f"Conversion Rate by Campaign")
     ax.set_xlabel("Campaign ID")
@@ -121,7 +119,7 @@ def create_campaign_revenue_chart(
     )
 
     fig, ax = plt.subplots(figsize=(9, 5))
-    ax.bar(campaign_rows["campaign_id"], campaign_rows["campaign_revenue"], color="#4C72B0")
+    ax.bar(campaign_rows["campaign_id"], campaign_rows["campaign_revenue"], color="#D55E00")
 
     ax.set_title(f"Revenue by Campaign")
     ax.set_xlabel("Campaign ID")

@@ -1,0 +1,4 @@
+﻿campaign_id,campaign_name,channel,start_date,end_date,audience_size,campaign_revenue,total_campaign_cost,conversions,conversion_rate,revenue_per_customer,revenue_per_conversion
+CMP-2026-003,Summer Win Big Offer,Email,2026-07-01,2026-07-31,10599,10282.98,1668.9,1944,0.18,0.97,5.29
+CMP-2025-002,Summer Retention Offer,Paid Media,2025-08-01,2025-08-31,10599,9959.8,1646.4,1895,0.17,0.94,5.26
+CMP-2026-004,Spring Reactivation TM,Outbound,2026-03-01,2026-04-30,10599,12775.82,1836.4,2395,0.22,1.21,5.33

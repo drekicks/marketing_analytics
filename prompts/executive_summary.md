@@ -41,10 +41,14 @@ Analyze the supplied campaign data and business context using only the informati
 
 Organize the analysis using the following sections:
 
-## Executive Summary
+Generate an executive summary for the selected campaign.
+
+Do not include a title or heading such as "Executive Summary."
+Begin immediately with the summary content.
+
 Provide an overall assessment of campaign performance and whether the campaign achieved its stated objective.
 
-## Key Strengths
+# Key Strengths
 Summarize the primary drivers of success.
 - Use 2 to 4 concise bullet points.
 - Each bullet should describe a distinct strength.

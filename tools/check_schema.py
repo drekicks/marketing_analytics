@@ -16,12 +16,12 @@ from pathlib import Path
 
 import pandas as pd
 from dotenv import load_dotenv
-from app.utils import database
+from app.utils.database import get_database_engine
 from sqlalchemy import create_engine, text
 
 load_dotenv()
 
-db_conn = database.engine
+db_conn = get_database_engine()
 
 DATABASE_URL = (
     f"postgresql+psycopg2://{os.getenv('DB_USER')}:"

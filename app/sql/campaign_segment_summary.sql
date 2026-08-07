@@ -1,4 +1,3 @@
---need to add revenue to Winback and Churn and reduce costs.
 with control_aud as 
 (select 
 cr.campaign_id,
@@ -16,7 +15,7 @@ group by 1,2,3,4,5
 ),
 control_fnl as 
 (
-select *, round(100*control_cnvrsn/control_audience,2)/100 control_conversion_rate, round(control_revenue/control_audience,2) control_rpc
+select *, round(control_cnvrsn::numeric/control_audience,2) control_conversion_rate, round(control_revenue/control_audience,2) control_rpc
 from control_aud
 ),
 test_aud as
@@ -37,7 +36,7 @@ group by 1,2,3
 ),
 test_fnl as
 (
-select *, round(100*test_cnvrsn/test_audience,2)/100 test_conversion_rate,round(test_revenue/test_audience,2) test_rpc
+select *, round(test_cnvrsn::numeric/test_audience,2) test_conversion_rate,round(test_revenue/test_audience,2) test_rpc
 from test_aud
 ),
 combined as
@@ -53,7 +52,7 @@ round((test_conversion_rate-control_conversion_rate) * test_audience,0)::integer
 test_revenue + control_revenue as campaign_revenue, 
 (test_cnvrsn + control_cnvrsn)::integer as campaign_conversions,
 (test_audience + control_audience) segment_audience
-from c2) select *, round(campaign_revenue/campaign_conversions,2) segment_rpr, round(100*campaign_conversions/segment_audience,2)/100 segment_conversion_rate
+from c2) select *, round(campaign_revenue/campaign_conversions,2) segment_rpr, round(campaign_conversions::numeric/segment_audience, 2) segment_conversion_rate
 from c3 order by 1;
 
 

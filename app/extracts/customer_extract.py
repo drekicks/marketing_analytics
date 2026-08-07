@@ -1,16 +1,21 @@
-from app.utils import database
+# from app.utils.database import get_database_engine
 from app.utils.file_utils import load_sql_extracts, file_export
 import app.utils.data_validation as validation
 
-db_conn = database.engine
 
-query = load_sql_extracts(["customer_segmentation"])
+def export_customer():
+    # db_conn = get_database_engine()
 
-df = query["customer_segmentation"]
-# print(df.head(5))
+    query = load_sql_extracts(["customer_segmentation"])
 
-results = validation.validate_customer_segmentation_output(df)
+    df = query["customer_segmentation"]
 
-validation.print_validation_summary(results)
+    results = validation.validate_customer_segmentation_output(df)
 
-file_export(df,"customer_segmentation.csv")
+    validation.print_validation_summary(results)
+
+    file_export(df,"customer_segmentation.csv")
+
+
+if __name__ == "__main__":
+    export_customer()

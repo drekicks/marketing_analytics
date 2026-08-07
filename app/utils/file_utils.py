@@ -1,10 +1,8 @@
-from app.utils import database as db
+from app.utils.database import get_database_engine
 from pathlib import Path
 import pandas as pd
 from sqlalchemy import text
 from app.config.paths import DATA_DIR, SQL_DIR
-
-db_conn = db.engine
 
 def load_sql(file_path: Path) -> str:
     """Read a SQL file and return it as a string."""
@@ -22,18 +20,21 @@ def load_sql_extracts(filenames: list[str], params: dict = None):
         Returns:
             Dictionary of DataFrames keyed by filename.
         """
+    db_conn = get_database_engine()
     results = {}
-    with db_conn.connect() as conn:
-        for name in filenames:
-            sql_file = SQL_DIR / f"{name}.sql"
-            if not sql_file.exists():
-                raise FileNotFoundError(f"SQL file not found: {sql_file}")
+    try:
+        with db_conn.connect() as conn:
+            for name in filenames:
+                sql_file = SQL_DIR / f"{name}.sql"
+                if not sql_file.exists():
+                    raise FileNotFoundError(f"SQL file not found: {sql_file}")
 
-            sql_query = load_sql(sql_file)
-            df = pd.read_sql(text(sql_query), conn, params=params or {})
-            results[name] = df
+                sql_query = load_sql(sql_file)
+                df = pd.read_sql(text(sql_query), conn, params=params or {})
+                results[name] = df
+    finally:
+        db_conn.dispose()
 
-            # print(f"{name}: {len(df)} rows")
     return results
 
 def file_export(df: pd.DataFrame, filename: str):
@@ -49,7 +50,7 @@ def file_export(df: pd.DataFrame, filename: str):
         """
     if not filename.lower().endswith(".csv"):
         filename += ".csv"
-    output_path = DATA_DIR / filename
+    output_path = DATA_DIR / "demo"/filename
     df.to_csv(output_path, index=False, encoding="utf-8-sig")
     print(f"Saved {len(df)} rows to {output_path}")
     return output_path

@@ -3,9 +3,6 @@ import pandas as pd
 from app.config.router import VisualizationRequest
 from app.visualization.segment_charts import create_segment_conversion_rate_chart, create_segment_revenue_chart
 from app.visualization.campaign_charts import create_campaign_conversion_rate_chart, create_campaign_revenue_chart
-# from app.config.paths import OUTPUT_DIR
-
-# output = OUTPUT_DIR
 
 def create_visualization(
         request: VisualizationRequest,

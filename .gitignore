@@ -11,4 +11,17 @@ __pycache__/
 # Output/data files (optional, if you don't want these in git)
 output/
 
-data
+# Ignore generated data
+data/*
+
+# But keep the demo data used by the deployed application
+!data/demo/
+!data/demo/*.csv
+
+docs/
+
+reports/
+
+tableau/
+
+tools/
