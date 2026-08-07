@@ -59,8 +59,6 @@ def load_postgres_data() -> tuple[
     pd.DataFrame,
     pd.DataFrame,
 ]:
-    from app.utils.database import get_database_engine
-    engine = get_database_engine()
     """
     Load application datasets from PostgreSQL for local development.
     Campaign goals are still a csv in local development also
@@ -100,4 +98,3 @@ else:
         f"Unsupported DATA_SOURCE: {DATA_SOURCE}. "
         "Use 'postgres' or 'csv'."
     )
-
