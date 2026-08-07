@@ -1,6 +1,6 @@
 import streamlit as st
-from app.utils.data_loader import campaign_goals_df, summary_df,segment_df, unique_campaigns_df
-from app.ai.context_builder import build_campaign_context,build_campaign_comparison_context,build_insight_context
+from app.utils.data_loader import campaign_goals_df, summary_df,unique_campaigns_df
+from app.ai.context_builder import build_campaign_context
 from app.ai.prompt_builder import build_prompt
 from app.ai.prompt_loader import load_prompt
 from app.ai.llm_client_api import generate_analysis
@@ -229,11 +229,6 @@ st.header("Executive Summary")
 # Display the saved summary, or instructions when no summary exists.
 if st.session_state.executive_summary:
     st.markdown(st.session_state.executive_summary)
-# else:
-#     st.info(
-#         "Click **Generate Executive Summary** "
-#         "to analyze the selected campaign."
-#     )
 
 # -------------------------------------------------------------------
 # ASK ANALYST — CHAT SHELL
