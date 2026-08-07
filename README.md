@@ -1,10 +1,27 @@
-# DVD Rental Campaign Analytics
+# AI Marketing Analytics Analytics
 
-A portfolio analytics project built with PostgreSQL, SQL, Python, Tableau, and an AI-powered **Ask Analyst** workflow.
+🚀 Live Demo:
 
-The project extends the PostgreSQL `dvdrental` sample database with simulated campaign data, customer segmentation, reusable SQL extracts, validation checks, Tableau-ready datasets, and a conversational analysis layer. It is designed to demonstrate an end-to-end analytics workflow: from source data and transformation through reporting, validation, and natural-language insight generation. 
+https://campaign-analytics-ai.streamlit.app
 
-The application supports configurable OpenAI models, allowing development to balance response quality, latency, and API cost.
+An AI-powered analytics application that enables business users to explore marketing campaign performance using natural language. Generate executive summaries, compare campaigns, visualize key metrics, and ask analytical questions through an interactive Streamlit interface.
+
+This portfolio project demonstrates an end-to-end analytics workflow, from data engineering and SQL transformation through business intelligence and AI-assisted analysis. It combines PostgreSQL, Python, SQL, Tableau, Streamlit, and the OpenAI API to simulate a production analytics solution.
+
+Key Features
+
+- AI-generated executive campaign summaries
+- Natural language "Ask Analyst" experience
+- Campaign comparison and performance insights
+- Interactive visualizations
+- PostgreSQL development environment with CSV-powered demo deployment
+- Configurable OpenAI models for balancing quality, latency, and cost
+
+## Application Screenshot
+
+<p align="center">
+  <img src="assets/app_screenshot.png" width="900">
+</p>
 
 ## Project Goals
 
@@ -198,7 +215,6 @@ app/
 ```
 
 
-
 The exact structure may evolve as the Ask Analyst functionality is expanded.
 
 ## Setup
@@ -207,7 +223,8 @@ The exact structure may evolve as the Ask Analyst functionality is expanded.
 
 ```bash
 git clone https://github.com/drekicks/marketing_analytics.git
-cd <repository-folder>
+cd marketing_analytics
+python -m venv .venv
 ```
 
 ### 2. Create and activate a virtual environment
@@ -334,27 +351,16 @@ v1.0.0  Hosted Streamlit portfolio demo
 
 Normal development changes should use descriptive commit messages. Tags should be reserved for meaningful project versions.
 
-## Roadmap
+## Future Vision
 
-### Before v1.0
-
-- Complete visual-analytics regression testing
-- Harden error handling and supported-request validation
-- Refresh project documentation and architecture diagrams
-- Add synthetic, demo-safe datasets
-- Build the Streamlit presentation layer
-- Deploy to Streamlit Community Cloud
-- Add API usage safeguards
-- Validate the hosted application with external users
-
-### Post-v1 Backlog
-
-- Scenario-planning workflows
-- Cross-object analytical datasets
-- Data-quality assistant
-- Forecasting and planning modules
-- Additional chart types
-- Agent-based multi-step analysis
+- [ ] Cross-object analytical datasets
+- [ ] Data-quality assistant
+- [ ] AI-generated explanations aligned with visualization datasets
+- [ ] Tableau dashboard integration with AI drill-through
+- [ ] Additional visualization types (trend, distribution, composition)
+- [ ] Retrieval-Augmented Generation (RAG) for customer-level analysis
+- [ ] Multi-agent architecture for specialized analytics workflows
+- [ ] Scenario planning and forecasting capabilities
 
 ## Business Value
 
@@ -368,10 +374,8 @@ This project reflects a practical analytics workflow rather than a single dashbo
 - Communicate technical outputs in a business-friendly format
 
 ## Data Source
+The project extends the PostgreSQL dvdrental sample database with simulated marketing campaign data, customer segmentation, reusable SQL extracts, validation checks, Tableau-ready datasets, and an AI-powered conversational analysis layer. It was designed to demonstrate an end-to-end analytics solution, from source data and transformation through reporting, validation, visualization, and natural-language insight generation.
 
-The project uses the PostgreSQL `dvdrental` sample database as its foundational dataset. Campaign data and related analytical layers are created for demonstration and portfolio purposes. The project contains 10,000 simulated customers with rental and payment details. Keys are created to ensure records can be joined to other tables. The original database only had 599 records. 
-
-- Original 599 customers' dates (payment, return, rental) were updated to bring the current (update rental dates to current.sql)
 
 ## License
 
