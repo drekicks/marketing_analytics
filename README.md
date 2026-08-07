@@ -8,7 +8,17 @@ An AI-powered analytics application that enables business users to explore marke
 
 This portfolio project demonstrates an end-to-end analytics workflow, from data engineering and SQL transformation through business intelligence and AI-assisted analysis. It combines PostgreSQL, Python, SQL, Tableau, Streamlit, and the OpenAI API to simulate a production analytics solution.
 
-Key Features
+## Application Screenshot
+
+<p align="center">
+  <img src="assets/app_screenshot.png" width="900">
+</p>
+
+<p align="center">
+  <img src="assets/ai_example.png" width="900">
+</p>
+
+## Key Features
 
 - AI-generated executive campaign summaries
 - Natural language "Ask Analyst" experience
@@ -17,41 +27,35 @@ Key Features
 - PostgreSQL development environment with CSV-powered demo deployment
 - Configurable OpenAI models for balancing quality, latency, and cost
 
-## Application Screenshot
+## Project Architecture
 
-<p align="center">
-  <img src="assets/app_screenshot.png" width="900">
-</p>
+```mermaid
+flowchart LR
+    A[Data Layer] --> B[Analytics Layer]
+    B --> C[AI Layer]
+    B --> D[Presentation Layer]
+    C --> D
+```
 
-## Project Goals
+Data Layer
+- PostgreSQL
+- CSV Demo Data
+- SQL Extracts
 
-This project demonstrates how an analyst can:
+Analytics Layer
+- Router
+- Context Builder
+- Session Manager
+- Visualization Services
 
-- Explore transactional customer and rental data with SQL
-- Build reusable analytical datasets
-- Generate and validate simulated campaign results
-- Create curated CSV extracts for Tableau
-- Separate controlled reporting snapshots from application execution
-- Use Python to coordinate data access and analysis
-- Add an AI-assisted experience for answering business questions
-- Apply production-minded practices such as modular code, validation, environment configuration, and version control
+AI Layer
+- Prompt Templates
+- OpenAI API
 
-## Demo Mode
-
-The portfolio release will include a Streamlit web interface hosted on
-Streamlit Community Cloud.
-
-The hosted version will use synthetic demonstration data and allow users to:
-
-- Select a campaign
-- Generate an executive summary
-- Ask natural-language business questions
-- Compare campaigns
-- Explore segment performance
-- Generate and interpret charts
-
-No local installation will be required for the hosted demo.
-
+Presentation Layer
+- CLI
+- Streamlit
+- Matplotli
 
 ## Project Workflow
 
@@ -64,13 +68,13 @@ flowchart TD
     C[Session Manager]
     D[Context Builder]
 
-    E[Visualization]
-    F[Ask Analyst]
+    E[Visualization Service]
+    F[Analyst Service]
 
     G[Matplotlib]
     H[OpenAI API]
 
-    I[CLI / Streamlit UI]
+    I[Presentation Layer]
 
     A --> B
     B --> C
@@ -85,8 +89,6 @@ flowchart TD
     G --> I
     H --> I
 ```
-
-## Key Features
 
 ### SQL Analysis
 
@@ -291,15 +293,6 @@ Run the campaign extract workflow separately:
 python -m app.extracts.campaign_extract
 ```
 
-This workflow:
-
-1. Reads campaign results from PostgreSQL
-2. Runs customer-level validation
-3. Stops if customer-level errors are found
-4. Loads the analytical SQL extracts
-5. Runs campaign-performance validation
-6. Exports the approved Tableau-ready CSV files
-
 ## Example Extract Logic
 
 ```python
@@ -342,25 +335,14 @@ The project uses Git tags and GitHub Releases for meaningful milestones.
 
 Version sequence:
 
-v0.5.0  Initial Ask Analyst integration
-v0.6.0  Campaign and segment analysis
-v0.7.0  Insight Explorer and derived signals
-v0.8.0  Session management and conversational context
-v0.9.0  Visual analytics
-v1.0.0  Hosted Streamlit portfolio demo
+- v0.5.0  Initial Ask Analyst integration
+- v0.6.0  Campaign and segment analysis
+- v0.7.0  Insight Explorer and derived signals
+- v0.8.0  Session management and conversational context
+- v0.9.0  Visual analytics
+- v1.0.0  Hosted Streamlit portfolio demo
 
 Normal development changes should use descriptive commit messages. Tags should be reserved for meaningful project versions.
-
-## Future Vision
-
-- [ ] Cross-object analytical datasets
-- [ ] Data-quality assistant
-- [ ] AI-generated explanations aligned with visualization datasets
-- [ ] Tableau dashboard integration with AI drill-through
-- [ ] Additional visualization types (trend, distribution, composition)
-- [ ] Retrieval-Augmented Generation (RAG) for customer-level analysis
-- [ ] Multi-agent architecture for specialized analytics workflows
-- [ ] Scenario planning and forecasting capabilities
 
 ## Business Value
 
@@ -376,6 +358,16 @@ This project reflects a practical analytics workflow rather than a single dashbo
 ## Data Source
 The project extends the PostgreSQL dvdrental sample database with simulated marketing campaign data, customer segmentation, reusable SQL extracts, validation checks, Tableau-ready datasets, and an AI-powered conversational analysis layer. It was designed to demonstrate an end-to-end analytics solution, from source data and transformation through reporting, validation, visualization, and natural-language insight generation.
 
+## Future Vision
+
+- [ ] Cross-object analytical datasets
+- [ ] Data-quality assistant
+- [ ] AI-generated explanations aligned with visualization datasets
+- [ ] Tableau dashboard integration with AI drill-through
+- [ ] Additional visualization types (trend, distribution, composition)
+- [ ] Retrieval-Augmented Generation (RAG) for customer-level analysis
+- [ ] Multi-agent architecture for specialized analytics workflows
+- [ ] Scenario planning and forecasting capabilities
 
 ## License
 
