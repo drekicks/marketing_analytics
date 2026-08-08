@@ -1,4 +1,4 @@
-# AI Marketing Analytics Analytics
+# AI Marketing Analytics Application
 
 🚀 Live Demo:
 
