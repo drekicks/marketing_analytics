@@ -1,25 +1,573 @@
-﻿campaign_id,campaign_name,customer_segment,treatment_grp,start_date,end_date,cmpgn_rvn,total_cost,audience,conversions,rvn_per_customer,rvn_per_converter
-CMP-2025-002,Summer Retention Offer,Champion,CONTROL,2025-08-01,2025-08-31,564.09,0.0,519,105,1.09,5.37
-CMP-2025-002,Summer Retention Offer,Champion,TEST,2025-08-01,2025-08-31,2813.25,459.1,2076,503,1.36,5.59
-CMP-2025-002,Summer Retention Offer,Churn Watchlist,CONTROL,2025-08-01,2025-08-31,211.61,0.0,386,41,0.55,5.16
-CMP-2025-002,Summer Retention Offer,Churn Watchlist,TEST,2025-08-01,2025-08-31,1430.89,287.9,1544,267,0.93,5.36
-CMP-2025-002,Summer Retention Offer,Growth,CONTROL,2025-08-01,2025-08-31,592.21,0.0,870,120,0.68,4.94
-CMP-2025-002,Summer Retention Offer,Growth,TEST,2025-08-01,2025-08-31,3439.0,691.3,3478,687,0.99,5.01
-CMP-2025-002,Summer Retention Offer,Win-Back,CONTROL,2025-08-01,2025-08-31,166.23,0.0,345,32,0.48,5.19
-CMP-2025-002,Summer Retention Offer,Win-Back,TEST,2025-08-01,2025-08-31,742.52,208.1,1381,140,0.54,5.3
-CMP-2026-003,Summer Win Big Offer,Champion,CONTROL,2026-07-01,2026-07-31,601.24,0.0,573,119,1.05,5.05
-CMP-2026-003,Summer Win Big Offer,Champion,TEST,2026-07-01,2026-07-31,3167.17,512.9,2294,567,1.38,5.59
-CMP-2026-003,Summer Win Big Offer,Churn Watchlist,CONTROL,2026-07-01,2026-07-31,291.78,0.0,425,52,0.69,5.61
-CMP-2026-003,Summer Win Big Offer,Churn Watchlist,TEST,2026-07-01,2026-07-31,1555.07,313.9,1699,288,0.92,5.4
-CMP-2026-003,Summer Win Big Offer,Growth,CONTROL,2026-07-01,2026-07-31,579.46,0.0,870,111,0.67,5.22
-CMP-2026-003,Summer Win Big Offer,Growth,TEST,2026-07-01,2026-07-31,3493.95,691.3,3478,687,1.0,5.09
-CMP-2026-003,Summer Win Big Offer,Win-Back,CONTROL,2026-07-01,2026-07-31,91.13,0.0,252,20,0.36,4.56
-CMP-2026-003,Summer Win Big Offer,Win-Back,TEST,2026-07-01,2026-07-31,503.18,150.8,1008,100,0.5,5.03
-CMP-2026-004,Spring Reactivation TM,Champion,CONTROL,2026-03-01,2026-04-30,766.86,0.0,573,133,1.34,5.77
-CMP-2026-004,Spring Reactivation TM,Champion,TEST,2026-03-01,2026-04-30,3664.16,553.9,2294,649,1.6,5.65
-CMP-2026-004,Spring Reactivation TM,Churn Watchlist,CONTROL,2026-03-01,2026-04-30,421.98,0.0,425,69,0.99,6.12
-CMP-2026-004,Spring Reactivation TM,Churn Watchlist,TEST,2026-03-01,2026-04-30,1663.81,327.4,1699,315,0.98,5.28
-CMP-2026-004,Spring Reactivation TM,Growth,CONTROL,2026-03-01,2026-04-30,896.2,0.0,870,172,1.03,5.21
-CMP-2026-004,Spring Reactivation TM,Growth,TEST,2026-03-01,2026-04-30,4143.57,758.8,3478,822,1.19,5.04
-CMP-2026-004,Spring Reactivation TM,Win-Back,CONTROL,2026-03-01,2026-04-30,245.58,0.0,252,44,0.97,5.58
-CMP-2026-004,Spring Reactivation TM,Win-Back,TEST,2026-03-01,2026-04-30,973.66,196.3,1008,191,0.97,5.1
+﻿campaign_id,campaign_name,customer_segment,customer_tier,primary_segment,treatment_grp,engagement_segment,category_engagement_tier,start_date,end_date,cmpgn_rvn,total_cost,audience,conversions,rvn_per_customer,rvn_per_converter
+CMP-2025-002,Summer Retention Offer,Champion,High Value,Champion,CONTROL,High,High Engagement,2025-08-01,2025-08-31,0.0,0.0,3,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Champion,High Value,Champion,CONTROL,High,Medium Engagement,2025-08-01,2025-08-31,0.0,0.0,1,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Champion,High Value,Champion,CONTROL,Very High,High Engagement,2025-08-01,2025-08-31,43.21,0.0,30,7,1.44,6.17
+CMP-2025-002,Summer Retention Offer,Champion,High Value,Champion,CONTROL,Very High,Low Engagement,2025-08-01,2025-08-31,28.03,0.0,17,4,1.65,7.01
+CMP-2025-002,Summer Retention Offer,Champion,High Value,Champion,CONTROL,Very High,Medium Engagement,2025-08-01,2025-08-31,25.92,0.0,12,5,2.16,5.18
+CMP-2025-002,Summer Retention Offer,Champion,High Value,Champion,TEST,High,High Engagement,2025-08-01,2025-08-31,11.12,2.4,14,2,0.79,5.56
+CMP-2025-002,Summer Retention Offer,Champion,High Value,Champion,TEST,High,Low Engagement,2025-08-01,2025-08-31,15.66,1.8,8,2,1.96,7.83
+CMP-2025-002,Summer Retention Offer,Champion,High Value,Champion,TEST,High,Medium Engagement,2025-08-01,2025-08-31,33.51,2.7,12,3,2.79,11.17
+CMP-2025-002,Summer Retention Offer,Champion,High Value,Champion,TEST,Moderate,High Engagement,2025-08-01,2025-08-31,0.0,0.1,1,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Champion,High Value,Champion,TEST,Moderate,Low Engagement,2025-08-01,2025-08-31,8.42,0.6,1,1,8.42,8.42
+CMP-2025-002,Summer Retention Offer,Champion,High Value,Champion,TEST,Moderate,Medium Engagement,2025-08-01,2025-08-31,0.0,0.2,2,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Champion,High Value,Champion,TEST,Very High,High Engagement,2025-08-01,2025-08-31,160.99,28.3,128,31,1.26,5.19
+CMP-2025-002,Summer Retention Offer,Champion,High Value,Champion,TEST,Very High,Low Engagement,2025-08-01,2025-08-31,90.08,13.3,58,15,1.55,6.01
+CMP-2025-002,Summer Retention Offer,Champion,High Value,Champion,TEST,Very High,Medium Engagement,2025-08-01,2025-08-31,153.33,19.7,77,24,1.99,6.39
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,CONTROL,High,High Engagement,2025-08-01,2025-08-31,118.21,0.0,105,20,1.13,5.91
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,CONTROL,High,Low Engagement,2025-08-01,2025-08-31,34.07,0.0,48,8,0.71,4.26
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,CONTROL,High,Medium Engagement,2025-08-01,2025-08-31,49.07,0.0,46,8,1.07,6.13
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,CONTROL,Moderate,High Engagement,2025-08-01,2025-08-31,72.25,0.0,58,13,1.25,5.56
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,CONTROL,Moderate,Low Engagement,2025-08-01,2025-08-31,39.76,0.0,36,7,1.1,5.68
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,CONTROL,Moderate,Medium Engagement,2025-08-01,2025-08-31,45.71,0.0,33,8,1.39,5.71
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,CONTROL,Very High,High Engagement,2025-08-01,2025-08-31,54.91,0.0,61,14,0.9,3.92
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,CONTROL,Very High,Low Engagement,2025-08-01,2025-08-31,22.7,0.0,33,6,0.69,3.78
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,CONTROL,Very High,Medium Engagement,2025-08-01,2025-08-31,30.25,0.0,36,5,0.84,6.05
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,TEST,High,High Engagement,2025-08-01,2025-08-31,444.76,71.4,319,79,1.39,5.63
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,TEST,High,Low Engagement,2025-08-01,2025-08-31,221.15,41.4,209,41,1.06,5.39
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,TEST,High,Medium Engagement,2025-08-01,2025-08-31,345.86,50.4,214,58,1.62,5.96
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,TEST,Moderate,High Engagement,2025-08-01,2025-08-31,296.55,48.4,219,53,1.35,5.6
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,TEST,Moderate,Low Engagement,2025-08-01,2025-08-31,199.29,33.8,138,40,1.44,4.98
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,TEST,Moderate,Medium Engagement,2025-08-01,2025-08-31,202.89,29.3,133,32,1.53,6.34
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,TEST,Very High,High Engagement,2025-08-01,2025-08-31,301.49,53.3,248,57,1.22,5.29
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,TEST,Very High,Low Engagement,2025-08-01,2025-08-31,169.39,31.4,154,32,1.1,5.29
+CMP-2025-002,Summer Retention Offer,Champion,Medium Value,Upsell - Scale,TEST,Very High,Medium Engagement,2025-08-01,2025-08-31,158.76,30.6,141,33,1.13,4.81
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,High Value,Churn Watchlist,CONTROL,High,Low Engagement,2025-08-01,2025-08-31,0.0,0.0,1,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,High Value,Churn Watchlist,CONTROL,Moderate,Medium Engagement,2025-08-01,2025-08-31,0.0,0.0,1,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,High Value,Churn Watchlist,CONTROL,Very High,High Engagement,2025-08-01,2025-08-31,17.23,0.0,16,2,1.08,8.62
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,High Value,Churn Watchlist,CONTROL,Very High,Low Engagement,2025-08-01,2025-08-31,0.0,0.0,4,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,High Value,Churn Watchlist,CONTROL,Very High,Medium Engagement,2025-08-01,2025-08-31,0.0,0.0,3,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,High Value,Churn Watchlist,TEST,High,High Engagement,2025-08-01,2025-08-31,0.0,0.4,4,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,High Value,Churn Watchlist,TEST,High,Low Engagement,2025-08-01,2025-08-31,11.55,1.1,6,1,1.93,11.55
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,High Value,Churn Watchlist,TEST,High,Medium Engagement,2025-08-01,2025-08-31,11.85,0.8,3,1,3.95,11.85
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,High Value,Churn Watchlist,TEST,Moderate,High Engagement,2025-08-01,2025-08-31,4.27,0.6,1,1,4.27,4.27
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,High Value,Churn Watchlist,TEST,Very High,High Engagement,2025-08-01,2025-08-31,61.17,11.6,61,11,1.0,5.56
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,High Value,Churn Watchlist,TEST,Very High,Low Engagement,2025-08-01,2025-08-31,7.07,3.7,27,2,0.26,3.54
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,High Value,Churn Watchlist,TEST,Very High,Medium Engagement,2025-08-01,2025-08-31,41.47,6.9,29,8,1.43,5.18
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,High,High Engagement,2025-08-01,2025-08-31,0.0,0.0,19,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,High,Low Engagement,2025-08-01,2025-08-31,8.4,0.0,7,2,1.2,4.2
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,High,Medium Engagement,2025-08-01,2025-08-31,2.77,0.0,7,1,0.4,2.77
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Moderate,High Engagement,2025-08-01,2025-08-31,14.61,0.0,37,3,0.39,4.87
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Moderate,Low Engagement,2025-08-01,2025-08-31,12.11,0.0,16,3,0.76,4.04
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Moderate,Medium Engagement,2025-08-01,2025-08-31,11.39,0.0,21,3,0.54,3.8
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Very High,High Engagement,2025-08-01,2025-08-31,2.3,0.0,4,1,0.58,2.3
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Very High,Low Engagement,2025-08-01,2025-08-31,0.0,0.0,2,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Very High,Medium Engagement,2025-08-01,2025-08-31,0.0,0.0,3,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,High,High Engagement,2025-08-01,2025-08-31,35.28,9.8,53,9,0.67,3.92
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,High,Low Engagement,2025-08-01,2025-08-31,34.26,5.8,28,6,1.22,5.71
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,High,Medium Engagement,2025-08-01,2025-08-31,30.07,6.7,37,6,0.81,5.01
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,Moderate,High Engagement,2025-08-01,2025-08-31,133.43,30.1,146,31,0.91,4.3
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,Moderate,Low Engagement,2025-08-01,2025-08-31,70.98,14.5,85,12,0.84,5.92
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,Moderate,Medium Engagement,2025-08-01,2025-08-31,76.98,14.1,71,14,1.08,5.5
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,Very High,High Engagement,2025-08-01,2025-08-31,10.26,1.3,8,1,1.28,10.26
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,Very High,Low Engagement,2025-08-01,2025-08-31,8.97,1.0,5,1,1.79,8.97
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,Very High,Medium Engagement,2025-08-01,2025-08-31,9.2,1.4,4,2,2.3,4.6
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,High,High Engagement,2025-08-01,2025-08-31,19.39,0.0,51,4,0.38,4.85
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,High,Low Engagement,2025-08-01,2025-08-31,6.14,0.0,30,2,0.2,3.07
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,High,Medium Engagement,2025-08-01,2025-08-31,8.9,0.0,29,3,0.31,2.97
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Moderate,High Engagement,2025-08-01,2025-08-31,17.98,0.0,31,3,0.58,5.99
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Moderate,Low Engagement,2025-08-01,2025-08-31,14.01,0.0,22,2,0.64,7.01
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Moderate,Medium Engagement,2025-08-01,2025-08-31,19.34,0.0,16,2,1.21,9.67
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Very High,High Engagement,2025-08-01,2025-08-31,16.52,0.0,27,3,0.61,5.51
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Very High,Low Engagement,2025-08-01,2025-08-31,22.76,0.0,19,4,1.2,5.69
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Very High,Medium Engagement,2025-08-01,2025-08-31,17.76,0.0,20,3,0.89,5.92
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,High,High Engagement,2025-08-01,2025-08-31,230.82,40.8,203,41,1.14,5.63
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,High,Low Engagement,2025-08-01,2025-08-31,150.41,24.1,116,25,1.3,6.02
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,High,Medium Engagement,2025-08-01,2025-08-31,65.97,17.9,114,13,0.58,5.07
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Moderate,High Engagement,2025-08-01,2025-08-31,113.86,24.8,143,21,0.8,5.42
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Moderate,Low Engagement,2025-08-01,2025-08-31,49.48,12.5,80,9,0.62,5.5
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Moderate,Medium Engagement,2025-08-01,2025-08-31,81.48,14.8,83,13,0.98,6.27
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Very High,High Engagement,2025-08-01,2025-08-31,89.68,18.7,102,17,0.88,5.28
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Very High,Low Engagement,2025-08-01,2025-08-31,35.99,8.9,54,7,0.67,5.14
+CMP-2025-002,Summer Retention Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Very High,Medium Engagement,2025-08-01,2025-08-31,66.39,15.6,81,15,0.82,4.43
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Engagement Growth,CONTROL,Low,High Engagement,2025-08-01,2025-08-31,78.28,0.0,114,18,0.69,4.35
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Engagement Growth,CONTROL,Low,Low Engagement,2025-08-01,2025-08-31,42.57,0.0,68,8,0.63,5.32
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Engagement Growth,CONTROL,Low,Medium Engagement,2025-08-01,2025-08-31,55.65,0.0,87,12,0.64,4.64
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Engagement Growth,CONTROL,Very Low,High Engagement,2025-08-01,2025-08-31,150.01,0.0,141,27,1.06,5.56
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Engagement Growth,CONTROL,Very Low,Low Engagement,2025-08-01,2025-08-31,47.19,0.0,109,12,0.43,3.93
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Engagement Growth,CONTROL,Very Low,Medium Engagement,2025-08-01,2025-08-31,44.09,0.0,73,10,0.6,4.41
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Engagement Growth,TEST,Low,High Engagement,2025-08-01,2025-08-31,516.42,110.6,546,112,0.95,4.61
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Engagement Growth,TEST,Low,Low Engagement,2025-08-01,2025-08-31,379.42,74.1,331,82,1.15,4.63
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Engagement Growth,TEST,Low,Medium Engagement,2025-08-01,2025-08-31,297.65,59.0,285,61,1.04,4.88
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Engagement Growth,TEST,Very Low,High Engagement,2025-08-01,2025-08-31,580.14,113.0,580,110,1.0,5.27
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Engagement Growth,TEST,Very Low,Low Engagement,2025-08-01,2025-08-31,298.2,67.8,358,64,0.83,4.66
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Engagement Growth,TEST,Very Low,Medium Engagement,2025-08-01,2025-08-31,392.97,72.7,357,74,1.1,5.31
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,CONTROL,High,High Engagement,2025-08-01,2025-08-31,13.59,0.0,28,3,0.49,4.53
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,CONTROL,High,Low Engagement,2025-08-01,2025-08-31,2.66,0.0,9,1,0.3,2.66
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,CONTROL,High,Medium Engagement,2025-08-01,2025-08-31,17.68,0.0,19,3,0.93,5.89
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,CONTROL,Moderate,High Engagement,2025-08-01,2025-08-31,17.26,0.0,55,3,0.31,5.75
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,CONTROL,Moderate,Low Engagement,2025-08-01,2025-08-31,30.26,0.0,31,6,0.98,5.04
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,CONTROL,Moderate,Medium Engagement,2025-08-01,2025-08-31,18.11,0.0,33,4,0.55,4.53
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,CONTROL,Very High,High Engagement,2025-08-01,2025-08-31,0.0,0.0,1,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,CONTROL,Very High,Low Engagement,2025-08-01,2025-08-31,0.0,0.0,3,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,CONTROL,Very High,Medium Engagement,2025-08-01,2025-08-31,9.19,0.0,2,2,4.6,4.6
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,TEST,High,High Engagement,2025-08-01,2025-08-31,101.16,18.5,95,18,1.06,5.62
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,TEST,High,Low Engagement,2025-08-01,2025-08-31,37.6,11.1,66,9,0.57,4.18
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,TEST,High,Medium Engagement,2025-08-01,2025-08-31,33.24,10.3,58,9,0.57,3.69
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,TEST,Moderate,High Engagement,2025-08-01,2025-08-31,164.92,39.5,210,37,0.79,4.46
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,TEST,Moderate,Low Engagement,2025-08-01,2025-08-31,124.17,23.1,116,23,1.07,5.4
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,TEST,Moderate,Medium Engagement,2025-08-01,2025-08-31,101.93,20.1,111,18,0.92,5.66
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,TEST,Very High,High Engagement,2025-08-01,2025-08-31,18.96,3.3,18,3,1.05,6.32
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,TEST,Very High,Low Engagement,2025-08-01,2025-08-31,9.75,1.8,8,2,1.22,4.88
+CMP-2025-002,Summer Retention Offer,Growth,Low Value,Upsell - Core,TEST,Very High,Medium Engagement,2025-08-01,2025-08-31,0.0,0.6,6,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Growth,Medium Value,Engagement Growth,CONTROL,Low,High Engagement,2025-08-01,2025-08-31,24.72,0.0,37,4,0.67,6.18
+CMP-2025-002,Summer Retention Offer,Growth,Medium Value,Engagement Growth,CONTROL,Low,Low Engagement,2025-08-01,2025-08-31,21.51,0.0,21,3,1.02,7.17
+CMP-2025-002,Summer Retention Offer,Growth,Medium Value,Engagement Growth,CONTROL,Low,Medium Engagement,2025-08-01,2025-08-31,10.96,0.0,30,3,0.37,3.65
+CMP-2025-002,Summer Retention Offer,Growth,Medium Value,Engagement Growth,CONTROL,Very Low,High Engagement,2025-08-01,2025-08-31,8.48,0.0,5,1,1.7,8.48
+CMP-2025-002,Summer Retention Offer,Growth,Medium Value,Engagement Growth,CONTROL,Very Low,Low Engagement,2025-08-01,2025-08-31,0.0,0.0,2,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Growth,Medium Value,Engagement Growth,CONTROL,Very Low,Medium Engagement,2025-08-01,2025-08-31,0.0,0.0,2,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Growth,Medium Value,Engagement Growth,TEST,Low,High Engagement,2025-08-01,2025-08-31,139.01,24.1,116,25,1.2,5.56
+CMP-2025-002,Summer Retention Offer,Growth,Medium Value,Engagement Growth,TEST,Low,Low Engagement,2025-08-01,2025-08-31,111.57,19.9,104,19,1.07,5.87
+CMP-2025-002,Summer Retention Offer,Growth,Medium Value,Engagement Growth,TEST,Low,Medium Engagement,2025-08-01,2025-08-31,100.16,17.4,94,16,1.07,6.26
+CMP-2025-002,Summer Retention Offer,Growth,Medium Value,Engagement Growth,TEST,Very Low,High Engagement,2025-08-01,2025-08-31,12.31,2.0,10,2,1.23,6.16
+CMP-2025-002,Summer Retention Offer,Growth,Medium Value,Engagement Growth,TEST,Very Low,Low Engagement,2025-08-01,2025-08-31,9.1,1.6,6,2,1.52,4.55
+CMP-2025-002,Summer Retention Offer,Growth,Medium Value,Engagement Growth,TEST,Very Low,Medium Engagement,2025-08-01,2025-08-31,10.32,0.8,3,1,3.44,10.32
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Champion,CONTROL,Very High,High Engagement,2025-08-01,2025-08-31,17.71,0.0,28,3,0.63,5.9
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Champion,CONTROL,Very High,Low Engagement,2025-08-01,2025-08-31,14.22,0.0,8,2,1.78,7.11
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Champion,CONTROL,Very High,Medium Engagement,2025-08-01,2025-08-31,16.14,0.0,17,2,0.95,8.07
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Champion,TEST,High,High Engagement,2025-08-01,2025-08-31,0.0,0.4,4,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Champion,TEST,High,Low Engagement,2025-08-01,2025-08-31,0.0,0.1,1,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Champion,TEST,Very High,High Engagement,2025-08-01,2025-08-31,76.97,16.0,105,11,0.73,7.0
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Champion,TEST,Very High,Low Engagement,2025-08-01,2025-08-31,26.93,7.0,50,4,0.54,6.73
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Champion,TEST,Very High,Medium Engagement,2025-08-01,2025-08-31,10.68,7.4,59,3,0.18,3.56
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Churn Watchlist,CONTROL,Very High,High Engagement,2025-08-01,2025-08-31,0.0,0.0,18,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Churn Watchlist,CONTROL,Very High,Low Engagement,2025-08-01,2025-08-31,13.14,0.0,7,2,1.88,6.57
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Churn Watchlist,CONTROL,Very High,Medium Engagement,2025-08-01,2025-08-31,11.27,0.0,14,3,0.81,3.76
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Churn Watchlist,TEST,High,Low Engagement,2025-08-01,2025-08-31,0.0,0.1,1,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Churn Watchlist,TEST,Very High,High Engagement,2025-08-01,2025-08-31,53.28,12.6,86,8,0.62,6.66
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Churn Watchlist,TEST,Very High,Low Engagement,2025-08-01,2025-08-31,16.18,4.2,27,3,0.6,5.39
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Churn Watchlist,TEST,Very High,Medium Engagement,2025-08-01,2025-08-31,25.98,6.1,41,4,0.63,6.5
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Win-Back VIP,CONTROL,Very High,High Engagement,2025-08-01,2025-08-31,0.0,0.0,5,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Win-Back VIP,CONTROL,Very High,Low Engagement,2025-08-01,2025-08-31,0.0,0.0,8,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Win-Back VIP,CONTROL,Very High,Medium Engagement,2025-08-01,2025-08-31,0.0,0.0,4,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Win-Back VIP,TEST,High,Low Engagement,2025-08-01,2025-08-31,0.0,0.2,2,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Win-Back VIP,TEST,High,Medium Engagement,2025-08-01,2025-08-31,0.0,0.1,1,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Win-Back VIP,TEST,Very High,High Engagement,2025-08-01,2025-08-31,32.61,4.5,25,4,1.3,8.15
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Win-Back VIP,TEST,Very High,Low Engagement,2025-08-01,2025-08-31,3.91,1.8,13,1,0.3,3.91
+CMP-2025-002,Summer Retention Offer,Win-Back,High Value,Win-Back VIP,TEST,Very High,Medium Engagement,2025-08-01,2025-08-31,3.95,2.1,16,1,0.25,3.95
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,High,High Engagement,2025-08-01,2025-08-31,2.71,0.0,4,1,0.68,2.71
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,High,Low Engagement,2025-08-01,2025-08-31,0.0,0.0,3,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,High,Medium Engagement,2025-08-01,2025-08-31,0.0,0.0,2,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Low,High Engagement,2025-08-01,2025-08-31,15.2,0.0,24,3,0.63,5.07
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Low,Low Engagement,2025-08-01,2025-08-31,2.56,0.0,12,1,0.21,2.56
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Low,Medium Engagement,2025-08-01,2025-08-31,2.63,0.0,16,1,0.16,2.63
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Moderate,High Engagement,2025-08-01,2025-08-31,5.98,0.0,10,1,0.6,5.98
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Moderate,Low Engagement,2025-08-01,2025-08-31,0.0,0.0,4,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Moderate,Medium Engagement,2025-08-01,2025-08-31,0.0,0.0,3,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Very High,High Engagement,2025-08-01,2025-08-31,0.0,0.0,1,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Very Low,High Engagement,2025-08-01,2025-08-31,18.79,0.0,33,4,0.57,4.7
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Very Low,Low Engagement,2025-08-01,2025-08-31,14.54,0.0,28,2,0.52,7.27
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Very Low,Medium Engagement,2025-08-01,2025-08-31,7.0,0.0,27,1,0.26,7.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,High,High Engagement,2025-08-01,2025-08-31,3.11,1.7,12,1,0.26,3.11
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,High,Low Engagement,2025-08-01,2025-08-31,0.0,0.4,4,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,High,Medium Engagement,2025-08-01,2025-08-31,4.78,1.4,9,1,0.53,4.78
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Low,High Engagement,2025-08-01,2025-08-31,31.98,10.7,77,6,0.42,5.33
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Low,Low Engagement,2025-08-01,2025-08-31,26.97,8.1,46,7,0.59,3.85
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Low,Medium Engagement,2025-08-01,2025-08-31,37.61,11.1,61,10,0.62,3.76
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Moderate,High Engagement,2025-08-01,2025-08-31,20.07,5.8,38,4,0.53,5.02
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Moderate,Low Engagement,2025-08-01,2025-08-31,0.0,1.5,15,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Moderate,Medium Engagement,2025-08-01,2025-08-31,10.55,3.3,18,3,0.59,3.52
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Very High,High Engagement,2025-08-01,2025-08-31,4.34,0.8,3,1,1.45,4.34
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Very High,Medium Engagement,2025-08-01,2025-08-31,0.0,0.1,1,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Very Low,High Engagement,2025-08-01,2025-08-31,131.38,29.7,172,25,0.76,5.26
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Very Low,Low Engagement,2025-08-01,2025-08-31,61.16,18.0,120,12,0.51,5.1
+CMP-2025-002,Summer Retention Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Very Low,Medium Engagement,2025-08-01,2025-08-31,32.49,12.0,85,7,0.38,4.64
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,High,High Engagement,2025-08-01,2025-08-31,3.36,0.0,13,1,0.26,3.36
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,High,Low Engagement,2025-08-01,2025-08-31,0.0,0.0,6,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,High,Medium Engagement,2025-08-01,2025-08-31,7.24,0.0,4,1,1.81,7.24
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Low,High Engagement,2025-08-01,2025-08-31,7.66,0.0,6,2,1.28,3.83
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Low,Low Engagement,2025-08-01,2025-08-31,0.0,0.0,1,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Low,Medium Engagement,2025-08-01,2025-08-31,0.0,0.0,1,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Moderate,High Engagement,2025-08-01,2025-08-31,0.0,0.0,8,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Moderate,Low Engagement,2025-08-01,2025-08-31,0.0,0.0,10,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Moderate,Medium Engagement,2025-08-01,2025-08-31,0.0,0.0,1,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very High,High Engagement,2025-08-01,2025-08-31,3.08,0.0,8,1,0.39,3.08
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very High,Low Engagement,2025-08-01,2025-08-31,3.0,0.0,2,1,1.5,3.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very High,Medium Engagement,2025-08-01,2025-08-31,0.0,0.0,5,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very Low,High Engagement,2025-08-01,2025-08-31,0.0,0.0,2,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very Low,Medium Engagement,2025-08-01,2025-08-31,0.0,0.0,2,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,TEST,High,High Engagement,2025-08-01,2025-08-31,22.17,6.5,40,5,0.55,4.43
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,TEST,High,Low Engagement,2025-08-01,2025-08-31,7.15,2.8,18,2,0.4,3.58
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,TEST,High,Medium Engagement,2025-08-01,2025-08-31,12.68,4.4,34,2,0.37,6.34
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Low,High Engagement,2025-08-01,2025-08-31,11.14,2.6,16,2,0.7,5.57
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Low,Low Engagement,2025-08-01,2025-08-31,11.23,2.5,15,2,0.75,5.62
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Low,Medium Engagement,2025-08-01,2025-08-31,0.0,1.2,12,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Moderate,High Engagement,2025-08-01,2025-08-31,18.17,4.7,32,3,0.57,6.06
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Moderate,Low Engagement,2025-08-01,2025-08-31,0.0,2.9,29,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Moderate,Medium Engagement,2025-08-01,2025-08-31,24.46,4.2,22,4,1.11,6.12
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Very High,High Engagement,2025-08-01,2025-08-31,5.6,3.2,27,1,0.21,5.6
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Very High,Low Engagement,2025-08-01,2025-08-31,0.0,2.1,21,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Very High,Medium Engagement,2025-08-01,2025-08-31,6.31,2.8,18,2,0.35,3.16
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Very Low,High Engagement,2025-08-01,2025-08-31,0.0,0.2,2,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Very Low,Low Engagement,2025-08-01,2025-08-31,0.0,0.1,1,0,0.0,0.0
+CMP-2025-002,Summer Retention Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Very Low,Medium Engagement,2025-08-01,2025-08-31,8.68,0.7,2,1,4.34,8.68
+CMP-2026-003,Summer Win Big Offer,Champion,High Value,Champion,CONTROL,High,High Engagement,2026-07-01,2026-07-31,10.18,0.0,3,1,3.39,10.18
+CMP-2026-003,Summer Win Big Offer,Champion,High Value,Champion,CONTROL,High,Low Engagement,2026-07-01,2026-07-31,0.0,0.0,2,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Champion,High Value,Champion,CONTROL,High,Medium Engagement,2026-07-01,2026-07-31,0.0,0.0,2,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Champion,High Value,Champion,CONTROL,Very High,High Engagement,2026-07-01,2026-07-31,95.0,0.0,58,19,1.64,5.0
+CMP-2026-003,Summer Win Big Offer,Champion,High Value,Champion,CONTROL,Very High,Low Engagement,2026-07-01,2026-07-31,24.37,0.0,16,5,1.52,4.87
+CMP-2026-003,Summer Win Big Offer,Champion,High Value,Champion,CONTROL,Very High,Medium Engagement,2026-07-01,2026-07-31,60.59,0.0,42,8,1.44,7.57
+CMP-2026-003,Summer Win Big Offer,Champion,High Value,Champion,TEST,High,High Engagement,2026-07-01,2026-07-31,35.31,4.3,18,5,1.96,7.06
+CMP-2026-003,Summer Win Big Offer,Champion,High Value,Champion,TEST,High,Low Engagement,2026-07-01,2026-07-31,16.01,1.7,7,2,2.29,8.01
+CMP-2026-003,Summer Win Big Offer,Champion,High Value,Champion,TEST,High,Medium Engagement,2026-07-01,2026-07-31,27.69,3.1,11,4,2.52,6.92
+CMP-2026-003,Summer Win Big Offer,Champion,High Value,Champion,TEST,Moderate,High Engagement,2026-07-01,2026-07-31,8.98,0.6,1,1,8.98,8.98
+CMP-2026-003,Summer Win Big Offer,Champion,High Value,Champion,TEST,Moderate,Low Engagement,2026-07-01,2026-07-31,8.42,0.6,1,1,8.42,8.42
+CMP-2026-003,Summer Win Big Offer,Champion,High Value,Champion,TEST,Moderate,Medium Engagement,2026-07-01,2026-07-31,0.0,0.2,2,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Champion,High Value,Champion,TEST,Very High,High Engagement,2026-07-01,2026-07-31,309.39,49.3,233,52,1.33,5.95
+CMP-2026-003,Summer Win Big Offer,Champion,High Value,Champion,TEST,Very High,Low Engagement,2026-07-01,2026-07-31,175.67,27.2,117,31,1.5,5.67
+CMP-2026-003,Summer Win Big Offer,Champion,High Value,Champion,TEST,Very High,Medium Engagement,2026-07-01,2026-07-31,204.8,29.3,123,34,1.67,6.02
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,CONTROL,High,High Engagement,2026-07-01,2026-07-31,91.29,0.0,98,20,0.93,4.56
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,CONTROL,High,Low Engagement,2026-07-01,2026-07-31,46.99,0.0,58,12,0.81,3.92
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,CONTROL,High,Medium Engagement,2026-07-01,2026-07-31,41.94,0.0,40,11,1.05,3.81
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,CONTROL,Moderate,High Engagement,2026-07-01,2026-07-31,59.54,0.0,58,11,1.03,5.41
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,CONTROL,Moderate,Low Engagement,2026-07-01,2026-07-31,41.96,0.0,36,6,1.17,6.99
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,CONTROL,Moderate,Medium Engagement,2026-07-01,2026-07-31,37.07,0.0,32,6,1.16,6.18
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,CONTROL,Very High,High Engagement,2026-07-01,2026-07-31,37.74,0.0,59,8,0.64,4.72
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,CONTROL,Very High,Low Engagement,2026-07-01,2026-07-31,35.88,0.0,37,9,0.97,3.99
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,CONTROL,Very High,Medium Engagement,2026-07-01,2026-07-31,18.69,0.0,32,3,0.58,6.23
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,TEST,High,High Engagement,2026-07-01,2026-07-31,478.84,78.1,326,91,1.47,5.26
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,TEST,High,Low Engagement,2026-07-01,2026-07-31,224.78,38.9,199,38,1.13,5.92
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,TEST,High,Medium Engagement,2026-07-01,2026-07-31,276.92,51.0,220,58,1.26,4.77
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,TEST,Moderate,High Engagement,2026-07-01,2026-07-31,326.59,49.9,219,56,1.49,5.83
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,TEST,Moderate,Low Engagement,2026-07-01,2026-07-31,187.66,28.8,138,30,1.36,6.26
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,TEST,Moderate,Medium Engagement,2026-07-01,2026-07-31,183.46,29.9,134,33,1.37,5.56
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,TEST,Very High,High Engagement,2026-07-01,2026-07-31,348.59,57.0,250,64,1.39,5.45
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,TEST,Very High,Low Engagement,2026-07-01,2026-07-31,140.52,28.5,150,27,0.94,5.2
+CMP-2026-003,Summer Win Big Offer,Champion,Medium Value,Upsell - Scale,TEST,Very High,Medium Engagement,2026-07-01,2026-07-31,213.54,34.5,145,40,1.47,5.34
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,High Value,Churn Watchlist,CONTROL,High,Low Engagement,2026-07-01,2026-07-31,0.0,0.0,4,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,High Value,Churn Watchlist,CONTROL,Very High,High Engagement,2026-07-01,2026-07-31,12.71,0.0,31,2,0.41,6.36
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,High Value,Churn Watchlist,CONTROL,Very High,Low Engagement,2026-07-01,2026-07-31,24.6,0.0,18,3,1.37,8.2
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,High Value,Churn Watchlist,CONTROL,Very High,Medium Engagement,2026-07-01,2026-07-31,21.74,0.0,16,4,1.36,5.44
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,High Value,Churn Watchlist,TEST,High,High Engagement,2026-07-01,2026-07-31,0.0,0.4,4,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,High Value,Churn Watchlist,TEST,High,Low Engagement,2026-07-01,2026-07-31,0.0,0.4,4,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,High Value,Churn Watchlist,TEST,High,Medium Engagement,2026-07-01,2026-07-31,7.9,0.8,3,1,2.63,7.9
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,High Value,Churn Watchlist,TEST,Moderate,High Engagement,2026-07-01,2026-07-31,4.27,0.6,1,1,4.27,4.27
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,High Value,Churn Watchlist,TEST,Moderate,Medium Engagement,2026-07-01,2026-07-31,13.89,0.6,1,1,13.89,13.89
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,High Value,Churn Watchlist,TEST,Very High,High Engagement,2026-07-01,2026-07-31,158.12,26.0,150,22,1.05,7.19
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,High Value,Churn Watchlist,TEST,Very High,Low Engagement,2026-07-01,2026-07-31,37.05,8.7,47,8,0.79,4.63
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,High Value,Churn Watchlist,TEST,Very High,Medium Engagement,2026-07-01,2026-07-31,51.02,11.6,71,9,0.72,5.67
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,High,High Engagement,2026-07-01,2026-07-31,2.81,0.0,18,1,0.16,2.81
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,High,Low Engagement,2026-07-01,2026-07-31,9.72,0.0,5,1,1.94,9.72
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,High,Medium Engagement,2026-07-01,2026-07-31,8.05,0.0,6,2,1.34,4.03
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Moderate,High Engagement,2026-07-01,2026-07-31,17.51,0.0,42,4,0.42,4.38
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Moderate,Low Engagement,2026-07-01,2026-07-31,9.11,0.0,26,2,0.35,4.56
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Moderate,Medium Engagement,2026-07-01,2026-07-31,11.1,0.0,12,4,0.93,2.78
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Very High,High Engagement,2026-07-01,2026-07-31,0.0,0.0,3,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Very High,Low Engagement,2026-07-01,2026-07-31,2.41,0.0,1,1,2.41,2.41
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Very High,Medium Engagement,2026-07-01,2026-07-31,0.0,0.0,1,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,High,High Engagement,2026-07-01,2026-07-31,32.7,9.4,54,8,0.61,4.09
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,High,Low Engagement,2026-07-01,2026-07-31,12.97,4.0,30,2,0.43,6.49
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,High,Medium Engagement,2026-07-01,2026-07-31,25.35,7.3,38,7,0.67,3.62
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,Moderate,High Engagement,2026-07-01,2026-07-31,84.62,24.1,141,20,0.6,4.23
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,Moderate,Low Engagement,2026-07-01,2026-07-31,70.6,14.5,75,14,0.94,5.04
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,Moderate,Medium Engagement,2026-07-01,2026-07-31,54.84,13.5,80,11,0.69,4.99
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,Very High,High Engagement,2026-07-01,2026-07-31,2.68,1.4,9,1,0.3,2.68
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,Very High,Low Engagement,2026-07-01,2026-07-31,2.53,1.1,6,1,0.42,2.53
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Low Value,Churn Watchlist,TEST,Very High,Medium Engagement,2026-07-01,2026-07-31,2.56,1.1,6,1,0.43,2.56
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,High,High Engagement,2026-07-01,2026-07-31,31.74,0.0,53,6,0.6,5.29
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,High,Low Engagement,2026-07-01,2026-07-31,6.2,0.0,29,1,0.21,6.2
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,High,Medium Engagement,2026-07-01,2026-07-31,26.11,0.0,26,4,1.0,6.53
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Moderate,High Engagement,2026-07-01,2026-07-31,44.41,0.0,39,6,1.14,7.4
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Moderate,Low Engagement,2026-07-01,2026-07-31,23.64,0.0,18,3,1.31,7.88
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Moderate,Medium Engagement,2026-07-01,2026-07-31,3.46,0.0,18,1,0.19,3.46
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Very High,High Engagement,2026-07-01,2026-07-31,0.0,0.0,24,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Very High,Low Engagement,2026-07-01,2026-07-31,27.18,0.0,14,5,1.94,5.44
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Very High,Medium Engagement,2026-07-01,2026-07-31,9.28,0.0,21,2,0.44,4.64
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,High,High Engagement,2026-07-01,2026-07-31,188.24,38.6,201,37,0.94,5.09
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,High,Low Engagement,2026-07-01,2026-07-31,75.11,18.7,117,14,0.64,5.37
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,High,Medium Engagement,2026-07-01,2026-07-31,137.52,22.7,117,22,1.18,6.25
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Moderate,High Engagement,2026-07-01,2026-07-31,183.61,28.0,135,29,1.36,6.33
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Moderate,Low Engagement,2026-07-01,2026-07-31,43.45,12.9,84,9,0.52,4.83
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Moderate,Medium Engagement,2026-07-01,2026-07-31,87.59,15.1,81,14,1.08,6.26
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Very High,High Engagement,2026-07-01,2026-07-31,152.97,25.0,105,29,1.46,5.27
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Very High,Low Engagement,2026-07-01,2026-07-31,28.31,9.4,59,7,0.48,4.04
+CMP-2026-003,Summer Win Big Offer,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Very High,Medium Engagement,2026-07-01,2026-07-31,97.17,18.0,80,20,1.21,4.86
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Engagement Growth,CONTROL,Low,High Engagement,2026-07-01,2026-07-31,102.82,0.0,139,19,0.74,5.41
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Engagement Growth,CONTROL,Low,Low Engagement,2026-07-01,2026-07-31,48.63,0.0,77,11,0.63,4.42
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Engagement Growth,CONTROL,Low,Medium Engagement,2026-07-01,2026-07-31,51.01,0.0,77,9,0.66,5.67
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Engagement Growth,CONTROL,Very Low,High Engagement,2026-07-01,2026-07-31,117.9,0.0,149,21,0.79,5.61
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Engagement Growth,CONTROL,Very Low,Low Engagement,2026-07-01,2026-07-31,60.35,0.0,87,11,0.69,5.49
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Engagement Growth,CONTROL,Very Low,Medium Engagement,2026-07-01,2026-07-31,54.94,0.0,82,11,0.67,4.99
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Engagement Growth,TEST,Low,High Engagement,2026-07-01,2026-07-31,553.42,109.6,521,115,1.06,4.81
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Engagement Growth,TEST,Low,Low Engagement,2026-07-01,2026-07-31,309.08,65.7,322,67,0.96,4.61
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Engagement Growth,TEST,Low,Medium Engagement,2026-07-01,2026-07-31,265.37,59.0,295,59,0.9,4.5
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Engagement Growth,TEST,Very Low,High Engagement,2026-07-01,2026-07-31,522.21,107.7,572,101,0.91,5.17
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Engagement Growth,TEST,Very Low,Low Engagement,2026-07-01,2026-07-31,413.39,75.0,380,74,1.09,5.59
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Engagement Growth,TEST,Very Low,Medium Engagement,2026-07-01,2026-07-31,365.23,67.8,348,66,1.05,5.53
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,CONTROL,High,High Engagement,2026-07-01,2026-07-31,2.68,0.0,24,1,0.11,2.68
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,CONTROL,High,Low Engagement,2026-07-01,2026-07-31,2.46,0.0,17,1,0.14,2.46
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,CONTROL,High,Medium Engagement,2026-07-01,2026-07-31,10.77,0.0,15,2,0.72,5.39
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,CONTROL,Moderate,High Engagement,2026-07-01,2026-07-31,10.9,0.0,47,4,0.23,2.73
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,CONTROL,Moderate,Low Engagement,2026-07-01,2026-07-31,22.88,0.0,31,4,0.74,5.72
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,CONTROL,Moderate,Medium Engagement,2026-07-01,2026-07-31,11.13,0.0,38,4,0.29,2.78
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,CONTROL,Very High,High Engagement,2026-07-01,2026-07-31,4.08,0.0,7,1,0.58,4.08
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,CONTROL,Very High,Low Engagement,2026-07-01,2026-07-31,0.0,0.0,3,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,CONTROL,Very High,Medium Engagement,2026-07-01,2026-07-31,9.39,0.0,1,1,9.39,9.39
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,TEST,High,High Engagement,2026-07-01,2026-07-31,106.04,20.9,99,22,1.07,4.82
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,TEST,High,Low Engagement,2026-07-01,2026-07-31,26.39,8.8,58,6,0.46,4.4
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,TEST,High,Medium Engagement,2026-07-01,2026-07-31,64.56,13.7,62,15,1.04,4.3
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,TEST,Moderate,High Engagement,2026-07-01,2026-07-31,214.82,44.8,218,46,0.99,4.67
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,TEST,Moderate,Low Engagement,2026-07-01,2026-07-31,124.69,22.6,116,22,1.07,5.67
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,TEST,Moderate,Medium Engagement,2026-07-01,2026-07-31,116.17,21.1,106,21,1.1,5.53
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,TEST,Very High,High Engagement,2026-07-01,2026-07-31,5.28,1.7,12,1,0.44,5.28
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,TEST,Very High,Low Engagement,2026-07-01,2026-07-31,8.67,1.8,8,2,1.08,4.34
+CMP-2026-003,Summer Win Big Offer,Growth,Low Value,Upsell - Core,TEST,Very High,Medium Engagement,2026-07-01,2026-07-31,5.49,1.7,7,2,0.78,2.75
+CMP-2026-003,Summer Win Big Offer,Growth,Medium Value,Engagement Growth,CONTROL,Low,High Engagement,2026-07-01,2026-07-31,30.79,0.0,22,5,1.4,6.16
+CMP-2026-003,Summer Win Big Offer,Growth,Medium Value,Engagement Growth,CONTROL,Low,Low Engagement,2026-07-01,2026-07-31,10.94,0.0,25,2,0.44,5.47
+CMP-2026-003,Summer Win Big Offer,Growth,Medium Value,Engagement Growth,CONTROL,Low,Medium Engagement,2026-07-01,2026-07-31,27.79,0.0,20,4,1.39,6.95
+CMP-2026-003,Summer Win Big Offer,Growth,Medium Value,Engagement Growth,CONTROL,Very Low,High Engagement,2026-07-01,2026-07-31,0.0,0.0,6,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Growth,Medium Value,Engagement Growth,CONTROL,Very Low,Low Engagement,2026-07-01,2026-07-31,0.0,0.0,2,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Growth,Medium Value,Engagement Growth,CONTROL,Very Low,Medium Engagement,2026-07-01,2026-07-31,0.0,0.0,1,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Growth,Medium Value,Engagement Growth,TEST,Low,High Engagement,2026-07-01,2026-07-31,112.56,23.1,131,20,0.86,5.63
+CMP-2026-003,Summer Win Big Offer,Growth,Medium Value,Engagement Growth,TEST,Low,Low Engagement,2026-07-01,2026-07-31,115.74,20.5,100,21,1.16,5.51
+CMP-2026-003,Summer Win Big Offer,Growth,Medium Value,Engagement Growth,TEST,Low,Medium Engagement,2026-07-01,2026-07-31,130.77,20.9,104,21,1.26,6.23
+CMP-2026-003,Summer Win Big Offer,Growth,Medium Value,Engagement Growth,TEST,Very Low,High Engagement,2026-07-01,2026-07-31,16.84,2.9,9,4,1.87,4.21
+CMP-2026-003,Summer Win Big Offer,Growth,Medium Value,Engagement Growth,TEST,Very Low,Low Engagement,2026-07-01,2026-07-31,12.96,1.1,6,1,2.16,12.96
+CMP-2026-003,Summer Win Big Offer,Growth,Medium Value,Engagement Growth,TEST,Very Low,Medium Engagement,2026-07-01,2026-07-31,4.27,0.9,4,1,1.07,4.27
+CMP-2026-003,Summer Win Big Offer,Win-Back,High Value,Win-Back VIP,CONTROL,Very High,High Engagement,2026-07-01,2026-07-31,12.27,0.0,7,2,1.75,6.14
+CMP-2026-003,Summer Win Big Offer,Win-Back,High Value,Win-Back VIP,CONTROL,Very High,Low Engagement,2026-07-01,2026-07-31,4.28,0.0,6,1,0.71,4.28
+CMP-2026-003,Summer Win Big Offer,Win-Back,High Value,Win-Back VIP,CONTROL,Very High,Medium Engagement,2026-07-01,2026-07-31,0.0,0.0,1,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,High Value,Win-Back VIP,TEST,High,Low Engagement,2026-07-01,2026-07-31,0.0,0.2,2,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,High Value,Win-Back VIP,TEST,High,Medium Engagement,2026-07-01,2026-07-31,0.0,0.1,1,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,High Value,Win-Back VIP,TEST,Very High,High Engagement,2026-07-01,2026-07-31,3.3,2.8,23,1,0.14,3.3
+CMP-2026-003,Summer Win Big Offer,Win-Back,High Value,Win-Back VIP,TEST,Very High,Low Engagement,2026-07-01,2026-07-31,11.81,2.5,15,2,0.79,5.91
+CMP-2026-003,Summer Win Big Offer,Win-Back,High Value,Win-Back VIP,TEST,Very High,Medium Engagement,2026-07-01,2026-07-31,19.69,4.4,19,5,1.04,3.94
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,High,High Engagement,2026-07-01,2026-07-31,0.0,0.0,3,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,High,Medium Engagement,2026-07-01,2026-07-31,5.54,0.0,4,1,1.39,5.54
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Low,High Engagement,2026-07-01,2026-07-31,0.0,0.0,15,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Low,Low Engagement,2026-07-01,2026-07-31,0.0,0.0,10,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Low,Medium Engagement,2026-07-01,2026-07-31,2.9,0.0,11,1,0.26,2.9
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Moderate,High Engagement,2026-07-01,2026-07-31,5.65,0.0,12,2,0.47,2.83
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Moderate,Low Engagement,2026-07-01,2026-07-31,0.0,0.0,4,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Moderate,Medium Engagement,2026-07-01,2026-07-31,0.0,0.0,5,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Very Low,High Engagement,2026-07-01,2026-07-31,14.91,0.0,51,3,0.29,4.97
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Very Low,Low Engagement,2026-07-01,2026-07-31,10.5,0.0,25,2,0.42,5.25
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Very Low,Medium Engagement,2026-07-01,2026-07-31,5.58,0.0,21,1,0.27,5.58
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,High,High Engagement,2026-07-01,2026-07-31,8.05,2.3,13,2,0.62,4.03
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,High,Low Engagement,2026-07-01,2026-07-31,4.92,1.2,7,1,0.7,4.92
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,High,Medium Engagement,2026-07-01,2026-07-31,4.78,1.2,7,1,0.68,4.78
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Low,High Engagement,2026-07-01,2026-07-31,39.77,12.6,86,8,0.46,4.97
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Low,Low Engagement,2026-07-01,2026-07-31,23.76,7.3,48,5,0.5,4.75
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Low,Medium Engagement,2026-07-01,2026-07-31,19.68,8.6,66,4,0.3,4.92
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Moderate,High Engagement,2026-07-01,2026-07-31,20.58,5.6,36,4,0.57,5.15
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Moderate,Low Engagement,2026-07-01,2026-07-31,3.14,2.0,15,1,0.21,3.14
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Moderate,Medium Engagement,2026-07-01,2026-07-31,0.0,1.6,16,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Very High,High Engagement,2026-07-01,2026-07-31,5.02,1.4,4,2,1.26,2.51
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Very High,Medium Engagement,2026-07-01,2026-07-31,0.0,0.1,1,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Very Low,High Engagement,2026-07-01,2026-07-31,78.33,23.4,154,16,0.51,4.9
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Very Low,Low Engagement,2026-07-01,2026-07-31,83.13,20.3,123,16,0.68,5.2
+CMP-2026-003,Summer Win Big Offer,Win-Back,Low Value,Win-Back Reactivation,TEST,Very Low,Medium Engagement,2026-07-01,2026-07-31,34.57,12.6,91,7,0.38,4.94
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,High,High Engagement,2026-07-01,2026-07-31,6.41,0.0,15,2,0.43,3.21
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,High,Low Engagement,2026-07-01,2026-07-31,0.0,0.0,4,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,High,Medium Engagement,2026-07-01,2026-07-31,0.0,0.0,9,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Low,High Engagement,2026-07-01,2026-07-31,0.0,0.0,2,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Low,Low Engagement,2026-07-01,2026-07-31,0.0,0.0,2,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Low,Medium Engagement,2026-07-01,2026-07-31,7.82,0.0,3,1,2.61,7.82
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Moderate,High Engagement,2026-07-01,2026-07-31,0.0,0.0,8,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Moderate,Low Engagement,2026-07-01,2026-07-31,0.0,0.0,9,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Moderate,Medium Engagement,2026-07-01,2026-07-31,0.0,0.0,3,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very High,High Engagement,2026-07-01,2026-07-31,6.56,0.0,7,2,0.94,3.28
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very High,Low Engagement,2026-07-01,2026-07-31,5.32,0.0,4,1,1.33,5.32
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very High,Medium Engagement,2026-07-01,2026-07-31,3.39,0.0,8,1,0.42,3.39
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very Low,High Engagement,2026-07-01,2026-07-31,0.0,0.0,2,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very Low,Medium Engagement,2026-07-01,2026-07-31,0.0,0.0,1,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,TEST,High,High Engagement,2026-07-01,2026-07-31,13.89,5.3,38,3,0.37,4.63
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,TEST,High,Low Engagement,2026-07-01,2026-07-31,29.66,3.5,20,3,1.48,9.89
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,TEST,High,Medium Engagement,2026-07-01,2026-07-31,14.41,4.4,29,3,0.5,4.8
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Low,High Engagement,2026-07-01,2026-07-31,12.14,3.0,20,2,0.61,6.07
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Low,Low Engagement,2026-07-01,2026-07-31,11.04,2.4,14,2,0.79,5.52
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Low,Medium Engagement,2026-07-01,2026-07-31,0.0,1.0,10,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Moderate,High Engagement,2026-07-01,2026-07-31,10.76,4.7,32,3,0.34,3.59
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Moderate,Low Engagement,2026-07-01,2026-07-31,20.98,5.0,30,4,0.7,5.25
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Moderate,Medium Engagement,2026-07-01,2026-07-31,3.37,2.5,20,1,0.17,3.37
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Very High,High Engagement,2026-07-01,2026-07-31,9.09,3.3,28,1,0.32,9.09
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Very High,Low Engagement,2026-07-01,2026-07-31,0.0,1.9,19,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Very High,Medium Engagement,2026-07-01,2026-07-31,17.31,3.0,15,3,1.15,5.77
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Very Low,High Engagement,2026-07-01,2026-07-31,0.0,0.2,2,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Very Low,Low Engagement,2026-07-01,2026-07-31,0.0,0.1,1,0,0.0,0.0
+CMP-2026-003,Summer Win Big Offer,Win-Back,Medium Value,Win-Back Growth,TEST,Very Low,Medium Engagement,2026-07-01,2026-07-31,0.0,0.3,3,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Champion,High Value,Champion,CONTROL,High,High Engagement,2026-03-01,2026-04-30,0.0,0.0,3,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Champion,High Value,Champion,CONTROL,High,Low Engagement,2026-03-01,2026-04-30,15.66,0.0,2,2,7.83,7.83
+CMP-2026-004,Spring Reactivation TM,Champion,High Value,Champion,CONTROL,High,Medium Engagement,2026-03-01,2026-04-30,3.64,0.0,2,1,1.82,3.64
+CMP-2026-004,Spring Reactivation TM,Champion,High Value,Champion,CONTROL,Very High,High Engagement,2026-03-01,2026-04-30,64.44,0.0,58,12,1.11,5.37
+CMP-2026-004,Spring Reactivation TM,Champion,High Value,Champion,CONTROL,Very High,Low Engagement,2026-03-01,2026-04-30,4.11,0.0,16,1,0.26,4.11
+CMP-2026-004,Spring Reactivation TM,Champion,High Value,Champion,CONTROL,Very High,Medium Engagement,2026-03-01,2026-04-30,72.74,0.0,42,12,1.73,6.06
+CMP-2026-004,Spring Reactivation TM,Champion,High Value,Champion,TEST,High,High Engagement,2026-03-01,2026-04-30,20.03,3.8,18,4,1.11,5.01
+CMP-2026-004,Spring Reactivation TM,Champion,High Value,Champion,TEST,High,Low Engagement,2026-03-01,2026-04-30,7.59,1.7,7,2,1.08,3.8
+CMP-2026-004,Spring Reactivation TM,Champion,High Value,Champion,TEST,High,Medium Engagement,2026-03-01,2026-04-30,3.95,1.6,11,1,0.36,3.95
+CMP-2026-004,Spring Reactivation TM,Champion,High Value,Champion,TEST,Moderate,High Engagement,2026-03-01,2026-04-30,0.0,0.1,1,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Champion,High Value,Champion,TEST,Moderate,Low Engagement,2026-03-01,2026-04-30,0.0,0.1,1,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Champion,High Value,Champion,TEST,Moderate,Medium Engagement,2026-03-01,2026-04-30,0.0,0.2,2,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Champion,High Value,Champion,TEST,Very High,High Engagement,2026-03-01,2026-04-30,377.23,53.8,233,61,1.62,6.18
+CMP-2026-004,Spring Reactivation TM,Champion,High Value,Champion,TEST,Very High,Low Engagement,2026-03-01,2026-04-30,219.2,29.7,117,36,1.87,6.09
+CMP-2026-004,Spring Reactivation TM,Champion,High Value,Champion,TEST,Very High,Medium Engagement,2026-03-01,2026-04-30,196.94,28.8,123,33,1.6,5.97
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,CONTROL,High,High Engagement,2026-03-01,2026-04-30,145.19,0.0,98,26,1.48,5.58
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,CONTROL,High,Low Engagement,2026-03-01,2026-04-30,68.6,0.0,58,13,1.18,5.28
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,CONTROL,High,Medium Engagement,2026-03-01,2026-04-30,84.82,0.0,40,12,2.12,7.07
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,CONTROL,Moderate,High Engagement,2026-03-01,2026-04-30,68.74,0.0,58,11,1.19,6.25
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,CONTROL,Moderate,Low Engagement,2026-03-01,2026-04-30,47.32,0.0,36,8,1.31,5.92
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,CONTROL,Moderate,Medium Engagement,2026-03-01,2026-04-30,46.08,0.0,32,7,1.44,6.58
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,CONTROL,Very High,High Engagement,2026-03-01,2026-04-30,78.75,0.0,59,15,1.33,5.25
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,CONTROL,Very High,Low Engagement,2026-03-01,2026-04-30,46.38,0.0,37,10,1.25,4.64
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,CONTROL,Very High,Medium Engagement,2026-03-01,2026-04-30,20.39,0.0,32,3,0.64,6.8
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,TEST,High,High Engagement,2026-03-01,2026-04-30,446.06,76.6,326,88,1.37,5.07
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,TEST,High,Low Engagement,2026-03-01,2026-04-30,377.22,51.4,199,63,1.9,5.99
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,TEST,High,Medium Engagement,2026-03-01,2026-04-30,373.41,57.5,220,71,1.7,5.26
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,TEST,Moderate,High Engagement,2026-03-01,2026-04-30,400.63,56.4,219,69,1.83,5.81
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,TEST,Moderate,Low Engagement,2026-03-01,2026-04-30,272.32,36.8,138,46,1.97,5.92
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,TEST,Moderate,Medium Engagement,2026-03-01,2026-04-30,199.57,29.9,134,33,1.49,6.05
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,TEST,Very High,High Engagement,2026-03-01,2026-04-30,353.98,58.0,250,66,1.42,5.36
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,TEST,Very High,Low Engagement,2026-03-01,2026-04-30,192.9,32.5,150,35,1.29,5.51
+CMP-2026-004,Spring Reactivation TM,Champion,Medium Value,Upsell - Scale,TEST,Very High,Medium Engagement,2026-03-01,2026-04-30,223.13,35.0,145,41,1.54,5.44
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,High Value,Churn Watchlist,CONTROL,High,High Engagement,2026-03-01,2026-04-30,0.0,0.0,1,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,High Value,Churn Watchlist,CONTROL,High,Low Engagement,2026-03-01,2026-04-30,0.0,0.0,1,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,High Value,Churn Watchlist,CONTROL,Very High,High Engagement,2026-03-01,2026-04-30,13.58,0.0,36,2,0.38,6.79
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,High Value,Churn Watchlist,CONTROL,Very High,Low Engagement,2026-03-01,2026-04-30,25.99,0.0,13,4,2.0,6.5
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,High Value,Churn Watchlist,CONTROL,Very High,Medium Engagement,2026-03-01,2026-04-30,32.5,0.0,13,4,2.5,8.13
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,High Value,Churn Watchlist,TEST,High,High Engagement,2026-03-01,2026-04-30,0.0,0.3,3,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,High Value,Churn Watchlist,TEST,High,Low Engagement,2026-03-01,2026-04-30,0.0,0.7,7,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,High Value,Churn Watchlist,TEST,High,Medium Engagement,2026-03-01,2026-04-30,0.0,0.3,3,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,High Value,Churn Watchlist,TEST,Moderate,High Engagement,2026-03-01,2026-04-30,4.27,0.6,1,1,4.27,4.27
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,High Value,Churn Watchlist,TEST,Moderate,Medium Engagement,2026-03-01,2026-04-30,0.0,0.1,1,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,High Value,Churn Watchlist,TEST,Very High,High Engagement,2026-03-01,2026-04-30,193.86,30.0,145,31,1.34,6.25
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,High Value,Churn Watchlist,TEST,Very High,Low Engagement,2026-03-01,2026-04-30,54.55,9.2,52,8,1.05,6.82
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,High Value,Churn Watchlist,TEST,Very High,Medium Engagement,2026-03-01,2026-04-30,50.16,12.4,74,10,0.68,5.02
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,High,High Engagement,2026-03-01,2026-04-30,15.23,0.0,22,4,0.69,3.81
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,High,Low Engagement,2026-03-01,2026-04-30,2.94,0.0,8,1,0.37,2.94
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,High,Medium Engagement,2026-03-01,2026-04-30,24.05,0.0,12,5,2.0,4.81
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Moderate,High Engagement,2026-03-01,2026-04-30,21.77,0.0,29,3,0.75,7.26
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Moderate,Low Engagement,2026-03-01,2026-04-30,20.08,0.0,11,3,1.83,6.69
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Moderate,Medium Engagement,2026-03-01,2026-04-30,20.01,0.0,22,5,0.91,4.0
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Very High,High Engagement,2026-03-01,2026-04-30,0.0,0.0,2,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Very High,Low Engagement,2026-03-01,2026-04-30,0.0,0.0,2,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Very High,Medium Engagement,2026-03-01,2026-04-30,0.0,0.0,1,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,TEST,High,High Engagement,2026-03-01,2026-04-30,19.73,7.5,50,5,0.39,3.95
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,TEST,High,Low Engagement,2026-03-01,2026-04-30,41.39,6.7,27,8,1.53,5.17
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,TEST,High,Medium Engagement,2026-03-01,2026-04-30,18.63,5.2,32,4,0.58,4.66
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,TEST,Moderate,High Engagement,2026-03-01,2026-04-30,157.23,31.4,154,32,1.02,4.91
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,TEST,Moderate,Low Engagement,2026-03-01,2026-04-30,87.55,18.0,90,18,0.97,4.86
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,TEST,Moderate,Medium Engagement,2026-03-01,2026-04-30,67.29,14.5,70,15,0.96,4.49
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,TEST,Very High,High Engagement,2026-03-01,2026-04-30,14.34,2.5,10,3,1.43,4.78
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,TEST,Very High,Low Engagement,2026-03-01,2026-04-30,0.0,0.5,5,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Low Value,Churn Watchlist,TEST,Very High,Medium Engagement,2026-03-01,2026-04-30,0.0,0.6,6,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,High,High Engagement,2026-03-01,2026-04-30,29.09,0.0,50,5,0.58,5.82
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,High,Low Engagement,2026-03-01,2026-04-30,52.58,0.0,32,7,1.64,7.51
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,High,Medium Engagement,2026-03-01,2026-04-30,40.24,0.0,27,6,1.49,6.71
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Moderate,High Engagement,2026-03-01,2026-04-30,43.93,0.0,39,8,1.13,5.49
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Moderate,Low Engagement,2026-03-01,2026-04-30,20.59,0.0,21,4,0.98,5.15
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Moderate,Medium Engagement,2026-03-01,2026-04-30,48.46,0.0,22,6,2.2,8.08
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Very High,High Engagement,2026-03-01,2026-04-30,5.04,0.0,28,1,0.18,5.04
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Very High,Low Engagement,2026-03-01,2026-04-30,5.9,0.0,17,1,0.35,5.9
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Very High,Medium Engagement,2026-03-01,2026-04-30,0.0,0.0,16,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,High,High Engagement,2026-03-01,2026-04-30,165.61,35.4,204,30,0.81,5.52
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,High,Low Engagement,2026-03-01,2026-04-30,76.37,19.4,114,16,0.67,4.77
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,High,Medium Engagement,2026-03-01,2026-04-30,120.07,24.6,116,26,1.04,4.62
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Moderate,High Engagement,2026-03-01,2026-04-30,173.54,28.0,135,29,1.29,5.98
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Moderate,Low Engagement,2026-03-01,2026-04-30,46.79,12.6,81,9,0.58,5.2
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Moderate,Medium Engagement,2026-03-01,2026-04-30,94.24,15.2,77,15,1.22,6.28
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Very High,High Engagement,2026-03-01,2026-04-30,142.21,23.6,101,27,1.41,5.27
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Very High,Low Engagement,2026-03-01,2026-04-30,49.32,10.6,56,10,0.88,4.93
+CMP-2026-004,Spring Reactivation TM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Very High,Medium Engagement,2026-03-01,2026-04-30,86.66,17.5,85,18,1.02,4.81
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Engagement Growth,CONTROL,Low,High Engagement,2026-03-01,2026-04-30,155.79,0.0,142,32,1.1,4.87
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Engagement Growth,CONTROL,Low,Low Engagement,2026-03-01,2026-04-30,62.48,0.0,73,12,0.86,5.21
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Engagement Growth,CONTROL,Low,Medium Engagement,2026-03-01,2026-04-30,67.88,0.0,72,15,0.94,4.53
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Engagement Growth,CONTROL,Very Low,High Engagement,2026-03-01,2026-04-30,138.31,0.0,142,29,0.97,4.77
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Engagement Growth,CONTROL,Very Low,Low Engagement,2026-03-01,2026-04-30,81.32,0.0,90,16,0.9,5.08
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Engagement Growth,CONTROL,Very Low,Medium Engagement,2026-03-01,2026-04-30,89.43,0.0,99,16,0.9,5.59
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Engagement Growth,TEST,Low,High Engagement,2026-03-01,2026-04-30,640.68,113.8,518,124,1.24,5.17
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Engagement Growth,TEST,Low,Low Engagement,2026-03-01,2026-04-30,359.96,68.6,326,72,1.1,5.0
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Engagement Growth,TEST,Low,Medium Engagement,2026-03-01,2026-04-30,301.58,63.0,300,66,1.01,4.57
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Engagement Growth,TEST,Very Low,High Engagement,2026-03-01,2026-04-30,722.93,130.4,579,145,1.25,4.99
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Engagement Growth,TEST,Very Low,Low Engagement,2026-03-01,2026-04-30,478.31,83.2,377,91,1.27,5.26
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Engagement Growth,TEST,Very Low,Medium Engagement,2026-03-01,2026-04-30,372.15,72.1,331,78,1.12,4.77
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,CONTROL,High,High Engagement,2026-03-01,2026-04-30,5.56,0.0,21,1,0.26,5.56
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,CONTROL,High,Low Engagement,2026-03-01,2026-04-30,15.56,0.0,13,4,1.2,3.89
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,CONTROL,High,Medium Engagement,2026-03-01,2026-04-30,13.89,0.0,14,3,0.99,4.63
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,CONTROL,Moderate,High Engagement,2026-03-01,2026-04-30,48.32,0.0,57,11,0.85,4.39
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,CONTROL,Moderate,Low Engagement,2026-03-01,2026-04-30,8.08,0.0,28,2,0.29,4.04
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,CONTROL,Moderate,Medium Engagement,2026-03-01,2026-04-30,27.42,0.0,26,6,1.05,4.57
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,CONTROL,Very High,High Engagement,2026-03-01,2026-04-30,0.0,0.0,1,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,CONTROL,Very High,Low Engagement,2026-03-01,2026-04-30,0.0,0.0,2,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,CONTROL,Very High,Medium Engagement,2026-03-01,2026-04-30,9.09,0.0,2,1,4.55,9.09
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,TEST,High,High Engagement,2026-03-01,2026-04-30,146.06,25.7,102,31,1.43,4.71
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,TEST,High,Low Engagement,2026-03-01,2026-04-30,64.05,12.7,62,13,1.03,4.93
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,TEST,High,Medium Engagement,2026-03-01,2026-04-30,65.69,15.3,63,18,1.04,3.65
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,TEST,Moderate,High Engagement,2026-03-01,2026-04-30,220.31,44.8,208,48,1.06,4.59
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,TEST,Moderate,Low Engagement,2026-03-01,2026-04-30,123.22,24.9,119,26,1.04,4.74
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,TEST,Moderate,Medium Engagement,2026-03-01,2026-04-30,124.99,24.8,118,26,1.06,4.81
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,TEST,Very High,High Engagement,2026-03-01,2026-04-30,7.0,3.3,18,3,0.39,2.33
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,TEST,Very High,Low Engagement,2026-03-01,2026-04-30,10.97,2.4,9,3,1.22,3.66
+CMP-2026-004,Spring Reactivation TM,Growth,Low Value,Upsell - Core,TEST,Very High,Medium Engagement,2026-03-01,2026-04-30,5.54,1.1,6,1,0.92,5.54
+CMP-2026-004,Spring Reactivation TM,Growth,Medium Value,Engagement Growth,CONTROL,Low,High Engagement,2026-03-01,2026-04-30,78.42,0.0,34,12,2.31,6.54
+CMP-2026-004,Spring Reactivation TM,Growth,Medium Value,Engagement Growth,CONTROL,Low,Low Engagement,2026-03-01,2026-04-30,27.35,0.0,29,4,0.94,6.84
+CMP-2026-004,Spring Reactivation TM,Growth,Medium Value,Engagement Growth,CONTROL,Low,Medium Engagement,2026-03-01,2026-04-30,38.15,0.0,19,5,2.01,7.63
+CMP-2026-004,Spring Reactivation TM,Growth,Medium Value,Engagement Growth,CONTROL,Very Low,High Engagement,2026-03-01,2026-04-30,29.15,0.0,4,3,7.29,9.72
+CMP-2026-004,Spring Reactivation TM,Growth,Medium Value,Engagement Growth,CONTROL,Very Low,Low Engagement,2026-03-01,2026-04-30,0.0,0.0,2,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Growth,Medium Value,Engagement Growth,TEST,Low,High Engagement,2026-03-01,2026-04-30,163.12,23.4,119,23,1.37,7.09
+CMP-2026-004,Spring Reactivation TM,Growth,Medium Value,Engagement Growth,TEST,Low,Low Engagement,2026-03-01,2026-04-30,172.11,23.6,96,28,1.79,6.15
+CMP-2026-004,Spring Reactivation TM,Growth,Medium Value,Engagement Growth,TEST,Low,Medium Engagement,2026-03-01,2026-04-30,140.2,22.0,105,23,1.34,6.1
+CMP-2026-004,Spring Reactivation TM,Growth,Medium Value,Engagement Growth,TEST,Very Low,High Engagement,2026-03-01,2026-04-30,24.7,2.6,11,3,2.25,8.23
+CMP-2026-004,Spring Reactivation TM,Growth,Medium Value,Engagement Growth,TEST,Very Low,Low Engagement,2026-03-01,2026-04-30,0.0,0.6,6,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Growth,Medium Value,Engagement Growth,TEST,Very Low,Medium Engagement,2026-03-01,2026-04-30,0.0,0.5,5,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Win-Back,High Value,Win-Back VIP,CONTROL,High,Medium Engagement,2026-03-01,2026-04-30,13.2,0.0,1,1,13.2,13.2
+CMP-2026-004,Spring Reactivation TM,Win-Back,High Value,Win-Back VIP,CONTROL,Very High,High Engagement,2026-03-01,2026-04-30,0.0,0.0,3,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Win-Back,High Value,Win-Back VIP,CONTROL,Very High,Low Engagement,2026-03-01,2026-04-30,9.36,0.0,2,1,4.68,9.36
+CMP-2026-004,Spring Reactivation TM,Win-Back,High Value,Win-Back VIP,CONTROL,Very High,Medium Engagement,2026-03-01,2026-04-30,14.22,0.0,4,1,3.56,14.22
+CMP-2026-004,Spring Reactivation TM,Win-Back,High Value,Win-Back VIP,TEST,High,Low Engagement,2026-03-01,2026-04-30,0.0,0.2,2,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Win-Back,High Value,Win-Back VIP,TEST,Very High,High Engagement,2026-03-01,2026-04-30,74.54,7.7,27,10,2.76,7.45
+CMP-2026-004,Spring Reactivation TM,Win-Back,High Value,Win-Back VIP,TEST,Very High,Low Engagement,2026-03-01,2026-04-30,3.71,2.4,19,1,0.2,3.71
+CMP-2026-004,Spring Reactivation TM,Win-Back,High Value,Win-Back VIP,TEST,Very High,Medium Engagement,2026-03-01,2026-04-30,39.14,4.6,16,6,2.45,6.52
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,High,High Engagement,2026-03-01,2026-04-30,0.0,0.0,2,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,High,Low Engagement,2026-03-01,2026-04-30,0.0,0.0,1,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,High,Medium Engagement,2026-03-01,2026-04-30,0.0,0.0,2,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Low,High Engagement,2026-03-01,2026-04-30,17.96,0.0,21,4,0.86,4.49
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Low,Low Engagement,2026-03-01,2026-04-30,20.54,0.0,15,4,1.37,5.14
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Low,Medium Engagement,2026-03-01,2026-04-30,21.5,0.0,13,3,1.65,7.17
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Moderate,High Engagement,2026-03-01,2026-04-30,0.0,0.0,8,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Moderate,Low Engagement,2026-03-01,2026-04-30,12.68,0.0,6,2,2.11,6.34
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Moderate,Medium Engagement,2026-03-01,2026-04-30,2.33,0.0,6,1,0.39,2.33
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Very Low,High Engagement,2026-03-01,2026-04-30,28.72,0.0,34,6,0.84,4.79
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Very Low,Low Engagement,2026-03-01,2026-04-30,19.81,0.0,34,5,0.58,3.96
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Very Low,Medium Engagement,2026-03-01,2026-04-30,12.56,0.0,22,3,0.57,4.19
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,TEST,High,High Engagement,2026-03-01,2026-04-30,3.11,1.9,14,1,0.22,3.11
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,TEST,High,Low Engagement,2026-03-01,2026-04-30,23.64,3.1,6,5,3.94,4.73
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,TEST,High,Medium Engagement,2026-03-01,2026-04-30,5.82,1.4,9,1,0.65,5.82
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,TEST,Low,High Engagement,2026-03-01,2026-04-30,66.46,15.5,80,15,0.83,4.43
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,TEST,Low,Low Engagement,2026-03-01,2026-04-30,34.1,8.3,43,8,0.79,4.26
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,TEST,Low,Medium Engagement,2026-03-01,2026-04-30,47.67,10.9,64,9,0.74,5.3
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,TEST,Moderate,High Engagement,2026-03-01,2026-04-30,44.2,9.0,40,10,1.11,4.42
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,TEST,Moderate,Low Engagement,2026-03-01,2026-04-30,11.9,3.3,13,4,0.92,2.98
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,TEST,Moderate,Medium Engagement,2026-03-01,2026-04-30,21.4,3.5,15,4,1.43,5.35
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,TEST,Very High,High Engagement,2026-03-01,2026-04-30,2.78,0.9,4,1,0.7,2.78
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,TEST,Very High,Medium Engagement,2026-03-01,2026-04-30,0.0,0.1,1,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,TEST,Very Low,High Engagement,2026-03-01,2026-04-30,138.69,31.1,171,28,0.81,4.95
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,TEST,Very Low,Low Engagement,2026-03-01,2026-04-30,71.73,19.9,114,17,0.63,4.22
+CMP-2026-004,Spring Reactivation TM,Win-Back,Low Value,Win-Back Reactivation,TEST,Very Low,Medium Engagement,2026-03-01,2026-04-30,111.69,19.5,90,21,1.24,5.32
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,CONTROL,High,High Engagement,2026-03-01,2026-04-30,10.31,0.0,15,2,0.69,5.16
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,CONTROL,High,Low Engagement,2026-03-01,2026-04-30,0.0,0.0,2,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,CONTROL,High,Medium Engagement,2026-03-01,2026-04-30,6.6,0.0,9,1,0.73,6.6
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Low,High Engagement,2026-03-01,2026-04-30,3.45,0.0,8,1,0.43,3.45
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Low,Low Engagement,2026-03-01,2026-04-30,4.15,0.0,5,1,0.83,4.15
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Low,Medium Engagement,2026-03-01,2026-04-30,7.76,0.0,3,1,2.59,7.76
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Moderate,High Engagement,2026-03-01,2026-04-30,14.17,0.0,6,2,2.36,7.09
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Moderate,Low Engagement,2026-03-01,2026-04-30,13.83,0.0,9,3,1.54,4.61
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Moderate,Medium Engagement,2026-03-01,2026-04-30,0.0,0.0,3,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very High,High Engagement,2026-03-01,2026-04-30,0.0,0.0,8,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very High,Low Engagement,2026-03-01,2026-04-30,0.0,0.0,5,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very High,Medium Engagement,2026-03-01,2026-04-30,0.0,0.0,2,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very Low,High Engagement,2026-03-01,2026-04-30,8.22,0.0,2,1,4.11,8.22
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very Low,Medium Engagement,2026-03-01,2026-04-30,4.21,0.0,1,1,4.21,4.21
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,High,High Engagement,2026-03-01,2026-04-30,25.68,6.3,38,5,0.68,5.14
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,High,Low Engagement,2026-03-01,2026-04-30,26.15,4.7,22,5,1.19,5.23
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,High,Medium Engagement,2026-03-01,2026-04-30,29.82,4.9,29,4,1.03,7.46
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,Low,High Engagement,2026-03-01,2026-04-30,18.64,2.9,14,3,1.33,6.21
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,Low,Low Engagement,2026-03-01,2026-04-30,18.56,2.1,11,2,1.69,9.28
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,Low,Medium Engagement,2026-03-01,2026-04-30,20.39,2.5,10,3,2.04,6.8
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,Moderate,High Engagement,2026-03-01,2026-04-30,31.67,5.9,34,5,0.93,6.33
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,Moderate,Low Engagement,2026-03-01,2026-04-30,26.27,6.0,30,6,0.88,4.38
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,Moderate,Medium Engagement,2026-03-01,2026-04-30,14.11,4.0,20,4,0.71,3.53
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,Very High,High Engagement,2026-03-01,2026-04-30,16.69,4.7,27,4,0.62,4.17
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,Very High,Low Engagement,2026-03-01,2026-04-30,30.5,4.8,18,6,1.69,5.08
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,Very High,Medium Engagement,2026-03-01,2026-04-30,6.78,2.6,21,1,0.32,6.78
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,Very Low,High Engagement,2026-03-01,2026-04-30,4.2,0.7,2,1,2.1,4.2
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,Very Low,Low Engagement,2026-03-01,2026-04-30,0.0,0.1,1,0,0.0,0.0
+CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,Very Low,Medium Engagement,2026-03-01,2026-04-30,3.62,0.8,3,1,1.21,3.62
