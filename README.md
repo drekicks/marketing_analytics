@@ -193,14 +193,12 @@ app/
 │   ├── prompt_loader.py
 │   ├── session_state_manager.py
 │   └── llm_client_api.py
-├── analysis/
 ├── config/
 │   ├── paths.py
 │   ├── router.py
 │   └── settings.py
 ├── extracts/
 ├── generation/
-├── prompts/
 ├── sql/
 ├── ui/
 ├── utils/
@@ -209,6 +207,7 @@ app/
     ├── chart_dispatcher.py
     ├── campaign_charts.py
     └── segment_charts.py
+prompts/
 |-- main.py
 |-- .env
 |-- .gitignore
