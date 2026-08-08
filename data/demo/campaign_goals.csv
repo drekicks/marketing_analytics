@@ -1,4 +1,4 @@
 campaign_id,campaign_name,campaign_goal,offer,channel,duration,budget,target_kpi,secondary_kpi,audience
-CMP-2026-003,Summer Win Big Offer,Acquire new customers,15% off,Email,30 days,1000,Incremental Conversions,Marketing ROI,New and Existing Customers
+CMP-2026-003,Summer Win Big Offer,Acquire new customers,15% off,Email,30 days,1000,Incremental Conversions,Marketing ROI,New
 CMP-2025-002,Summer Retention Offer,Retain Customers,20% off,Email,30 days,1500,Absolue Lift,Test Conversion Rate,Existing Customers
 CMP-2026-004,Spring Reactivation TM,Increase Revenue,5% off,Outbound,60 days,1200,Campaign Revenue,Marketing ROI,Existing Customers
