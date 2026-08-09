@@ -29,7 +29,7 @@ INSIGHT_RESPONSE_FORMAT = """REQUIRED RESPONSE FORMAT
 
 Respond using exactly these sections:
 
-Campaign Assessment
+##Campaign Assessment
 Provide a concise overall assessment of campaign performance.
 
 Key Insights
@@ -37,15 +37,15 @@ Key Insights
 2. State the next most important finding.
 3. State another material finding, if supported.
 
-What This Means
-Explain the business implications of the findings.
+##What This Means
+- Explain the business implications of the findings.
 
 Recommended Actions
 1. Provide a data-supported action.
 2. Provide another data-supported action.
 3. Include a monitoring or testing recommendation when appropriate.
 
-Limitations
+##Limitations
 State any limitations in the supplied data or analysis.
 
 Do not omit or rename these sections.
