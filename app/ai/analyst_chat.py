@@ -28,12 +28,12 @@ STANDARD_RESPONSE_FORMAT = """Use the following format for every answer:
 INSIGHT_RESPONSE_FORMAT = """REQUIRED RESPONSE FORMAT
 
 Respond using exactly these sections:
-Use the following headings:
-## Campaign Assessment
-## Key Insights
-## What This Means
-## Recommended Actions
-## Limitations
+Use the following sub-headings:
+### Campaign Assessment
+### Key Insights
+### What This Means
+### Recommended Actions
+### Limitations
 
 Campaign Assessment
 Provide a concise overall assessment of campaign performance.
@@ -62,9 +62,9 @@ DERIVED_SIGNAL_RESPONSE_FORMAT = """Answer the user's specific question directly
 2. Do not use bold text, italics, headings, or other markdown emphasis.
 
 Use the following headings:
-### Key Insights
-### What This Means
-### Limitations
+## Key Insights
+## What This Means
+## Limitations
 
 Keep each section short and concise. 
 Only include Recommended Actions whe the evidence supports a meaningful and specific action.
