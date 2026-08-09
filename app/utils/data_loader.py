@@ -2,6 +2,7 @@ import pandas as pd
 import os
 from app.config.paths import DATA_DIR, DEMO_DATA_DIR
 from app.utils.file_utils import load_sql_extracts
+import streamlit as st
 
 
 DATA_SOURCE = os.getenv("DATA_SOURCE",
@@ -9,7 +10,7 @@ DATA_SOURCE = os.getenv("DATA_SOURCE",
                         ).strip().lower()
 
 
-
+@st.cache_data
 def load_csv_data() -> tuple[
     pd.DataFrame,
     pd.DataFrame,
