@@ -29,11 +29,11 @@ INSIGHT_RESPONSE_FORMAT = """REQUIRED RESPONSE FORMAT
 
 Respond using exactly these sections:
 Use the following sub-headings:
-### Campaign Assessment
-### Key Insights
-### What This Means
-### Recommended Actions
-### Limitations
+## Campaign Assessment
+## Key Insights
+## What This Means
+## Recommended Actions
+## Limitations
 
 Campaign Assessment
 Provide a concise overall assessment of campaign performance.
