@@ -175,7 +175,7 @@ These files are intended to serve as controlled Tableau data sources.
 - **Dashboarding:** Tableau
 - **Python visualization:** Matplotlib
 - **AI integration:** OpenAI API
-- **Application interface:** Python CLI; Streamlit planned for Demo Mode
+- **Application interface:** Python CLI; Streamlit for Demo Mode
 - **Development environment:** PyCharm
 - **Testing:** pytest
 - **Version control:** Git and GitHub
