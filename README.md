@@ -55,7 +55,7 @@ AI Layer
 Presentation Layer
 - CLI
 - Streamlit
-- Matplotli
+- Matplotlib
 
 ## Project Workflow
 
