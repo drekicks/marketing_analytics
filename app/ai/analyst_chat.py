@@ -257,7 +257,3 @@ def _format_conversation_history(
         )
 
     return "\n\n".join(formatted_exchanges)
-
-# template = load_prompt("executive_summary")
-# a = ask_analyst(campaign_id="CMP-2026-004", question="Compare segment churn vs growth?", prompt_template=template, conversation_history=[])
-# print(a)
