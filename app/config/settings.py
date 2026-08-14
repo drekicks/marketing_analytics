@@ -3,10 +3,10 @@ from dotenv import load_dotenv
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-try:
-    import streamlit as st
-except ImportError:
-    st = None
+# try:
+#     import streamlit as st
+# except ImportError:
+#     st = None
 
 if TYPE_CHECKING:
     from app.config.router import RouteResult
@@ -18,9 +18,9 @@ MODEL_NAME = None
 openai_api_key = None
 
 # First try Streamlit Secrets
-if st is not None:
-    MODEL_NAME = st.secrets.get("OPENAI_MODEL")
-    openai_api_key = st.secrets.get("OPENAI_API_KEY")
+# if st is not None:
+#     MODEL_NAME = st.secrets.get("OPENAI_MODEL")
+#     openai_api_key = st.secrets.get("OPENAI_API_KEY")
 
 # Fall back to .env / environment variables
 MODEL_NAME = MODEL_NAME or os.getenv("OPENAI_MODEL")
