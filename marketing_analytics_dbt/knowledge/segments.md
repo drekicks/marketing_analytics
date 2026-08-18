@@ -10,8 +10,8 @@ customer_tier  in ('High Value', 'Medium Value') AND recency_segment = 'Active'
 AND engagement_segment in ('High Engagement','Very High Engagement','Moderate Engagement')
 
 **Available In:**  
-`segment_performance_summary` — campaign + customer segment performance
-`customer_analytic_layer` — customer + campaign level
+- `segment_performance_summary` — campaign + customer segment performance
+- `customer_analytic_layer` — customer + campaign level
 
 ## Growth
 
@@ -32,8 +32,8 @@ AND engagement_segment in ('Very Low Engagement','Low Engagement')
 )
 
 **Available In:**  
-`segment_performance_summary` — campaign + customer segment performance
-`customer_analytic_layer` — customer + campaign level
+- `segment_performance_summary` — campaign + customer segment performance
+- `customer_analytic_layer` — customer + campaign level
 
 ## Churn Watchlist
 
@@ -44,8 +44,8 @@ Customers whose last purchase occurred 61 to 175 days before the data snapshot d
 recency_segment = 'Pre-Lapsed'
 
 **Available In:**  
-`segment_performance_summary` — campaign + customer segment performance
-`customer_analytic_layer` — customer + campaign level
+- `segment_performance_summary` — campaign + customer segment performance
+- `customer_analytic_layer` — customer + campaign level
 
 ## Win-Back
 
