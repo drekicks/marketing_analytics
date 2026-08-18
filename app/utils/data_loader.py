@@ -99,3 +99,5 @@ else:
         f"Unsupported DATA_SOURCE: {DATA_SOURCE}. "
         "Use 'postgres' or 'csv'."
     )
+
+# print(f"Loaded {DATA_SOURCE} data.")

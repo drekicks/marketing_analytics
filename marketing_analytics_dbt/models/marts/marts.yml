@@ -1,0 +1,140 @@
+version: 2
+
+models:
+  - name: campaign_performance_summary
+    description: >
+      Campaign-level performance summary containing audience,
+      conversion, revenue, cost, and lift metrics. One row per campaign.
+
+    columns:
+      - name: campaign_id
+        description: Unique identifier for a campaign.
+        data_tests:
+          - not_null
+
+      - name: audience_size
+        description: >
+          Number of customers in the campaign.
+        data_tests:
+          - not_null
+
+      - name: conversions
+        description: >
+          Number of customers who converted during the campaign.
+        data_tests:
+          - not_null
+
+      - name: campaign_revenue
+        description: >
+          Revenue attributed to the campaign.
+        data_tests:
+          - not_null
+
+      - name: total_campaign_cost
+        description: >
+          Total campaign cost attributed to the campaign,
+          calculated as contact cost plus offer cost.
+        data_tests:
+          - not_null
+
+      - name: test_conversion_rate
+        description: >
+          Conversion rate for the campaign in the TEST treatment group.
+        data_tests:
+          - not_null
+
+      - name: control_conversion_rate
+        description: >
+          Conversion rate for the campaign in the CONTROL treatment group.
+        data_tests:
+          - not_null
+
+  - name: segment_performance_summary
+    description: >
+      Segment-level performance summary containing audience,
+      conversion, revenue, cost, and lift metrics. One row per segment per campaign.
+
+    columns:
+      - name: customer_segment
+        description: Marketing segment assigned to the customer.
+        data_tests:
+          - not_null
+
+      - name: campaign_id
+        description: Unique identifier for a campaign.
+        data_tests:
+          - not_null
+
+      - name: segment_audience
+        description: >
+          Number of customers in the customer segment for the campaign.
+        data_tests:
+          - not_null
+
+      - name: campaign_conversions
+        description: >
+          Number of customers who converted during the campaign.
+        data_tests:
+          - not_null
+
+      - name: test_conversion_rate
+        description: >
+          Conversion rate for the segment in the TEST treatment group. 
+          Test groups are defined as all customers where treatment_group='TEST'.
+        data_tests:
+          - not_null
+
+      - name: control_conversion_rate
+        description: >
+          Conversion rate for the segment in the CONTROL treatment group. 
+          Control groups are defined as all customers where treatment_group='CONTROL'.
+        data_tests:
+          - not_null
+
+  - name: customer_analytic_layer
+    description: >
+      A customer-level analytic layer containing customer-level
+      performance metrics. One row per customer per campaign.
+
+    columns:
+      - name: customer_id
+        description: Unique identifier for a customer.
+        data_tests:
+          - not_null
+
+      - name: campaign_id
+        description: Unique identifier for a campaign.
+        data_tests:
+          - not_null
+
+      - name: customer_segment
+        description: Marketing segment assigned to the customer.
+        data_tests:
+          - not_null
+
+      - name: total_campaign_cost
+        description: >
+          Total campaign cost attributed to the customer,
+          calculated as contact cost plus offer cost.
+
+      - name: campaign_revenue
+        description: >
+          Revenue attributed to the customer for the campaign.
+
+      - name: conversion_flag
+        description: >
+          Indicates whether the customer converted during the campaign.
+
+      - name: treatment_group
+        description: >
+          Indicates whether the customer was assigned to the TEST
+          or CONTROL treatment group for the campaign.
+
+      - name: contact_cost
+        description: >
+          Cost incurred to contact a customer assigned to the TEST
+          treatment group.
+
+      - name: offer_cost
+        description: >
+          Offer-related cost incurred when a TEST customer converts.

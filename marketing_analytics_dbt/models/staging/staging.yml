@@ -1,0 +1,79 @@
+models:
+  - name: stg_customer
+    columns:
+      - name: customer_id
+        data_tests:
+          - unique
+          - not_null
+
+      - name: store_id
+        data_tests:
+          - not_null
+
+      - name: stg_rental
+        columns:
+          - name: rental_id
+            data_tests:
+              - unique
+              - not_null
+
+          - name: customer_id
+            data_tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: ref('stg_customer')
+                    field: customer_id
+
+          - name: inventory_id
+            data_tests:
+              - not_null
+#              - relationships:
+#                  arguments:
+#                    to: ref('stg_inventory')
+#                    field: inventory_id
+
+  - name: stg_payment
+    columns:
+      - name: payment_id
+        data_tests:
+          - unique
+          - not_null
+
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customer')
+                field: customer_id
+
+      - name: rental_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_rental')
+                field: rental_id
+
+      - name: amount
+        data_tests:
+          - not_null
+
+  - name: stg_customer_segment
+    columns:
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customer')
+                field: customer_id
+
+      - name: customer_segment
+        data_tests:
+          - not_null
+
+      - name: primary_segment
+        data_tests:
+          - not_null

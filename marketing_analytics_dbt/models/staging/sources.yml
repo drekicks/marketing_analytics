@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: dvdrental
+    database: dvdrental
+    schema: public
+
+    tables:
+      - name: customer
+      - name: rental
+      - name: payment
+      - name: campaign_results
+      - name: customer_segment

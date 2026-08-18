@@ -3,6 +3,11 @@ from app.ai.analyst_chat import (
     INSIGHT_RESPONSE_FORMAT,
     STANDARD_RESPONSE_FORMAT,
 )
+import os
+
+DATA_SOURCE = os.getenv("DATA_SOURCE",
+                        "postgres",
+                        ).strip().lower()
 
 
 def test_insight_context_uses_insight_response_format():
