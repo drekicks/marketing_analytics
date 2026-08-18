@@ -56,8 +56,8 @@ Customers whose last purchase occurred more than 175 days before the data snapsh
 recency_segment = 'Lapsed'
 
 **Available In:**  
-`segment_performance_summary` — campaign + customer segment performance
-`customer_analytic_layer` — customer + campaign level
+- `segment_performance_summary` — campaign + customer segment performance
+- `customer_analytic_layer` — customer + campaign level
 
 # Segmentation Attributes
 
