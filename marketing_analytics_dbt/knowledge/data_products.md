@@ -56,7 +56,7 @@ Campaign and segment identifiers must be populated and segment performance
 metrics must pass defined business-rule validations.
 
 **dbt Model:**  
-segment_performance_summary*
+segment_performance_summary
 
 ## Customer Analytic Layer
 
