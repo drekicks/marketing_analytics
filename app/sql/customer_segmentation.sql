@@ -306,6 +306,7 @@ SELECT
     	else 'Review'
     end as market_segment
 FROM customer_segments
+order by 1
 ;
 
 SELECT * FROM customer_segment cs

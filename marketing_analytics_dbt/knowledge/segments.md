@@ -64,17 +64,17 @@ recency_segment = 'Lapsed'
 ## Customer Tier
 
 **Definition:**  
-Customer tier is a classification of customers based on their revenue. Customers are divided into 10 equal groups (deciles 1 to 10). 
+Customer tier is a classification of customers based on their revenue. Customers are divided into 10 equal groups (Deciles 1 to 10). 
 Decile 1 is the highest revenue.
 
 ### High Value
 Customers in Decile 1
 
 ### Medium Value
-Customers in deciles 2 to 5  
+Customers in Deciles 2 to 5  
 
 ### Low Value
-Customers in deciles 6 to 10 
+Customers in Deciles 6 to 10 
 
 **Available In:**  
 - `segment_performance_summary` — campaign + customer segment performance
