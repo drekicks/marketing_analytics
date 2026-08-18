@@ -81,4 +81,4 @@ Customer, campaign and segment identifiers must be populated and customer perfor
 metrics must pass defined business-rule validations.
 
 **dbt Model:**  
-customer_analytic_layer*
+customer_analytic_layer
