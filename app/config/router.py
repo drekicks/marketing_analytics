@@ -153,6 +153,10 @@ def route_question(question: str) -> RouteResult:
         "calculated",
         "data product",
         "available in",
+        "what are",
+        "tell me",
+        "what's",
+        "what's the",
     )
 
     performance_terms = (
@@ -174,6 +178,7 @@ def route_question(question: str) -> RouteResult:
         "definition",
         "define",
         "grain",
+        "explain",
     )
 
     def is_knowledge_question(question: str) -> bool:
