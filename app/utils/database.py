@@ -17,7 +17,15 @@ def get_database_engine():
         f"{os.getenv('DB_NAME')}"
     )
 
+    connect_args = {}
+
+    if os.getenv("DB_SSLMODE"):
+        connect_args["sslmode"] = os.getenv("DB_SSLMODE")
+
     # --- Create engine ---
-    return create_engine(DATABASE_URL, echo=False, pool_pre_ping=True)
+    return create_engine(
+        DATABASE_URL,
+        connect_args=connect_args
+    )
 
 
