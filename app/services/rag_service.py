@@ -1,6 +1,7 @@
 from openai import OpenAI
 from app.config.settings import openai_api_key
-from utils.knowledge_search import search_knowledge_base as search_knowledge
+from app.utils.knowledge_search import search_knowledge_base as search_knowledge
+
 
 if not openai_api_key:
     raise RuntimeError("OPENAI_API_KEY is not set. Check your .env loading.")
