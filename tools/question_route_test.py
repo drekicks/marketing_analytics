@@ -68,8 +68,8 @@ from app.ai.context_builder import build_campaign_context, build_segment_context
 #             "insight"
 #          ),
         (
-            "Which campaign had the highest revenue, CMP-2026-004 or CMP-2026-003?",
-            "campaign"
+            "What does Churn Watchlist mean?",
+            "knowledge"
         ),
 #         (
 #             "Across all campaigns, what delivered the most scale?",
