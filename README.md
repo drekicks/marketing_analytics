@@ -48,13 +48,27 @@ flowchart LR
 Data Layer
 - PostgreSQL
 - CSV Demo Data
-- SQL Extracts
 
-Analytics Layer
+Business-Ready Data Layer
+- dbt Staging Models
+- dbt Marts
+- Data Quality Tests
+- Business Rules
+- SQL Extracts / Retrieval Queries
+
+Knowledge / RAG Layer
+- Markdown Business Knowledge
+- Chunking
+- Embedding
+- pgvector
+- Knowledge Retriebal
+
+Application / Orchestration Layer
 - Router
 - Context Builder
 - Session Manager
 - Visualization Services
+- RAG Service
 
 AI Layer
 - Prompt Templates
