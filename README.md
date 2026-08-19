@@ -31,10 +31,18 @@ This portfolio project demonstrates an end-to-end analytics workflow, from data 
 
 ```mermaid
 flowchart LR
-    A[Data Layer] --> B[Analytics Layer]
-    B --> C[AI Layer]
-    B --> D[Presentation Layer]
+    A[Data Sources]
+    B[Business-Ready Data Layer]
+    C[Knowledge / RAG Layer]
+    D[Application / Orchestration Layer]
+    E[AI Layer]
+    F[Presentation Layer]
+    A --> B
+    B --> C
+    B --> D
     C --> D
+    D --> E
+    E --> F
 ```
 
 Data Layer
