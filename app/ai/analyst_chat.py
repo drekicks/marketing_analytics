@@ -4,6 +4,7 @@ from app.config.router import route_question
 from app.ai.context_builder import build_campaign_context, build_segment_context, build_customer_context, build_campaign_comparison_context, build_insight_context
 from app.utils.data_loader import summary_df, segment_df, campaign_goals_df, customer_df
 import re
+from app.services.rag_service import answer_with_rag
 
 SCOPE_TERMS = (
     "overall",
@@ -180,7 +181,10 @@ def ask_analyst(campaign_id: str,
     resolved_campaign_id = resolved_campaign_ids[0]
 
     if context is None:
-        if route.context_type == "campaign":
+        if route.context_type == "knowledge":
+            return answer_with_rag(question)
+
+        elif route.context_type == "campaign":
             if route.analysis_type == "comparison" and len(resolved_campaign_ids) >= 2:
                 context = build_campaign_comparison_context(
                     summary_df,

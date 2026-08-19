@@ -145,6 +145,50 @@ def route_question(question: str) -> RouteResult:
         "line diagram",
     )
 
+    knowledge_terms = (
+        "what is",
+        "what does",
+        "how is",
+        "how are",
+        "calculated",
+        "data product",
+        "available in",
+    )
+
+    performance_terms = (
+        "perform",
+        "performance",
+        "performing",
+        "breakdown",
+        "trend",
+    )
+
+    strong_knowledge_terms = (
+        "quality check",
+        "quality checks",
+        "data quality",
+        "business rule",
+        "business rules",
+        "formula",
+        "calculated",
+        "definition",
+        "define",
+        "grain",
+    )
+
+    def is_knowledge_question(question: str) -> bool:
+        q = question.lower()
+
+        strong_knowledge_match = any(term in q for term in strong_knowledge_terms)
+
+        if strong_knowledge_match:
+            return True
+
+        knowledge_match = any(term in q for term in knowledge_terms)
+        performance_match = any(term in q for term in performance_terms)
+        evaluation_match = any(term in q for term in evaluation_terms)
+
+        return knowledge_match and not performance_match and not evaluation_match
 
     has_multiple_campaigns = len(campaign_ids) > 1
 
@@ -290,6 +334,15 @@ def route_question(question: str) -> RouteResult:
             analysis_type="insight",
             context_type="insight",
             campaign_ids=campaign_ids,
+        )
+
+    # RAG questions
+    if is_knowledge_question(question):
+        return RouteResult(
+            context_type="knowledge",
+            analysis_type="summary",
+            campaign_ids=[],
+            visualization_request=None,
         )
 
     # Explicit segment subject.
