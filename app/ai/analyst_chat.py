@@ -24,7 +24,8 @@ STANDARD_RESPONSE_FORMAT = """Use the following format for every answer:
    \"The data shows\":
 4. Present supporting evidence as a short-bulleted list.
 5. Use plain-language labels followed by a colon and the metric value.
-6. Do not offer additional analysis at the end of the response."""
+6. Do not offer additional analysis at the end of the response.
+7. Use tables when they improve readability."""
 
 INSIGHT_RESPONSE_FORMAT = """REQUIRED RESPONSE FORMAT
 
