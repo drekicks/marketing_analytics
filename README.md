@@ -7,18 +7,18 @@ An AI-powered analytics application that enables business users to explore marke
 
 This portfolio project demonstrates an end-to-end Business-Ready Data and AI workflow, from data transformation, modeling, testing, and governance through analytics and AI-assisted analysis. It combines PostgreSQL, dbt, Python, SQL, pgvector, Tableau, Streamlit, and the OpenAI API to support both structured analytics and retrieval-augmented generation (RAG).
 
-## Application Screenshot
+## Application Screenshots
 
 <p align="center">
   <img src="assets/app_screenshot.png" width="900">
 </p>
 
-<h6>AI-generated campaign summaries</h6>
+<h6>AI Analytics Example</h6>
 <p align="center">
   <img src="assets/ai_example.png" width="900">
 </p>
 
-<h3>RAG Example</h3>
+<h6>RAG Business Knowledge Example</h6>
 <p align="center">
   <img src="assets/rag_example.png" width="900">
 </p>
