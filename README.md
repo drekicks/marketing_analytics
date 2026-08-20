@@ -17,6 +17,10 @@ This portfolio project demonstrates an end-to-end Business-Ready Data and AI wor
   <img src="assets/ai_example.png" width="900">
 </p>
 
+<p align="center">
+  <img src="assets/rag_example.png" width="900">
+</p>
+
 ## Key Features
 
 - AI-generated executive campaign summaries
