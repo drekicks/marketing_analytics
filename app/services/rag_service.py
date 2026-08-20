@@ -49,6 +49,9 @@ Formatting rules:
 - Do not use LaTeX or mathematical notation such as \\[ \\], \\( \\), or \\text{{}}.
 - Display formulas using plain text or inline code.
 - Keep field names exactly as documented.
+- When a business rule contains multiple AND/OR conditions, explain the conditions in plain language or numbered steps rather than repeating the raw expression alone.
+- When multiple related categories or definitions are returned, use a Markdown table when it improves readability.
+- Treat requests to "define" and "explain" business concepts similarly: provide the definition plus a clear explanation of the applicable business rule.
 
 Context:
 {context}
@@ -65,7 +68,7 @@ Question:
     return response.output_text
 
 # if __name__ == "__main__":
-#     question = "What does Pre-Lapsed mean?"
+#     question = "Explain customer segmentation."
 #
 #     answer = answer_with_rag(question)
 #

@@ -32,15 +32,16 @@ def ingest_knowledge():
             conn.execute(
                 text("""
                     INSERT INTO ai.knowledge_chunks
-                        (source, title, content, embedding)
+                        (source, title, content, embedding, category)
                     VALUES
-                        (:source, :title, :content, CAST(:embedding AS vector))
+                        (:source, :title, :content, CAST(:embedding AS vector), :category)
                 """),
                 {
                     "source": chunk["source"],
                     "title": chunk["title"],
                     "content": chunk["content"],
                     "embedding": str(embedding),
+                    "category": chunk["category"],
                 }
             )
 

@@ -15,10 +15,55 @@ def search_knowledge_base(question, limit=5):
     question_embedding = create_embedding(question)
     engine = get_database_engine()
 
+    # 1. Check whether the question names a known category
+    category_query = text("""
+                          SELECT DISTINCT category
+                          FROM ai.knowledge_chunks
+                          WHERE category IS NOT NULL
+                          """)
+
+    with engine.connect() as conn:
+        categories = conn.execute(category_query).scalars().all()
+
+    question_lower = question.lower()
+
+    matched_category = next(
+        (
+            category
+            for category in categories
+            if category.lower() in question_lower
+        ),
+        None
+    )
+
+    # 2. If a category is explicitly requested, retrieve that category
+    if matched_category:
+        query = text("""
+                     SELECT id,
+                            source,
+                            category,
+                            title,
+                            content,
+                            1.0 AS similarity
+                     FROM ai.knowledge_chunks
+                     WHERE category = :category
+                     ORDER BY id
+                     """)
+
+        with engine.connect() as conn:
+            return conn.execute(
+                query,
+                {"category": matched_category}
+            ).mappings().all()
+
+    # 3. Otherwise use semantic/vector retrieval
+    question_embedding = create_embedding(question)
+
     query = text("""
         SELECT
             id,
             source,
+            category,
             title,
             content,
             1 - (embedding <=> CAST(:embedding AS vector)) AS similarity

@@ -1,30 +1,76 @@
-import re
-
 def chunk_document(document):
     content = document["content"]
     source = document["source"]
 
-    sections = re.split(r"(?=^## )", content, flags=re.MULTILINE)
+    lines = content.splitlines()
 
     chunks = []
 
-    for section in sections:
-        section = section.strip()
+    current_category = None
+    current_title = None
+    current_content = []
 
-        if not section.startswith("## "):
-            continue
+    for line in lines:
+        stripped_line = line.strip()
+        # print(repr(stripped_line))
 
-        lines = section.splitlines()
+        # Top-level category: # Customer Segments
+        if stripped_line.startswith("# ") and not stripped_line.startswith("## "):
 
-        title = lines[0].replace("## ", "").strip()
+            # Save previous chunk before changing categories
+            if current_title:
+                chunks.append(
+                    {
+                        "source": source,
+                        "category": current_category,
+                        "title": current_title,
+                        "content": "\n".join(current_content).strip(),
+                    }
+                )
 
+                current_title = None
+                current_content = []
+
+            current_category = line.replace("# ", "", 1).strip()
+
+            # print("CATEGORY FOUND:", current_category)
+
+        # Chunk heading: ## Champion
+        elif stripped_line.startswith("## "):
+
+            # Save previous chunk
+            if current_title:
+                chunks.append(
+                    {
+                        "source": source,
+                        "category": current_category,
+                        "title": current_title,
+                        "content": "\n".join(current_content).strip(),
+                    }
+                )
+
+            current_title = stripped_line.replace("## ", "", 1).strip()
+
+            current_content = [
+                f"{current_category} > {current_title}",
+                stripped_line,
+            ]
+
+        else:
+            if current_title:
+                current_content.append(line)
+
+    # Save final chunk
+    if current_title:
         chunks.append(
             {
-            "source": source,
-            "title": title,
-            "content": section
+                "source": source,
+                "category": current_category,
+                "title": current_title,
+                "content": "\n".join(current_content).strip(),
             }
         )
+
 
     return chunks
 
@@ -34,10 +80,14 @@ def chunk_document(document):
 #     documents = load_knowledge_documents()
 #
 #     for document in documents:
+#         if document["source"] != "segments_v2.md":
+#             continue
+#
 #         chunks = chunk_document(document)
 #
 #         for chunk in chunks:
 #             print(chunk["source"])
+#             print(chunk["category"])
 #             print(chunk["title"])
 #             print(len(chunk["content"]))
 #             print("-" * 50)

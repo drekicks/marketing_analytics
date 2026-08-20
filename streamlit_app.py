@@ -184,11 +184,12 @@ with st.sidebar:
     st.subheader("Example Questions")
 
     st.markdown("""
-        - How did this campaign perform?
         - Which segment performed best?
         - Compare to CMP-2026-003
         - What are the key takeaways?
-        - Chart revenue by segment
+        - Chart revenue by segment.
+        - Define customer segments.
+        - Explain lapsed customers.
         """)
 
     st.divider()
