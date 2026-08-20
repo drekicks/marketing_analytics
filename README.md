@@ -13,10 +13,12 @@ This portfolio project demonstrates an end-to-end Business-Ready Data and AI wor
   <img src="assets/app_screenshot.png" width="900">
 </p>
 
+<h3>AI-generated campaign summaries</h3>
 <p align="center">
   <img src="assets/ai_example.png" width="900">
 </p>
 
+<h3>RAG Example</h3>
 <p align="center">
   <img src="assets/rag_example.png" width="900">
 </p>
