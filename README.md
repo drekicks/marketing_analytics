@@ -489,4 +489,4 @@ The project extends the PostgreSQL dvdrental sample database with simulated mark
 
 ## License
 
-This project is intended for educational and portfolio use. Add an open-source license before distributing or accepting external contributions.
+© 2026 Andre Ferree. All rights reserved. This repository is provided for portfolio and demonstration purposes only.
