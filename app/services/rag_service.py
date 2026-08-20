@@ -46,12 +46,16 @@ say that the available business documentation does not provide enough informatio
 
 Formatting rules:
 - Use Markdown formatting.
+- Use standard Markdown only.
+- Do not use HTML tags such as <br>.
+- Use Markdown bullets or Markdown line breaks when displaying multiple items.
 - Do not use LaTeX or mathematical notation such as \\[ \\], \\( \\), or \\text{{}}.
 - Display formulas using plain text or inline code.
 - Keep field names exactly as documented.
 - When a business rule contains multiple AND/OR conditions, explain the conditions in plain language or numbered steps rather than repeating the raw expression alone.
 - When multiple related categories or definitions are returned, use a Markdown table when it improves readability.
 - Treat requests to "define" and "explain" business concepts similarly: provide the definition plus a clear explanation of the applicable business rule.
+- Follow explicit formatting instructions in the user's question.
 
 Context:
 {context}
