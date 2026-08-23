@@ -7,7 +7,13 @@ with control_aud as
     end_date,
     count(customer_id) control_audience,
     sum(campaign_revenue) control_revenue,
-    count(*) filter (where treatment_group='CONTROL' and response_flag='Y' and conversion_flag='Y') control_conversions
+    count(
+            case
+                when treatment_group = 'CONTROL' and response_flag='Y' and conversion_flag='Y'
+                then 1
+            end
+    ) as control_conversions
+{#    count(*) filter (where treatment_group='CONTROL' and response_flag='Y' and conversion_flag='Y') control_conversions#}
 from {{ ref('stg_campaign_results') }}
 where treatment_group='CONTROL'
 group by campaign_id,campaign_name,customer_segment,start_date,end_date
@@ -29,7 +35,13 @@ test_aud as
     sum(offer_cost) offer_cost,
     sum(contact_cost) contact_cost,
     sum(contact_cost + offer_cost) total_campaign_cost,
-    count(*) filter (where treatment_group='TEST' and response_flag='Y' and conversion_flag='Y') test_conversions
+    count(
+            case
+                when treatment_group = 'TEST' and response_flag='Y' and conversion_flag='Y'
+                then 1
+            end
+    ) as test_conversions
+{#    count(*) filter (where treatment_group='TEST' and response_flag='Y' and conversion_flag='Y') test_conversions#}
 from {{ ref('stg_campaign_results') }}
 where treatment_group='TEST'
 group by campaign_id,campaign_name,customer_segment

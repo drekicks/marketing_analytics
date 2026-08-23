@@ -3,6 +3,7 @@
 🚀 Live Demo:
 
 https://campaign-analytics-ai.streamlit.app
+
 An AI-powered analytics application that enables business users to explore marketing campaign performance and governed business knowledge using natural language. Generate executive summaries, compare campaigns, visualize key metrics, ask analytical questions, and retrieve trusted business definitions and metric logic through an interactive Streamlit interface.
 
 This portfolio project demonstrates an end-to-end Business-Ready Data and AI workflow, from data transformation, modeling, testing, and governance through analytics and AI-assisted analysis. It combines PostgreSQL, dbt, Python, SQL, pgvector, Tableau, Streamlit, and the OpenAI API to support both structured analytics and retrieval-augmented generation (RAG).
@@ -475,6 +476,7 @@ This project reflects a practical analytics workflow rather than a single dashbo
 
 ## Data Source
 The project extends the PostgreSQL dvdrental sample database with simulated marketing campaign data, customer segmentation, reusable SQL extracts, validation checks, Tableau-ready datasets, and an AI-powered conversational analysis layer. It was designed to demonstrate an end-to-end analytics solution, from source data and transformation through reporting, validation, visualization, and natural-language insight generation.
+The dbt project supports both PostgreSQL and Snowflake targets. Source configuration and transformation SQL were standardized for cross-platform compatibility. Snowflake implementation includes raw-data ingestion, staging and mart models, automated data-quality tests, lineage, and warehouse query inspection.
 
 ## Future Vision
 

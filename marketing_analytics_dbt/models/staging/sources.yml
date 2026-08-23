@@ -2,8 +2,8 @@ version: 2
 
 sources:
   - name: dvdrental
-    database: dvdrental
-    schema: public
+    database: "{{ target.database }}"
+    schema: "{{ 'RAW' if target.type == 'snowflake' else 'public' }}"
 
     tables:
       - name: customer
