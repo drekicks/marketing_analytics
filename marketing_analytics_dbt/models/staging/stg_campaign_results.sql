@@ -12,5 +12,6 @@ select
     offer_cost,
     start_date,
     end_date,
-    channel
+    channel,
+    updated_at
 from {{ source('dvdrental', 'campaign_results') }}

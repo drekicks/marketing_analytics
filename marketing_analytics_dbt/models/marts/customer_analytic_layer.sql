@@ -1,3 +1,8 @@
+{{ config(
+    materialized='incremental',
+    unique_key=['campaign_id', 'customer_id']
+) }}
+
 select
 cr.customer_id,
 cr.campaign_id,
@@ -25,6 +30,14 @@ cr.campaign_revenue,
 cs.category_engagement_tier,
 offer_cost,
 contact_cost,
-offer_cost + contact_cost as total_campaign_cost
+offer_cost + contact_cost as total_campaign_cost,
+cr.updated_at as updated_at
 from {{ ref('stg_campaign_results') }} cr join {{ ref('stg_customer_segment') }} cs
 	on cr.customer_id = cs.customer_id
+
+{% if is_incremental() %}
+where cr.updated_at > (
+    select coalesce(max(t.updated_at),'1990-01-01'::date)
+    from {{ this }} as t
+)
+{% endif %}

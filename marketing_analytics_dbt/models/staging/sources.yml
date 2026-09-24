@@ -11,3 +11,4 @@ sources:
       - name: payment
       - name: campaign_results
       - name: customer_segment
+      - name: address
