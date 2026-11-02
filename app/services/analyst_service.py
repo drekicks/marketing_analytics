@@ -115,6 +115,15 @@ def process_analyst_question(
             context=visualization_context,
         )
 
+        # Return the chart interpretation directly. Falling through would
+        # call ask_analyst() again without the chart context and overwrite
+        # this answer with a generic campaign/segment response.
+        return AnalystResult(
+            answer=answer,
+            campaign_id=resolved_campaign_id,
+            chart_path=chart_path,
+        )
+
     comparison_campaign_ids = resolve_comparison_campaign_ids(
         explicit_campaign_ids=route.campaign_ids,
         previous_active_campaign_id=previous_active_campaign_id,
