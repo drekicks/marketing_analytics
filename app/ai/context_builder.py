@@ -1,6 +1,5 @@
 import pandas as pd
 from app.ai.campaign_id_validation import validate_campaign_ids
-from app.utils.data_loader import campaign_goals_df
 from app.ai.insight_signals import calculate_segment_signals, format_segment_signals
 
 def build_segment_context(segment_df:pd.DataFrame,
@@ -15,7 +14,7 @@ def build_segment_context(segment_df:pd.DataFrame,
             Segment performance and segment comparisons.
         """
     campaign_rows = segment_df[segment_df["campaign_id"] == campaign_id]
-    goal_rows = goals_df[campaign_goals_df["campaign_id"] == campaign_id]
+    goal_rows = goals_df[goals_df["campaign_id"] == campaign_id]
 
     if campaign_rows.empty:
         raise ValueError(f"{campaign_id} not found")
@@ -71,12 +70,12 @@ def build_segment_context(segment_df:pd.DataFrame,
             f"Estimated Incremental Conversions: {row['incremental_conversions']:,}\n",
             f"Financial Impact\n"
             f"-----------------",
-            f"Incremental Revenue: ${row['incremental_rev']:,.2f}",
+            f"Incremental Revenue: ${row['incremental_revenue']:,.2f}",
             f"Campaign Cost: ${row['total_campaign_cost']:,.2f}",
             f"Marketing ROI: {row['marketing_roi']:.1%}",
             f"Campaign Revenue: ${row['campaign_revenue']:,.2f}",
             f"Conversions: {row['campaign_conversions']:,}",
-            f"Revenue Per Conversion: ${row['segment_rpr']:.2f}",
+            f"Revenue Per Conversion: ${row['segment_revenue_per_conversion']:.2f}",
         ])
 
     return "\n".join(context_lines)
@@ -376,7 +375,7 @@ def build_insight_context(
         "segment_audience",
         "campaign_revenue",
         "campaign_conversions",
-        "segment_rpr",
+        "segment_revenue_per_conversion",
         "segment_conversion_rate",
         "absolute_lift",
         # "control_rpc",
@@ -391,7 +390,7 @@ def build_insight_context(
                 f"- Audience: {row['segment_audience']:,}",
                 f"- Revenue: ${row['campaign_revenue']:,.2f}",
                 f"- Conversions: {row['campaign_conversions']:,}",
-                f"- Revenue Per Conversion: ${row['segment_rpr']:,.2f}",
+                f"- Revenue Per Conversion: ${row['segment_revenue_per_conversion']:,.2f}",
                 f"- Conversion Rate: {row['segment_conversion_rate']:.1%}",
                 f"- Absolute Lift: {row['absolute_lift']} percentage points\n",
             ]

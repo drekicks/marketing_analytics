@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from app.config.paths import DATA_DIR, DEMO_DATA_DIR
+from app.config.paths import DEMO_DATA_DIR
 from app.utils.file_utils import load_sql_extracts
 import streamlit as st
 
@@ -53,6 +53,7 @@ def load_csv_data() -> tuple[
     return summary, segment, goals, customer, unique_campaigns
 
 
+@st.cache_data(ttl=3600)
 def load_postgres_data() -> tuple[
     pd.DataFrame,
     pd.DataFrame,
@@ -61,8 +62,11 @@ def load_postgres_data() -> tuple[
     pd.DataFrame,
 ]:
     """
-    Load application datasets from PostgreSQL for local development.
-    Campaign goals are still a csv in local development also
+    Load application datasets from the dbt marts in PostgreSQL (Neon).
+
+    Every dataset, including campaign goals (a dbt seed), comes from the
+    schema set by ANALYTICS_SCHEMA. Results are cached for an hour so
+    Streamlit reruns don't re-query the database.
     """
 
     extracts = load_sql_extracts(
@@ -71,6 +75,7 @@ def load_postgres_data() -> tuple[
             "campaign_summary",
             "analytic_layer",
             "unique_campaigns_list",
+            "campaign_goals",
         ]
     )
 
@@ -78,14 +83,9 @@ def load_postgres_data() -> tuple[
     segment = extracts["campaign_segment_summary"]
     summary = extracts["campaign_summary"]
     customer = extracts["analytic_layer"]
-
-    goals = pd.read_csv(
-        DEMO_DATA_DIR
-        / "campaign_goals.csv"
-    )
+    goals = extracts["campaign_goals"]
 
     return summary, segment, goals, customer, unique_campaigns
-
 
 
 if DATA_SOURCE == "csv":

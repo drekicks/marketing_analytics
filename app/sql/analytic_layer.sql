@@ -1,3 +1,2 @@
-select * from dbt_dev.customer_analytic_layer cal
-
-
+select *
+from {{analytics_schema}}.customer_analytic_layer;

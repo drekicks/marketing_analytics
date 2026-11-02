@@ -39,7 +39,8 @@ def export_campaign_results() -> None:
             "campaign_segment_summary",
             "analytic_layer",
             "campaign_tableau_summary",
-            "unique_campaigns_list"
+            "unique_campaigns_list",
+            "campaign_goals",
         ]
     )
 
@@ -48,6 +49,7 @@ def export_campaign_results() -> None:
     analytic_df = extracts["analytic_layer"]
     tableau_df = extracts["campaign_tableau_summary"]
     unique_campaigns_df = extracts["unique_campaigns_list"]
+    goals_df = extracts["campaign_goals"]
 
     performance_results = (
         validation.campaign_performance_validation(segment_df)
@@ -81,6 +83,10 @@ def export_campaign_results() -> None:
     file_export(
         unique_campaigns_df,
         "unique_campaigns.csv",
+    )
+    file_export(
+        goals_df,
+        "campaign_goals.csv",
     )
 
 

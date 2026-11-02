@@ -9,19 +9,21 @@ See `ARCHITECTURE.md` for the full map, the request flow, and the known-issues l
 ## Run
 
 ```bash
-pip install -r requirements.txt        # file is UTF-16 encoded; pip handles it
+pip install -r requirements.txt
 streamlit run streamlit_app.py         # web app (hosted demo entry point)
 python main.py                         # CLI version (README's `python -m app.main` is wrong)
-python -m app.extracts.campaign_extract     # validate + re-export data/demo/*.csv (overwrites demo data)
+python -m app.extracts.campaign_extract     # validate + re-export data/demo/*.csv from the marts (overwrites demo data)
 python -m app.utils.knowledge_ingestion     # rebuild ai.knowledge_chunks embeddings (TRUNCATEs table)
-cd marketing_analytics_dbt && dbt build     # needs ~/.dbt/profiles.yml profile `marketing_analytics_dbt`
+cd marketing_analytics_dbt && dbt build --target neon   # see profiles.example.yml; NEON_DB_* env vars
 pytest tests/                               # real test suite (conftest sets dummy OpenAI env + CSV mode)
                                             # tools/ holds older ad-hoc tests; some are broken
 ```
 
 Env (`.env` at repo root): `OPENAI_API_KEY` and `OPENAI_MODEL` are required at import time.
-`DATA_SOURCE` is `csv` (default, reads `data/demo/`) or `postgres`. Set `DB_HOST/DB_PORT/DB_NAME/DB_USER/DB_PASSWORD`
-and optionally `DB_SSLMODE` for postgres mode, RAG, ingestion, and extracts.
+`DATA_SOURCE` is `postgres` (target: dbt marts in Neon) or `csv` (offline fallback, reads `data/demo/`; the code default).
+`ANALYTICS_SCHEMA` (default `dbt_dev_analytics`) fills `{{analytics_schema}}` in `app/sql/*.sql`. Set
+`DB_HOST/DB_PORT/DB_NAME/DB_USER/DB_PASSWORD` and `DB_SSLMODE=require` (Neon) for postgres mode, RAG, ingestion, and extracts.
+See `.env.example`.
 
 ## Key files
 - `streamlit_app.py`: UI and session state. `app/ui/cli.py` and `main.py` are the CLI.
@@ -49,5 +51,7 @@ and optionally `DB_SSLMODE` for postgres mode, RAG, ingestion, and extracts.
   `models/marts/<entity>_summary.sql` / `customer_analytic_layer.sql` (tables). YAML lives in `staging.yml`/`marts.yml`,
   singular tests in `tests/assert_<model>_<check>.sql`. SQL is lowercase with CTE chains and Jinja comments `{# #}`
   for disabled code. Avoid Postgres-only syntax (e.g. `FILTER`) so it stays Snowflake-compatible.
-- Watch out: the demo CSVs use legacy column names (`segment_rpr`, `incremental_rev`) that differ from the
-  current dbt marts. `app/sql/*.sql` reads schema `dbt_dev`. Many modules do work at import time.
+- Column names: the dbt marts are the source of truth. Demo CSVs must keep identical columns
+  (`tests/test_context_builders.py::test_demo_csv_columns_match_dbt_marts`). Rename in dbt first, then code, then re-export CSVs.
+- SQL extracts reference `{{analytics_schema}}.<model>`, never a hard-coded schema.
+- Many modules do work at import time (settings validation, data loading), so tests rely on `tests/conftest.py`.

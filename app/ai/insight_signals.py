@@ -1,6 +1,5 @@
 from typing import Any
 import pandas as pd
-from app.utils.data_loader import segment_df
 
 
 def calculate_segment_signals(
@@ -64,7 +63,7 @@ def calculate_segment_signals(
         "campaign_conversions",
         "campaign_revenue",
         "absolute_lift",
-        "segment_rpr",
+        "segment_revenue_per_conversion",
         "segment_conversion_rate"
     ]
 
@@ -94,7 +93,7 @@ def calculate_segment_signals(
     ]
 
     highest_revenue_per_conversion = campaign_segments.loc[
-        campaign_segments["segment_rpr"].idxmax()
+        campaign_segments["segment_revenue_per_conversion"].idxmax()
     ]
 
     lowest_conversion_rate = campaign_segments.loc[
@@ -120,7 +119,7 @@ def calculate_segment_signals(
             },
         "highest_revenue_per_conversion": {
             "segment":highest_revenue_per_conversion[campaign_label_column],
-            "value":float(highest_revenue_per_conversion["segment_rpr"])
+            "value":float(highest_revenue_per_conversion["segment_revenue_per_conversion"])
             },
         "lowest_conversion_rate": {
             "segment":lowest_conversion_rate[campaign_label_column],
@@ -167,6 +166,3 @@ def format_segment_signals(signals: dict[str, Any]) -> str:
             ),
         ]
     )
-signals = calculate_segment_signals(
-    segment_df=segment_df
-)

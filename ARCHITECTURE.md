@@ -32,7 +32,7 @@ This is an "AI analyst" for marketing campaigns. A business user picks a campaig
 marketing_analytics/
 ├── streamlit_app.py            Streamlit UI (the web app / hosted demo entry point)
 ├── main.py                     CLI entry point (terminal version of the same app)
-├── requirements.txt            Python deps (NOTE: file is UTF-16 LE encoded, unpinned)
+├── requirements.txt            Python deps (UTF-8, unpinned)
 ├── .env.example                Env var template (incomplete, see §6)
 ├── .devcontainer/              GitHub Codespaces config, auto-runs `streamlit run streamlit_app.py`
 ├── prompts/                    LLM prompt templates with {{placeholders}}
@@ -75,10 +75,11 @@ marketing_analytics/
 │   │   ├── campaign_extract.py   CLI: validate + export campaign CSVs (Tableau / demo data)
 │   │   └── customer_extract.py   CLI: export customer_segmentation.csv
 │   ├── sql/                      Static SQL run by load_sql_extracts (no user input)
-│   │   ├── campaign_summary.sql          → dbt_dev.campaign_performance_summary
-│   │   ├── campaign_segment_summary.sql  → dbt_dev.segment_performance_summary
-│   │   ├── analytic_layer.sql            → dbt_dev.customer_analytic_layer
-│   │   ├── unique_campaigns_list.sql     → raw public.campaign_results (bypasses dbt)
+│   │   ├── campaign_summary.sql          → {{analytics_schema}}.campaign_performance_summary
+│   │   ├── campaign_segment_summary.sql  → {{analytics_schema}}.segment_performance_summary
+│   │   ├── analytic_layer.sql            → {{analytics_schema}}.customer_analytic_layer
+│   │   ├── campaign_goals.sql            → {{analytics_schema}}.campaign_goals (dbt seed)
+│   │   ├── unique_campaigns_list.sql     → {{analytics_schema}}.campaign_performance_summary
 │   │   ├── campaign_tableau_summary.sql  → raw campaign_results ⨝ customer_segment (Tableau only)
 │   │   └── customer_segmentation.sql     → raw dvdrental tables; builds the segmentation (Tableau / customer_segment)
 │   └── ui/
@@ -111,10 +112,10 @@ marketing_analytics/
    - `app/config/paths.py` creates `data/` and `output/`.
    - `data_loader.py` reads `DATA_SOURCE` (default `"csv"`):
      - `csv` → `load_csv_data()` (wrapped in `@st.cache_data`) reads `data/demo/campaign_summary.csv`, `campaign_segment_summary.csv`, `campaign_goals.csv`, `campaign_analytic_layer.csv`, `unique_campaigns.csv`.
-     - `postgres` → `load_postgres_data()` → `file_utils.load_sql_extracts([...])` runs the four `app/sql/*.sql` files. Goals are still read from CSV. **Not cached.**
+     - `postgres` → `load_postgres_data()` (`@st.cache_data(ttl=3600)`) → `file_utils.load_sql_extracts([...])` runs five `app/sql/*.sql` files, including goals from the `campaign_goals` seed. `{{analytics_schema}}` is replaced with `ANALYTICS_SCHEMA` (default `dbt_dev_analytics`).
    - The result is five module-level globals: `summary_df`, `segment_df`, `campaign_goals_df`, `customer_df`, `unique_campaigns_df`.
 2. Importing `app/ai/llm_client_api.py`, `app/services/rag_service.py`, and `app/utils/embedding_service.py` each creates its own `OpenAI(...)` client.
-3. Importing `app/ai/insight_signals.py` runs `calculate_segment_signals(segment_df)` once at module level, and the result is never used.
+3. *(Removed in Phase 2: `insight_signals.py` used to compute unused signals at import time.)*
 4. `streamlit_app.py` initialises `st.session_state`: `analytics_session` (a `SessionState`), `executive_summary`, `messages` (visible chat), `analyst_history` (Q/A pairs sent to the LLM). It also builds `campaign_options`, sets the first campaign as active, and renders the sidebar selector (`handle_campaign_change` clears chat and summary when the campaign changes).
 
 ### 3b. Executive Summary button (`streamlit_app.py`, lines ~203–233)
@@ -180,11 +181,11 @@ Tests: generic `not_null`/`unique`/`relationships` in `staging.yml` and `marts.y
 
 ### What the app actually queries
 - **Default (CSV mode):** no database at all for analytics. It reads `data/demo/*.csv`, which are snapshots exported by `app/extracts/campaign_extract.py`.
-- **Postgres mode:** `dbt_dev.campaign_performance_summary`, `dbt_dev.segment_performance_summary`, `dbt_dev.customer_analytic_layer`, and raw `campaign_results` (for the campaign list).
+- **Postgres mode (Neon):** `dbt_dev_analytics.campaign_performance_summary` (also the campaign list), `.segment_performance_summary`, `.customer_analytic_layer`, and `.campaign_goals` (seed). The schema comes from `ANALYTICS_SCHEMA`.
 - **Always (RAG):** `ai.knowledge_chunks` (pgvector), written by `app/utils/knowledge_ingestion.py`.
-- **Goals:** `data/demo/campaign_goals.csv` in both modes. Campaign goals/budget/KPIs live **only** in this CSV.
+- **Goals:** the dbt seed `marketing_analytics_dbt/seeds/campaign_goals.csv` → `dbt_dev_analytics.campaign_goals` in postgres mode. CSV mode uses the exported copy `data/demo/campaign_goals.csv`.
 
-> ⚠️ Schema mismatch: `dbt_project.yml` sets `+schema: staging/analytics`. With dbt's default `generate_schema_name` (there is no override in `macros/`), marts build into `<target_schema>_analytics` (e.g. `dbt_dev_analytics`), but `app/sql/*.sql` reads `dbt_dev.*`. See §9.
+> ✅ Schema: `dbt_project.yml` sets `+schema: staging/analytics` (models and seeds). With dbt's default `generate_schema_name` and target schema `dbt_dev`, everything the app reads lands in `dbt_dev_analytics`, locally and in Neon (`--target neon`, see `profiles.example.yml`). The demo CSVs use the same column names as the marts (checked by `tests/test_context_builders.py`).
 
 ---
 
@@ -221,8 +222,9 @@ There is no schema in the prompt. The model never sees table or column names. `a
 |---|---|---|---|
 | `OPENAI_API_KEY` | **Yes** (import-time `RuntimeError`) | `app/config/settings.py` | All OpenAI calls |
 | `OPENAI_MODEL` | **Yes** (import-time `RuntimeError`); **missing from `.env.example`** | `settings.py` → `llm_client_api.py` | Model for summary and analyst |
-| `DATA_SOURCE` | No (default `csv`) | `app/utils/data_loader.py` | `csv` or `postgres` |
-| `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` | For postgres mode, **RAG**, ingestion, extracts | `app/utils/database.py::get_database_engine` | `postgresql+psycopg://user:pass@host:port/db`. `DB_PORT` is **missing from `.env.example`**, and if unset the URL contains `None`. |
+| `DATA_SOURCE` | No (default `csv`) | `app/utils/data_loader.py` | `csv` or `postgres` (target: `postgres` on Neon) |
+| `ANALYTICS_SCHEMA` | No (default `dbt_dev_analytics`) | `app/utils/database.py::get_analytics_schema` | Schema substituted for `{{analytics_schema}}` in `app/sql/*.sql`. Validated as a plain identifier. |
+| `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` | For postgres mode, **RAG**, ingestion, extracts | `app/utils/database.py::get_database_engine` | Built with `URL.create` (password escaped). One cached engine per process with `pool_pre_ping`. |
 | `DB_SSLMODE` | No; **(inferred)** needed for Neon | `database.py` | Passed as `connect_args["sslmode"]` |
 | *(dbt)* `~/.dbt/profiles.yml`, profile `marketing_analytics_dbt` | For dbt only | `dbt_project.yml` | Not in repo. The log shows a Postgres target with schema `public` at `dbt debug` time. |
 
@@ -234,7 +236,7 @@ No real secrets are committed (`.env` is git-ignored, and `.env.example` holds p
 
 ## 7. External dependencies
 
-From `requirements.txt` (unpinned, UTF-16 encoded):
+From `requirements.txt` (unpinned):
 
 | Library | Used for |
 |---|---|
@@ -275,7 +277,7 @@ flowchart TD
     end
 
     MARTS -->|app/sql/*.sql| EXT --> CSV[(data/demo/*.csv)]
-    GOALS[(data/demo/campaign_goals.csv)]
+    GOALS[(campaign_goals seed / data/demo copy)]
 
     subgraph App["Python app"]
         DL[data_loader.py<br/>DATA_SOURCE=csv or postgres]
@@ -320,14 +322,14 @@ Severity is my judgement: 🔴 likely user-visible breakage · 🟠 wrong or was
 ### Bugs found by reading (not executed)
 1. ✅ **Fixed:** Charts came with the wrong answer and cost two LLM calls. The visualization branch of `analyst_service.process_analyst_question` fell through to a second `ask_analyst(context=None)` call that overwrote the chart interpretation. It now returns right after the chart-interpretation call.
 2. 🔴 **Customer-level questions crash in both data modes.** `context_builder.build_customer_context` reads `row['treatment_grp']` and `row['cnvrsn_flg']`, but `customer_analytic_layer` (and `data/demo/campaign_analytic_layer.csv`) have `treatment_group` / `conversion_flag`, which raises `KeyError`. That error is not caught by the UI's `except ValueError`. Even with the names fixed, it emits ~10k customer blocks (several MB), well past the 400k-character guard.
-3. 🔴 **Postgres mode is out of sync with the code.** The dbt `segment_performance_summary` produces `incremental_revenue`, `segment_revenue_per_conversion`, `control_conversions`, `control_revenue_per_customer`, `expcted_revenue`. The code (`build_segment_context`, `build_insight_context`, `insight_signals.calculate_segment_signals`) expects the **demo CSV's legacy names** `incremental_rev` and `segment_rpr`. With `DATA_SOURCE=postgres`, segment and insight questions would `KeyError`, and so would importing `insight_signals.py` (it computes signals at module level). **(inferred)** The demo CSVs were exported before the dbt mart columns were renamed.
-4. 🔴 **dbt schema vs. app SQL.** The marts build into `<target>_analytics` (no `generate_schema_name` macro), while `app/sql/*.sql` reads `dbt_dev.*`. One of them is stale.
+3. ✅ **Fixed (Phase 2):** Postgres mode was out of sync with the code. The code now uses the dbt mart names (`incremental_revenue`, `segment_revenue_per_conversion`). `data/demo/campaign_segment_summary.csv` headers were renamed to match, and `insight_signals.py` no longer computes signals at import.
+4. ✅ **Fixed (Phase 2):** dbt schema vs. app SQL. `app/sql/*.sql` uses `{{analytics_schema}}` (default `dbt_dev_analytics`) instead of the stale `dbt_dev`.
 5. 🟠 **`app/utils/dbt_utils.py` calls `run_dbt_build()` at import.** Importing it shells out to `dbt build`. Nothing imports it today, so this is a trap waiting to fire.
 6. 🟠 **CLI has no conversation memory.** `cli.run_cli_chat` never appends to `conversation_history`.
 7. ✅ **Fixed:** Charts disappeared after a rerun. The history loop in `streamlit_app.py` now re-displays each message's `chart_path`.
 8. ✅ **Fixed:** Chart files were shared. `chart_dispatcher.create_visualization` now adds a random suffix to each PNG filename, so concurrent users no longer overwrite each other's charts.
-9. 🟠 `build_segment_context` filters goals with the **module-global** `campaign_goals_df` instead of its `goals_df` argument (`context_builder.py:18`).
-10. 🟠 `knowledge_search.search_knowledge_base` calls `create_embedding(question)` **twice** (lines 15 and 60), so every RAG question pays for two embeddings, and the first is wasted when a category matches. A category match also ignores `limit` and fakes `similarity = 1.0`.
+9. ✅ **Fixed (Phase 2):** `build_segment_context` now filters goals with its `goals_df` argument.
+10. 🟡 `knowledge_search.search_knowledge_base`: the duplicate embedding call is fixed (Phase 2). A category match still ignores `limit` and fakes `similarity = 1.0`.
 11. 🟠 `app/sql/customer_segmentation.sql` contains **two statements** (a stray `SELECT * FROM customer_segment cs` at the end). How `pd.read_sql` handles that depends on the driver.
 12. 🟠 `customer_extract.export_customer` prints validation results but **exports anyway**. Both extract scripts write into `data/demo/`, overwriting the hosted demo's data.
 13. 🟡 Broken tests: `tools/analyst_response_format_test.py` calls `_get_response_format_instructions` with 1 argument (it needs 2). `tools/test_insight_signals.py` imports the non-existent `app.tests.insight_signals_campaign`. Every test import needs `OPENAI_API_KEY`/`OPENAI_MODEL` set because `settings.py` raises at import. `tools/` is git-ignored even though these files are tracked.
@@ -341,7 +343,7 @@ Severity is my judgement: 🔴 likely user-visible breakage · 🟠 wrong or was
 19. 🟡 Heavy import-time side effects: env validation, directory creation, data loading, 3 OpenAI clients, and the unused signal computation.
 
 ### Hard-coded values
-20. RAG model `"gpt-5.5"`, embedding model, `limit=3`, `min_similarity=0.35`, `MAX_PROMPT_CHARACTERS=400_000`, last-5 history, chart colours/paths, campaign ID regex `CMP-\d+(-\d+)*`, segment names in validators, `dbt_dev` schema in SQL, and example campaign IDs in the sidebar. The executive-summary prompt embeds real numbers from one campaign as its example, which can anchor outputs.
+20. RAG model `"gpt-5.5"`, embedding model, `limit=3`, `min_similarity=0.35`, `MAX_PROMPT_CHARACTERS=400_000`, last-5 history, chart colours/paths, campaign ID regex `CMP-\d+(-\d+)*`, segment names in validators, example campaign IDs in the sidebar. The executive-summary prompt embeds real numbers from one campaign as its example, which can anchor outputs.
 
 ### Security
 21. **SQL injection:** none found. All app SQL is static, and RAG queries use bound parameters. `tools/check_schema.py` uses f-string table names, but they come from a hard-coded dict.
@@ -352,10 +354,10 @@ Severity is my judgement: 🔴 likely user-visible breakage · 🟠 wrong or was
 24. Scope terms are defined three times (`router.py`, `analyst_chat.SCOPE_TERMS`, `analyst_service.scope_terms`). The question is routed twice (service + `ask_analyst`). Context is built in two places. The executive-summary flow is duplicated between `streamlit_app.py` and `cli.py`. The campaign-metadata block is copy-pasted across 3 context builders. The four chart functions are near-duplicates, and `chart_builder`/`chart_dispatcher` repeat the same if-chain.
 25. Unused: `customer_summary` mart; `validate_customer_data` and `validate_segmentation_data`; `cosine_similarity`; `AnalystResult.chart_title`; `SessionState.active_segment`; unused imports in `streamlit_app.py`/`cli.py`; `pie/line/scatter` detection that always errors; commented-out "conversions" metric; `openpyxl`/`PyYAML`/`requests`; `data/demo/customer_extract.csv` (no producer in repo); empty `dvdrental_backup.sql`; `logs/dbt.log`; boilerplate `marketing_analytics_dbt/README.md`.
 26. README drift: says `python -m app.main` (the entry is the root `main.py`), lists `campaign_performance_summary.sql` (the file is `campaign_summary.sql`), mentions `app/generation/` (doesn't exist), says psycopg2 (code uses psycopg 3), and its `ai.knowledge_chunks` DDL lacks the `category` column the code writes and reads. `changelog.md` stops at v0.7.0.
-27. Data / docs inconsistencies: `campaign_goals.csv` has the typo "Absolue Lift". `metrics.md` says absolute lift / conversion rate are "available in segment_performance_summary" only, but the campaign mart also has them. `segments.md` describes 4 market segments, while `customer_segmentation.sql` defines 10 `primary_segment` values. The validator's `expected_segment` comments out "Category Expansion", which the SQL still assigns, so it would report mismatches.
+27. Data / docs inconsistencies: `metrics.md` says absolute lift / conversion rate are "available in segment_performance_summary" only, but the campaign mart also has them. `segments.md` describes 4 market segments, while `customer_segmentation.sql` defines 10 `primary_segment` values. The validator's `expected_segment` comments out "Category Expansion", which the SQL still assigns, so it would report mismatches.
 28. Router fragility: substring matching (`"vs"` inside other words, `"better"` triggers comparison terms, broad `"what are"`/`"tell me"` RAG triggers). The order of rules determines meaning, and only 2 of the routing tests are enabled.
 29. Prompt contradictions: `executive_summary.md` says "do not use headings" but specifies `#`/`##` sections. `STANDARD_RESPONSE_FORMAT` forbids emphasis while the insight format requires `##` headings. Typo "whe" in `DERIVED_SIGNAL_RESPONSE_FORMAT`.
-30. `requirements.txt` is UTF-16 LE with CRLF line endings and fully unpinned, which is a reproducibility risk for the hosted app.
+30. ✅ **Fixed (Phase 2):** `requirements.txt` is now UTF-8. Still fully unpinned, which is a reproducibility risk for the hosted app.
 31. In the Streamlit sidebar, typing a different campaign ID in chat changes the "Active Campaign" badge but not the selectbox value, so the two can disagree.
 
 ---
