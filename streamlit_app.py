@@ -7,6 +7,7 @@ from app.ai.llm_client_api import generate_analysis
 from app.config.settings import SessionState
 from app.services.analyst_service import process_analyst_question
 from datetime import datetime
+from pathlib import Path
 
 
 st.set_page_config(page_title="AI Marketing Analytics Assistant",
@@ -251,6 +252,13 @@ st.write(
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
+
+        # Re-display charts from earlier answers; otherwise they disappear
+        # on every rerun. User messages have no chart_path key.
+        chart_path = message.get("chart_path")
+
+        if chart_path and Path(chart_path).exists():
+            st.image(chart_path)
 
 question = st.chat_input(
     "Ask a business question about campaign performance..."

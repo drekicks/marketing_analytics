@@ -324,8 +324,8 @@ Severity is my judgement: 🔴 likely user-visible breakage · 🟠 wrong or was
 4. 🔴 **dbt schema vs. app SQL.** The marts build into `<target>_analytics` (no `generate_schema_name` macro), while `app/sql/*.sql` reads `dbt_dev.*`. One of them is stale.
 5. 🟠 **`app/utils/dbt_utils.py` calls `run_dbt_build()` at import.** Importing it shells out to `dbt build`. Nothing imports it today, so this is a trap waiting to fire.
 6. 🟠 **CLI has no conversation memory.** `cli.run_cli_chat` never appends to `conversation_history`.
-7. 🟠 **Charts disappear after a rerun.** The history loop in `streamlit_app.py` (~251) only calls `st.markdown(message["content"])` and ignores `chart_path`.
-8. 🟠 **Chart files are shared.** Fixed filenames in `output/charts/` mean concurrent users on the hosted app overwrite each other's PNGs.
+7. ✅ **Fixed:** Charts disappeared after a rerun. The history loop in `streamlit_app.py` now re-displays each message's `chart_path`.
+8. ✅ **Fixed:** Chart files were shared. `chart_dispatcher.create_visualization` now adds a random suffix to each PNG filename, so concurrent users no longer overwrite each other's charts.
 9. 🟠 `build_segment_context` filters goals with the **module-global** `campaign_goals_df` instead of its `goals_df` argument (`context_builder.py:18`).
 10. 🟠 `knowledge_search.search_knowledge_base` calls `create_embedding(question)` **twice** (lines 15 and 60), so every RAG question pays for two embeddings, and the first is wasted when a category matches. A category match also ignores `limit` and fakes `similarity = 1.0`.
 11. 🟠 `app/sql/customer_segmentation.sql` contains **two statements** (a stray `SELECT * FROM customer_segment cs` at the end). How `pd.read_sql` handles that depends on the driver.

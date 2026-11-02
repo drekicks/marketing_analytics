@@ -15,7 +15,8 @@ python main.py                         # CLI version (README's `python -m app.ma
 python -m app.extracts.campaign_extract     # validate + re-export data/demo/*.csv (overwrites demo data)
 python -m app.utils.knowledge_ingestion     # rebuild ai.knowledge_chunks embeddings (TRUNCATEs table)
 cd marketing_analytics_dbt && dbt build     # needs ~/.dbt/profiles.yml profile `marketing_analytics_dbt`
-pytest tools/                               # ad-hoc tests; some are broken (see ARCHITECTURE.md §9)
+pytest tests/                               # real test suite (conftest sets dummy OpenAI env + CSV mode)
+                                            # tools/ holds older ad-hoc tests; some are broken
 ```
 
 Env (`.env` at repo root): `OPENAI_API_KEY` and `OPENAI_MODEL` are required at import time.
