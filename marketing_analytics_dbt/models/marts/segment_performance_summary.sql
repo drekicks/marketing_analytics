@@ -71,7 +71,7 @@ c2 as
 (
 select *,
        (test_conversion_rate-control_conversion_rate)*100 absolute_lift,
-       control_revenue_per_customer*test_audience expcted_revenue,
+       control_revenue_per_customer*test_audience expected_revenue,
        test_revenue-(control_revenue_per_customer*test_audience) incremental_revenue
 from combined
 ), c3 as

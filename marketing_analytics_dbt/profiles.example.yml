@@ -1,0 +1,39 @@
+# Example dbt profile for this project.
+#
+# Copy the `neon` output below into ~/.dbt/profiles.yml under your existing
+# `marketing_analytics_dbt` profile (keep your current local output as-is).
+# Credentials are read from environment variables, never stored in this file.
+#
+# Build into Neon:
+#   dbt build --target neon
+#
+# With `schema: dbt_dev` and dbt's default schema naming, models land in:
+#   dbt_dev_staging    (staging views)
+#   dbt_dev_analytics  (marts + the campaign_goals seed)
+# which is the same layout as the local database.
+#
+# Seeds use the target schema plus their own config; see dbt_project.yml.
+
+marketing_analytics_dbt:
+  target: dev            # your existing local target stays the default
+  outputs:
+    dev:
+      type: postgres
+      host: localhost
+      port: 5432
+      user: "{{ env_var('LOCAL_DB_USER') }}"
+      password: "{{ env_var('LOCAL_DB_PASSWORD') }}"
+      dbname: dvdrental
+      schema: dbt_dev
+      threads: 4
+
+    neon:
+      type: postgres
+      host: "{{ env_var('NEON_DB_HOST') }}"        # e.g. ep-xxxx.us-east-2.aws.neon.tech
+      port: 5432
+      user: "{{ env_var('NEON_DB_USER') }}"
+      password: "{{ env_var('NEON_DB_PASSWORD') }}"
+      dbname: "{{ env_var('NEON_DB_NAME') }}"
+      schema: dbt_dev
+      sslmode: require
+      threads: 4
