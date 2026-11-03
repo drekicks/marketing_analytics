@@ -51,36 +51,49 @@ flowchart LR
     C --> D
     D --> E
     E --> F
+    E -.->|customer SQL| D
+    D -.->|validated read-only query| B
+    D -->|charts| F
 ```
 
-Data Layer
-- PostgreSQL
-- CSV Demo Data
+The dotted arrows are the customer text-to-SQL loop: the AI layer writes a query, and the application validates it
+and runs it as a read-only database role against the business-ready layer.
+
+Data Sources
+- Neon (serverless PostgreSQL): dvdrental sample data plus the campaign tables
+- Fivetran replication from Neon (logical publication)
 
 Business-Ready Data Layer
 - dbt Staging Models
 - dbt Marts
+- dbt Seed: Campaign Goals
 - Data Quality Tests
 - Business Rules
 - SQL Extracts / Retrieval Queries
+- CSV Snapshots of the Marts (offline fallback)
+- Read-Only Role for Customer Queries
 
 Knowledge / RAG Layer
 - Markdown Business Knowledge
 - Chunking
 - Embedding
 - pgvector
-- Knowledge Retriebal
+- Knowledge Retrieval
 
 Application / Orchestration Layer
+- Analyst Service (orchestrator)
 - Router
 - Context Builder
 - Session Manager
-- Visualization Services
+- Visualization Service
 - RAG Service
+- Customer SQL Service + SQL Validator (sqlglot)
+- User-Facing Error Handling
 
 AI Layer
 - Prompt Templates
 - OpenAI API
+- Structured Output (customer SQL)
 
 Presentation Layer
 - CLI
