@@ -570,6 +570,7 @@ Version sequence:
 - v0.9.0  Visual analytics
 - v1.0.0  Hosted Streamlit portfolio demo
 - v1.1.0  Business-Ready Data + RAG
+- v1.2.0  Neon data layer + guarded text-to-SQL for customer questions
 
 Normal development changes should use descriptive commit messages. Tags should be reserved for meaningful project versions.
 
