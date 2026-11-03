@@ -33,6 +33,17 @@ jobs:
       NEON_DB_USER: ${{ secrets.DB_USER }}
       NEON_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
     steps:
+      - name: Check Neon secrets
+        run: |
+          missing=()
+          for name in DB_HOST DB_NAME DB_USER DB_PASSWORD; do
+            if [ -z "${!name}" ]; then missing+=("$name"); fi
+          done
+          if [ ${#missing[@]} -gt 0 ]; then
+            echo "::error::Missing secrets: ${missing[*]}. Add them under Settings > Secrets and variables > Actions > Repository secrets (not Variables, not an Environment)."
+            exit 1
+          fi
+
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5

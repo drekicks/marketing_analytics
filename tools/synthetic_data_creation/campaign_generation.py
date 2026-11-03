@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import os
 import random
 import re
 from dataclasses import dataclass
@@ -474,6 +475,13 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--run-date", type=date.fromisoformat, default=date.today(),
                         help="Pretend today is this date (YYYY-MM-DD).")
     args = parser.parse_args(argv)
+
+    missing = [name for name in ("DB_HOST", "DB_NAME", "DB_USER") if not os.getenv(name)]
+    if missing:
+        raise ValueError(
+            f"Missing database settings: {', '.join(missing)}. Set them in .env locally, "
+            "or as repository secrets for the GitHub workflow."
+        )
 
     from app.utils.database import get_database_engine
 
