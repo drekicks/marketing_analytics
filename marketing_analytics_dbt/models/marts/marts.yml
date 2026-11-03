@@ -138,3 +138,33 @@ models:
       - name: offer_cost
         description: >
           Offer-related cost incurred when a TEST customer converts.
+
+  - name: campaign_goals
+    description: >
+      Planned objectives, offer, channel, budget and KPIs for each campaign.
+      One row per campaign. Built from raw public.campaign_goals, which
+      tools/synthetic_data_creation/campaign_generation.py writes; the app adds
+      this business context to every campaign, segment and insight answer.
+
+    columns:
+      - name: campaign_id
+        description: Unique identifier for a campaign.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: campaign_goal
+        description: Business objective of the campaign.
+        data_tests:
+          - not_null
+
+      - name: target_kpi
+        description: Primary measure of campaign success.
+        data_tests:
+          - not_null
+
+      - name: secondary_kpi
+        description: Secondary measure used to evaluate efficiency and tradeoffs.
+
+      - name: budget
+        description: Planned campaign budget in dollars.

@@ -1,0 +1,14 @@
+# dbt profile for CI (weekly_campaign.yml). Credentials come from repo secrets.
+marketing_analytics_dbt:
+  target: neon
+  outputs:
+    neon:
+      type: postgres
+      host: "{{ env_var('NEON_DB_HOST') }}"
+      port: 5432
+      user: "{{ env_var('NEON_DB_USER') }}"
+      password: "{{ env_var('NEON_DB_PASSWORD') }}"
+      dbname: "{{ env_var('NEON_DB_NAME') }}"
+      schema: dbt_dev
+      sslmode: require
+      threads: 4

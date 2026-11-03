@@ -57,7 +57,7 @@ def load_postgres_data() -> tuple[
     """
     Load application datasets from the dbt marts in PostgreSQL (Neon).
 
-    Every dataset, including campaign goals (a dbt seed), comes from the
+    Every dataset, including campaign goals (a dbt model), comes from the
     schema set by ANALYTICS_SCHEMA. Results are cached for an hour so
     Streamlit reruns don't re-query the database.
     """

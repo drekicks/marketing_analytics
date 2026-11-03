@@ -1,4 +1,4 @@
--- Campaign goals, budget and KPIs (dbt seed: marketing_analytics_dbt/seeds/campaign_goals.csv).
+-- Campaign goals, budget and KPIs (dbt model marts/campaign_goals.sql, built from raw public.campaign_goals).
 select
     campaign_id,
     campaign_name,
