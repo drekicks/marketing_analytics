@@ -168,3 +168,55 @@ def test_main_fails_clearly_without_db_settings(monkeypatch):
         monkeypatch.delenv(name, raising=False)
     with pytest.raises(ValueError, match="DB_HOST, DB_NAME, DB_USER"):
         cg.main(["--dry-run"])
+
+
+class _FakeResult:
+    def __init__(self, row):
+        self._row = row
+
+    def first(self):
+        return self._row
+
+
+class _FakeConnection:
+    def __init__(self, existing_tables=()):
+        self.statements = []
+        self.existing_tables = existing_tables
+
+    def execute(self, statement, params=None):
+        sql = str(statement)
+        self.statements.append(sql)
+        found = any(f"public.{t} " in sql for t in self.existing_tables) and sql.startswith("select")
+        return _FakeResult((1,) if found else None)
+
+
+class _FakeEngine:
+    def __init__(self, connection):
+        self.connection = connection
+
+    def begin(self):
+        engine = self
+
+        class _Ctx:
+            def __enter__(self):
+                return engine.connection
+
+            def __exit__(self, *exc):
+                return False
+
+        return _Ctx()
+
+
+def test_load_campaign_is_insert_only(campaign):
+    """Neon publishes campaign_results without a replica identity, so DELETE fails there."""
+    connection = _FakeConnection()
+    cg.load_campaign(_FakeEngine(connection), campaign)
+    assert not any(sql.lower().startswith("delete") for sql in connection.statements)
+    assert sum(sql.startswith("insert into public.") for sql in connection.statements) == 2
+
+
+def test_load_campaign_refuses_existing_id(campaign):
+    connection = _FakeConnection(existing_tables=("campaign_results",))
+    with pytest.raises(ValueError, match="already exists in public.campaign_results"):
+        cg.load_campaign(_FakeEngine(connection), campaign)
+    assert not any(sql.startswith("insert") for sql in connection.statements)
