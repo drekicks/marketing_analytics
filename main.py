@@ -1,10 +1,11 @@
 from app.ui.campaign_selector import select_campaign
-from app.utils.data_loader import unique_campaigns_df
+from app.utils.data_loader import get_campaign_data
 from app.config.settings import SessionState
 from app.ui.cli import run_cli_chat,show_executive_summary
 
 def main() -> None:
     # Load initial application data and establish the default campaign.
+    unique_campaigns_df = get_campaign_data().unique_campaigns
     valid_campaign_ids = {
         str(value).strip()
         for value in unique_campaigns_df["campaign_id"].dropna()

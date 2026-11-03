@@ -2,7 +2,7 @@
 Shared pytest setup.
 
 app.config.settings raises at import time when the OpenAI settings are
-missing, and app.utils.data_loader loads data at import time. Dummy values
+missing, and app.utils.data_loader reads DATA_SOURCE at import time. Dummy values
 and CSV mode let the test suite import the app without real credentials or
 a database. No test makes a real OpenAI call.
 """

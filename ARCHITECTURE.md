@@ -64,7 +64,7 @@ marketing_analytics/
 │   │   ├── segment_charts.py     matplotlib bar charts by segment (revenue, test-vs-control conversion rate)
 │   │   └── chart_builder.py      build_visualization_context(): the same chart data as text for the LLM
 │   ├── utils/
-│   │   ├── data_loader.py        Loads the 5 DataFrames at import (CSV or Postgres, via DATA_SOURCE)
+│   │   ├── data_loader.py        get_campaign_data(): cached DataFrames per request (CSV or Postgres, via DATA_SOURCE)
 │   │   ├── database.py           get_database_engine(): SQLAlchemy engine from DB_* env vars
 │   │   ├── file_utils.py         load_sql_extracts() runs app/sql/*.sql → DataFrames; file_export() writes CSVs
 │   │   ├── data_validation.py    pandas data-quality checks for the extract scripts
@@ -111,13 +111,13 @@ marketing_analytics/
 
 ### 3a. App startup (on every Streamlit rerun, but cached)
 
-1. `streamlit_app.py` imports `app.utils.data_loader`. Importing it **does real work**:
+1. `streamlit_app.py` imports the app, then calls `get_campaign_data()` on every rerun. Importing **does real work**:
    - `app/config/settings.py` runs `load_dotenv()` and raises `RuntimeError` if `OPENAI_API_KEY` or `OPENAI_MODEL` is missing.
    - `app/config/paths.py` creates `data/` and `output/`.
-   - `data_loader.py` reads `DATA_SOURCE` (default `"csv"`):
+   - `data_loader.py` reads `DATA_SOURCE` (default `"csv"`); `get_campaign_data()` dispatches on it:
      - `csv` → `load_csv_data()` (wrapped in `@st.cache_data`) reads `data/demo/campaign_summary.csv`, `campaign_segment_summary.csv`, `campaign_goals.csv`, `campaign_analytic_layer.csv`, `unique_campaigns.csv`.
-     - `postgres` → `load_postgres_data()` (`@st.cache_data(ttl=3600)`) → `file_utils.load_sql_extracts([...])` runs five `app/sql/*.sql` files, including goals from the `campaign_goals` model. `{{analytics_schema}}` is replaced with `ANALYTICS_SCHEMA` (default `dbt_dev_analytics`).
-   - The result is four module-level globals: `summary_df`, `segment_df`, `campaign_goals_df`, `unique_campaigns_df`. Customer-level data is not loaded into memory; customer questions query Neon directly (step 7d).
+     - `postgres` → `load_postgres_data()` (`@st.cache_data(ttl=POSTGRES_CACHE_TTL_SECONDS)`, 10 minutes) → `file_utils.load_sql_extracts([...])` runs five `app/sql/*.sql` files, including goals from the `campaign_goals` model. `{{analytics_schema}}` is replaced with `ANALYTICS_SCHEMA` (default `dbt_dev_analytics`).
+   - The result is a `CampaignData` (`summary`, `segment`, `goals`, `unique_campaigns`). Consumers call `get_campaign_data()` inside their functions, never at import: module-level copies never refresh in a long-running app, so new weekly campaigns would not appear until a restart. New campaigns show up within the TTL, or at once via the sidebar **Refresh Data** button (`clear_campaign_data_cache()`). Customer-level data is not loaded into memory; customer questions query Neon directly (step 7d).
 2. Importing `app/ai/llm_client_api.py`, `app/services/rag_service.py`, and `app/utils/embedding_service.py` each creates its own `OpenAI(...)` client.
 3. *(Removed in Phase 2: `insight_signals.py` used to compute unused signals at import time.)*
 4. `streamlit_app.py` initialises `st.session_state`: `analytics_session` (a `SessionState`), `executive_summary`, `messages` (visible chat), `analyst_history` (Q/A pairs sent to the LLM). It also builds `campaign_options`, sets the first campaign as active, and renders the sidebar selector (`handle_campaign_change` clears chat and summary when the campaign changes).

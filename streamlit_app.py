@@ -12,23 +12,31 @@ st.set_page_config(page_title="AI Marketing Analytics Assistant",
 # -------------------------------------------------------------------
 # START-UP
 #
-# Importing the app validates settings and loads campaign data (from Neon
-# in postgres mode). Show a readable message instead of a traceback if that
-# fails; reloading the page retries, because failed loads aren't cached.
+# Importing the app validates settings; campaign data (from Neon in postgres
+# mode) is loaded on every rerun through a short-lived cache, so new weekly
+# campaigns appear without restarting the app. Show a readable message
+# instead of a traceback if either fails; reloading the page retries,
+# because failed loads aren't cached.
 # -------------------------------------------------------------------
 
 try:
-    from app.utils.data_loader import campaign_goals_df, summary_df, unique_campaigns_df
+    from app.utils.data_loader import clear_campaign_data_cache, get_campaign_data
     from app.ai.context_builder import build_campaign_context
     from app.ai.prompt_builder import build_prompt
     from app.ai.prompt_loader import load_prompt
     from app.ai.llm_client_api import generate_analysis
     from app.config.settings import SessionState
     from app.services.analyst_service import process_analyst_question
+
+    campaign_data = get_campaign_data()
 except Exception as startup_error:
     st.title("AI Marketing Analytics Assistant")
     st.error(f"The app couldn't start. {user_message(startup_error)}")
     st.stop()
+
+summary_df = campaign_data.summary
+campaign_goals_df = campaign_data.goals
+unique_campaigns_df = campaign_data.unique_campaigns
 
 # -------------------------------------------------------------------
 # PAGE HEADER
@@ -194,6 +202,14 @@ with st.sidebar:
     ):
         st.session_state.messages = []
         st.session_state.analyst_history = []
+        st.rerun()
+
+    if st.button(
+            "Refresh Data",
+            use_container_width=True,
+            help="Reload campaigns from the database (e.g. after the weekly campaign run).",
+    ):
+        clear_campaign_data_cache()
         st.rerun()
 
     st.divider()

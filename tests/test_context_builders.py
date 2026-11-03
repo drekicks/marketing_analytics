@@ -13,12 +13,13 @@ from app.ai.context_builder import (
     build_segment_context,
 )
 from app.config.paths import DEMO_DATA_DIR
-from app.utils.data_loader import (
-    campaign_goals_df,
-    segment_df,
-    summary_df,
-    unique_campaigns_df,
-)
+from app.utils.data_loader import get_campaign_data
+
+_data = get_campaign_data()
+summary_df = _data.summary
+segment_df = _data.segment
+campaign_goals_df = _data.goals
+unique_campaigns_df = _data.unique_campaigns
 
 CAMPAIGN_IDS = sorted(unique_campaigns_df["campaign_id"].astype(str).str.strip())
 
