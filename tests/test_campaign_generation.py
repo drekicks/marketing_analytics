@@ -160,3 +160,11 @@ def test_runs_are_random_unless_seeded(customers, rates):
     d = cg.generate_campaign(customers, rates, [], RUN_DATE, seed=99)
     strip = lambda rows: [{k: v for k, v in r.items() if k != "updated_at"} for r in rows]
     assert strip(c.results) == strip(d.results) and c.goal == d.goal
+
+
+def test_main_fails_clearly_without_db_settings(monkeypatch):
+    import app.utils.database  # loads .env first, so clearing below wins
+    for name in ("DB_HOST", "DB_NAME", "DB_USER"):
+        monkeypatch.delenv(name, raising=False)
+    with pytest.raises(ValueError, match="DB_HOST, DB_NAME, DB_USER"):
+        cg.main(["--dry-run"])
