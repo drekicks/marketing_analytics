@@ -66,7 +66,7 @@ Data Sources
 Business-Ready Data Layer
 - dbt Staging Models
 - dbt Marts
-- dbt Seed: Campaign Goals
+- dbt Model: Campaign Goals (raw `public.campaign_goals`, written by the weekly campaign generator)
 - Data Quality Tests
 - Business Rules
 - SQL Extracts / Retrieval Queries
@@ -295,7 +295,7 @@ marketing_analytics/
 │   ├── visualization/        matplotlib charts and their text equivalents
 │   └── extracts/             validated CSV exports (Tableau + offline fallback)
 ├── prompts/                  prompt templates
-├── marketing_analytics_dbt/  dbt project (staging, marts, seeds, tests, knowledge docs)
+├── marketing_analytics_dbt/  dbt project (staging, marts, tests, knowledge docs)
 ├── data/demo/                CSV snapshots of the marts
 ├── tests/                    pytest suite
 ├── requirements.txt          app dependencies

@@ -9,10 +9,9 @@
 #
 # With `schema: dbt_dev` and dbt's default schema naming, models land in:
 #   dbt_dev_staging    (staging views)
-#   dbt_dev_analytics  (marts + the campaign_goals seed)
+#   dbt_dev_analytics  (marts, including campaign_goals)
 # which is the same layout as the local database.
 #
-# Seeds use the target schema plus their own config; see dbt_project.yml.
 
 marketing_analytics_dbt:
   target: dev            # your existing local target stays the default

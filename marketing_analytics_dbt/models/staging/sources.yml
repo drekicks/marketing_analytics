@@ -12,3 +12,5 @@ sources:
       - name: campaign_results
       - name: customer_segment
       - name: address
+      - name: campaign_goals
+        description: One row per campaign; written by tools/synthetic_data_creation/campaign_generation.py.

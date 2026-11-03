@@ -81,7 +81,7 @@ marketing_analytics/
 │   │   ├── campaign_summary.sql          → {{analytics_schema}}.campaign_performance_summary
 │   │   ├── campaign_segment_summary.sql  → {{analytics_schema}}.segment_performance_summary
 │   │   ├── analytic_layer.sql            → {{analytics_schema}}.customer_analytic_layer
-│   │   ├── campaign_goals.sql            → {{analytics_schema}}.campaign_goals (dbt seed)
+│   │   ├── campaign_goals.sql            → {{analytics_schema}}.campaign_goals (dbt model)
 │   │   ├── unique_campaigns_list.sql     → {{analytics_schema}}.campaign_performance_summary
 │   │   ├── campaign_tableau_summary.sql  → raw campaign_results ⨝ customer_segment (Tableau only)
 │   │   └── customer_segmentation.sql     → raw dvdrental tables; builds the segmentation (Tableau / customer_segment)
@@ -97,7 +97,7 @@ marketing_analytics/
 │   └── knowledge/                RAG source documents (metrics, segments, data products, data quality)
 ├── data/demo/                    CSV snapshots, the default data source for the app
 ├── tableau/Summit Marketing.twb  Tableau workbook (points at local CSVs on the author's Windows machine)
-├── tools/                        Ad-hoc tests/scripts (NOTE: tools/ is in .gitignore but these files are tracked)
+├── tools/                        Ad-hoc scripts; synthetic_data_creation/ holds the weekly campaign generator
 ├── assets/                       README screenshots
 ├── logs/dbt.log                  Stray dbt log from `dbt init` / `dbt debug`
 ├── .idea/                        PyCharm project files (tracked)
@@ -116,7 +116,7 @@ marketing_analytics/
    - `app/config/paths.py` creates `data/` and `output/`.
    - `data_loader.py` reads `DATA_SOURCE` (default `"csv"`):
      - `csv` → `load_csv_data()` (wrapped in `@st.cache_data`) reads `data/demo/campaign_summary.csv`, `campaign_segment_summary.csv`, `campaign_goals.csv`, `campaign_analytic_layer.csv`, `unique_campaigns.csv`.
-     - `postgres` → `load_postgres_data()` (`@st.cache_data(ttl=3600)`) → `file_utils.load_sql_extracts([...])` runs five `app/sql/*.sql` files, including goals from the `campaign_goals` seed. `{{analytics_schema}}` is replaced with `ANALYTICS_SCHEMA` (default `dbt_dev_analytics`).
+     - `postgres` → `load_postgres_data()` (`@st.cache_data(ttl=3600)`) → `file_utils.load_sql_extracts([...])` runs five `app/sql/*.sql` files, including goals from the `campaign_goals` model. `{{analytics_schema}}` is replaced with `ANALYTICS_SCHEMA` (default `dbt_dev_analytics`).
    - The result is four module-level globals: `summary_df`, `segment_df`, `campaign_goals_df`, `unique_campaigns_df`. Customer-level data is not loaded into memory; customer questions query Neon directly (step 7d).
 2. Importing `app/ai/llm_client_api.py`, `app/services/rag_service.py`, and `app/utils/embedding_service.py` each creates its own `OpenAI(...)` client.
 3. *(Removed in Phase 2: `insight_signals.py` used to compute unused signals at import time.)*
@@ -154,9 +154,9 @@ marketing_analytics/
 ## 4. Data layer (dbt)
 
 ### Sources (`models/staging/sources.yml`)
-Source `dvdrental`, with schema `public` on Postgres and `RAW` on Snowflake. Tables: `customer`, `rental`, `payment`, `campaign_results`, `customer_segment`, `address` (`address` is declared but unused).
+Source `dvdrental`, with schema `public` on Postgres and `RAW` on Snowflake. Tables: `customer`, `rental`, `payment`, `campaign_results`, `customer_segment`, `address`, `campaign_goals` (`address` is declared but unused).
 
-- `campaign_results`: synthetic, one row per customer × campaign, with raw column names `treatment_grp`, `contacted_flg`, `response_flg`, `cnvrsn_flg`, `cmpgn_rvn`, costs, dates, `channel`, `updated_at`. **(inferred)** Loaded by a script that is not in the repo (`tools/check_schema.py` mentions a missing `generate_synthetic_data.py`).
+- `campaign_results`: synthetic, one row per customer × campaign, with raw column names `treatment_grp`, `contacted_flg`, `response_flg`, `cnvrsn_flg`, `cmpgn_rvn`, costs, dates, `channel`, `updated_at`. Written weekly by `tools/synthetic_data_creation/campaign_generation.py` (GitHub Actions `.github/workflows/weekly_campaign.yml`): one random campaign of ≥ 5,000 customers sampled proportionally from `customer_segment`, 80/20 TEST/CONTROL, conversion rates from `tools/synthetic_data_creation/conversion_rates.csv` (baseline jittered ±20% and lift ±50% per campaign), plus its goal row in `campaign_goals`. Then `dbt build --target neon`.
 - `customer_segment`: **(inferred)** a table you created from the output of `app/sql/customer_segmentation.sql`. `stg_customer_segment` reads `market_segment`, `primary_segment`, and the `is_*` flags, which are exactly the columns that query produces. No code in the repo writes this table.
 
 ### Staging (views, `+schema: staging`)
@@ -188,11 +188,11 @@ Tests: generic `not_null`/`unique`/`relationships` in `staging.yml` and `marts.y
 
 ### What the app actually queries
 - **Default (CSV mode):** no database at all for analytics. It reads `data/demo/*.csv`, which are snapshots exported by `app/extracts/campaign_extract.py`.
-- **Postgres mode (Neon):** `dbt_dev_analytics.campaign_performance_summary` (also the campaign list), `.segment_performance_summary`, `.customer_analytic_layer`, and `.campaign_goals` (seed). The schema comes from `ANALYTICS_SCHEMA`.
+- **Postgres mode (Neon):** `dbt_dev_analytics.campaign_performance_summary` (also the campaign list), `.segment_performance_summary`, `.customer_analytic_layer`, and `.campaign_goals`. The schema comes from `ANALYTICS_SCHEMA`.
 - **Always (RAG), in all modes including CSV:** `ai.knowledge_chunks` (pgvector) in Neon, written by `app/utils/knowledge_ingestion.py`.
-- **Goals:** the dbt seed `marketing_analytics_dbt/seeds/campaign_goals.csv` → `dbt_dev_analytics.campaign_goals` in postgres mode. CSV mode uses the exported copy `data/demo/campaign_goals.csv`.
+- **Goals:** raw `public.campaign_goals` (written by `tools/synthetic_data_creation/campaign_generation.py`; one-time DDL in `create_campaign_goals_table.sql`) → dbt model `marts/campaign_goals.sql` → `dbt_dev_analytics.campaign_goals` in postgres mode. dbt test `assert_campaign_goals_coverage` fails if a campaign has no goal. CSV mode uses the exported copy `data/demo/campaign_goals.csv`.
 
-> ✅ Schema: `dbt_project.yml` sets `+schema: staging/analytics` (models and seeds). With dbt's default `generate_schema_name` and target schema `dbt_dev`, everything the app reads lands in `dbt_dev_analytics`, locally and in Neon (`--target neon`, see `profiles.example.yml`). The demo CSVs use the same column names as the marts (checked by `tests/test_context_builders.py`).
+> ✅ Schema: `dbt_project.yml` sets `+schema: staging/analytics` (models). With dbt's default `generate_schema_name` and target schema `dbt_dev`, everything the app reads lands in `dbt_dev_analytics`, locally and in Neon (`--target neon`, see `profiles.example.yml`). The demo CSVs use the same column names as the marts (checked by `tests/test_context_builders.py`).
 
 ---
 
@@ -306,7 +306,7 @@ flowchart TD
     end
 
     MARTS -->|app/sql/*.sql| EXT --> CSV[(data/demo/*.csv)]
-    GOALS[(campaign_goals seed / data/demo copy)]
+    GOALS[(campaign_goals model / data/demo copy)]
 
     subgraph App["Python app"]
         DL[data_loader.py<br/>DATA_SOURCE=csv or postgres]
@@ -400,7 +400,7 @@ Severity is my judgement: 🔴 likely user-visible breakage · 🟠 wrong or was
 2. **dbt target:** What `schema` does your `profiles.yml` target use, and where do the marts actually land (`dbt_dev` vs `dbt_dev_analytics`)? Should the app read the marts or keep using CSV snapshots?
 3. **Column names:** Which naming is canonical, the dbt mart names (`incremental_revenue`, `segment_revenue_per_conversion`) or the demo CSV names (`incremental_rev`, `segment_rpr`)? Can I regenerate the demo CSVs?
 4. **`customer_segment` table and `campaign_results`:** How are these created and loaded (scripts outside the repo)? Should that become a dbt model/seed?
-5. **Campaign goals:** Should `campaign_goals.csv` become a dbt seed or table, or stay a CSV?
+5. **Campaign goals:** ✅ Resolved: goals live in raw `public.campaign_goals`, exposed by the `campaign_goals` dbt model.
 6. **New features:** Do you want text-to-SQL (the LLM generating queries against Neon), or keep the current "pre-computed context" design? This is the biggest architectural fork.
 7. **Model choice:** What is `OPENAI_MODEL` set to, and should RAG use it instead of the hard-coded `gpt-5.5`?
 8. **Is the CLI still a supported interface,** or is Streamlit the only target going forward?

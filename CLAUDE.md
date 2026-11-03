@@ -15,6 +15,7 @@ streamlit run streamlit_app.py         # web app (hosted demo entry point)
 python main.py                         # CLI version (README's `python -m app.main` is wrong)
 python -m app.extracts.campaign_extract     # validate + re-export data/demo/*.csv from the marts (overwrites demo data)
 python -m app.utils.knowledge_ingestion     # rebuild ai.knowledge_chunks embeddings (TRUNCATEs table)
+python -m tools.synthetic_data_creation.campaign_generation --dry-run   # weekly random campaign → Neon raw tables (drop --dry-run to load)
 cd marketing_analytics_dbt && dbt build --target neon   # see profiles.example.yml; NEON_DB_* env vars
 pytest                                      # from the repo root; pytest.ini adds the root to sys.path
                                             # (conftest sets dummy OpenAI env + CSV mode; no network)
@@ -43,6 +44,8 @@ See `.env.example`.
   (customer-level data is queried from Neon, not loaded).
 - `app/visualization/`: matplotlib PNG charts (`chart_dispatcher`) and their text equivalents (`chart_builder`).
 - `prompts/*.md`: prompt templates using `{{placeholder}}` syntax (filled by `app/ai/prompt_builder.py`).
+- `tools/synthetic_data_creation/campaign_generation.py`: weekly synthetic campaign generator (results + exactly one goal per campaign
+  into `public.campaign_results` / `public.campaign_goals`); scheduled by `.github/workflows/weekly_campaign.yml`.
 - `marketing_analytics_dbt/`: dbt project. `knowledge/*.md` holds the RAG source docs (split on `#`/`##` headings).
 
 ## Conventions noticed

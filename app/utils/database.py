@@ -10,7 +10,7 @@ from sqlalchemy.engine import URL, Engine
 env_path = Path(__file__).resolve().parent.parent.parent / ".env"
 load_dotenv(dotenv_path=env_path)
 
-# Schema that holds the dbt marts and seeds the app reads
+# Schema that holds the dbt marts the app reads
 # (dbt target schema "dbt_dev" + the "analytics" custom schema).
 DEFAULT_ANALYTICS_SCHEMA = "dbt_dev_analytics"
 

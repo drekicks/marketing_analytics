@@ -38,11 +38,6 @@ models:
     marts:
       +schema: analytics
       +materialized: table
-seeds:
-  marketing_analytics_dbt:
-    # Keep reference data next to the marts the app reads (dbt_dev_analytics).
-    +schema: analytics
-
     # Config indicated by + and applies to all files under models/example/
 #    example:
 #      +materialized: view
