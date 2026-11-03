@@ -1,2 +1,2 @@
 select *
-from dbt_dev.campaign_performance_summary;
+from {{analytics_schema}}.campaign_performance_summary;

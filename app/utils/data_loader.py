@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from app.config.paths import DATA_DIR, DEMO_DATA_DIR
+from app.config.paths import DEMO_DATA_DIR
 from app.utils.file_utils import load_sql_extracts
 import streamlit as st
 
@@ -12,7 +12,6 @@ DATA_SOURCE = os.getenv("DATA_SOURCE",
 
 @st.cache_data
 def load_csv_data() -> tuple[
-    pd.DataFrame,
     pd.DataFrame,
     pd.DataFrame,
     pd.DataFrame,
@@ -40,59 +39,51 @@ def load_csv_data() -> tuple[
         / "campaign_goals.csv"
     )
 
-    customer = pd.read_csv(
-        DEMO_DATA_DIR
-        / "campaign_analytic_layer.csv"
-    )
-
     unique_campaigns = pd.read_csv(
         DEMO_DATA_DIR
         / "unique_campaigns.csv"
     )
 
-    return summary, segment, goals, customer, unique_campaigns
+    return summary, segment, goals, unique_campaigns
 
 
+@st.cache_data(ttl=3600)
 def load_postgres_data() -> tuple[
-    pd.DataFrame,
     pd.DataFrame,
     pd.DataFrame,
     pd.DataFrame,
     pd.DataFrame,
 ]:
     """
-    Load application datasets from PostgreSQL for local development.
-    Campaign goals are still a csv in local development also
+    Load application datasets from the dbt marts in PostgreSQL (Neon).
+
+    Every dataset, including campaign goals (a dbt seed), comes from the
+    schema set by ANALYTICS_SCHEMA. Results are cached for an hour so
+    Streamlit reruns don't re-query the database.
     """
 
     extracts = load_sql_extracts(
         [
             "campaign_segment_summary",
             "campaign_summary",
-            "analytic_layer",
             "unique_campaigns_list",
+            "campaign_goals",
         ]
     )
 
     unique_campaigns = extracts["unique_campaigns_list"]
     segment = extracts["campaign_segment_summary"]
     summary = extracts["campaign_summary"]
-    customer = extracts["analytic_layer"]
+    goals = extracts["campaign_goals"]
 
-    goals = pd.read_csv(
-        DEMO_DATA_DIR
-        / "campaign_goals.csv"
-    )
-
-    return summary, segment, goals, customer, unique_campaigns
-
+    return summary, segment, goals, unique_campaigns
 
 
 if DATA_SOURCE == "csv":
-    summary_df, segment_df, campaign_goals_df, customer_df,unique_campaigns_df = (load_csv_data())
+    summary_df, segment_df, campaign_goals_df, unique_campaigns_df = load_csv_data()
 
 elif DATA_SOURCE == "postgres":
-    summary_df, segment_df, campaign_goals_df, customer_df, unique_campaigns_df = (load_postgres_data())
+    summary_df, segment_df, campaign_goals_df, unique_campaigns_df = load_postgres_data()
 
 else:
     raise ValueError(

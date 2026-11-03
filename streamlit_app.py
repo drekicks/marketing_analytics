@@ -1,17 +1,34 @@
-import streamlit as st
-from app.utils.data_loader import campaign_goals_df, summary_df,unique_campaigns_df
-from app.ai.context_builder import build_campaign_context
-from app.ai.prompt_builder import build_prompt
-from app.ai.prompt_loader import load_prompt
-from app.ai.llm_client_api import generate_analysis
-from app.config.settings import SessionState
-from app.services.analyst_service import process_analyst_question
 from datetime import datetime
+from pathlib import Path
 
+import streamlit as st
+
+from app.ui.errors import user_message
 
 st.set_page_config(page_title="AI Marketing Analytics Assistant",
                    page_icon="📊",
                    layout="wide")
+
+# -------------------------------------------------------------------
+# START-UP
+#
+# Importing the app validates settings and loads campaign data (from Neon
+# in postgres mode). Show a readable message instead of a traceback if that
+# fails; reloading the page retries, because failed loads aren't cached.
+# -------------------------------------------------------------------
+
+try:
+    from app.utils.data_loader import campaign_goals_df, summary_df, unique_campaigns_df
+    from app.ai.context_builder import build_campaign_context
+    from app.ai.prompt_builder import build_prompt
+    from app.ai.prompt_loader import load_prompt
+    from app.ai.llm_client_api import generate_analysis
+    from app.config.settings import SessionState
+    from app.services.analyst_service import process_analyst_question
+except Exception as startup_error:
+    st.title("AI Marketing Analytics Assistant")
+    st.error(f"The app couldn't start. {user_message(startup_error)}")
+    st.stop()
 
 # -------------------------------------------------------------------
 # PAGE HEADER
@@ -188,6 +205,7 @@ with st.sidebar:
         - Compare to CMP-2026-003
         - What are the key takeaways?
         - Chart revenue by segment.
+        - Which countries had the most converters?
         - Define customer segments.
         - Explain lapsed customers.
         """)
@@ -221,9 +239,10 @@ if st.button("Generate Executive Summary"):
             # Save the result so it remains visible after Streamlit reruns.
             st.session_state.executive_summary = analysis
 
-        except ValueError as e:
-            # Display expected business/data errors without crashing the app.
-            st.error(f"Analyst:{e}")
+        except Exception as error:
+            # Business/data errors show their own message; AI, database and
+            # unexpected errors get a friendly message (details are logged).
+            st.error(f"Analyst: {user_message(error)}")
 
 st.header("Executive Summary")
 
@@ -252,18 +271,30 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
+        # Re-display charts from earlier answers; otherwise they disappear
+        # on every rerun. User messages have no chart_path key.
+        chart_path = message.get("chart_path")
+
+        if chart_path and Path(chart_path).exists():
+            st.image(chart_path)
+
+        # Customer-level answers come from model-written SQL; show it.
+        if message.get("sql"):
+            with st.expander("SQL used"):
+                st.code(message["sql"], language="sql")
+
 question = st.chat_input(
     "Ask a business question about campaign performance..."
 )
 
 if question:
     # Save and immediately display the user's submitted question.
-    user_message = {
+    user_chat_message = {
         "role": "user",
         "content": question,
     }
 
-    st.session_state.messages.append(user_message)
+    st.session_state.messages.append(user_chat_message)
 
     with st.chat_message("user"):
         st.markdown(question)
@@ -300,13 +331,15 @@ if question:
                 str(result.chart_path)
                 if result.chart_path else None
             ),
+            "sql": result.sql,
         }
 
-    except ValueError as error:
+    except Exception as error:
         assistant_message = {
             "role": "assistant",
-            "content": f"Analyst: {error}",
+            "content": f"Analyst: {user_message(error)}",
             "chart_path": None,
+            "sql": None,
         }
 
     st.session_state.messages.append(assistant_message)
@@ -316,4 +349,8 @@ if question:
 
         if assistant_message["chart_path"]:
             st.image(assistant_message["chart_path"])
+
+        if assistant_message["sql"]:
+            with st.expander("SQL used"):
+                st.code(assistant_message["sql"], language="sql")
 

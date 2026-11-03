@@ -1,6 +1,7 @@
-from dataclasses import dataclass
+import re
+from dataclasses import dataclass, replace
 from pathlib import Path
-from app.config.router import route_question
+from app.config.router import RouteResult, is_scope_request, route_question
 from app.config.settings import SessionState
 from app.ai.context_builder import build_campaign_comparison_context,build_insight_context
 from app.utils.data_loader import summary_df,campaign_goals_df,segment_df
@@ -10,8 +11,17 @@ from app.ai.session_state_manager import resolve_campaign_id,resolve_comparison_
 from app.visualization.chart_builder import build_visualization_context
 from app.visualization.chart_dispatcher import create_visualization
 from app.config.paths import OUTPUT_DIR
+from app.ai.campaign_id_validation import validate_campaign_ids
+from app.services.customer_sql_service import (
+    build_customer_query_context,
+    run_customer_query,
+)
+from app.utils.data_loader import DATA_SOURCE
 
 chart_dir = OUTPUT_DIR
+
+# Short follow-ups such as "What about Canada?" carry no routing keywords.
+FOLLOW_UP_PATTERN = re.compile(r"^\s*(what about|how about|and|same for|what if)\b", re.IGNORECASE)
 
 @dataclass
 class AnalystResult:
@@ -19,6 +29,7 @@ class AnalystResult:
     campaign_id: str | None = None
     chart_path: Path | None = None
     chart_title: str | None = None
+    sql: str | None = None
 
 
 def process_analyst_question(
@@ -38,6 +49,18 @@ def process_analyst_question(
     # Determine the analytical route for the current question.
     route = route_question(question)
 
+    # Keep short follow-ups on the customer route ("What about Canada?"),
+    # which the keyword router would otherwise send to a campaign summary.
+    previous_route = session_state.last_route
+    if (
+        previous_route is not None
+        and previous_route.context_type == "customer_campaign"
+        and route.context_type == "campaign"
+        and route.analysis_type == "summary"
+        and FOLLOW_UP_PATTERN.match(question)
+    ):
+        route = replace(route, context_type="customer_campaign", analysis_type="detail")
+
     # Load the instructions used for Ask Analyst responses.
     question_template = load_prompt("analyst_guidelines")
 
@@ -53,18 +76,7 @@ def process_analyst_question(
         valid_campaign_ids=valid_campaign_ids,
     )
 
-    scope_terms = (
-        "overall",
-        "across all",
-        "across campaigns",
-        "across segments",
-        "portfolio-wide",
-        "big picture",
-        "holistically",
-    )
-
-    normalized_question = question.lower()
-    is_scope_request = any(term in normalized_question for term in scope_terms)
+    scope_request = is_scope_request(question)
 
     prebuilt_context = None
 
@@ -113,6 +125,26 @@ def process_analyst_question(
             prompt_template=question_template,
             conversation_history=conversation_history,
             context=visualization_context,
+            route=route,
+        )
+
+        # Return the chart interpretation directly. Falling through would
+        # call ask_analyst() again without the chart context and overwrite
+        # this answer with a generic campaign/segment response.
+        return AnalystResult(
+            answer=answer,
+            campaign_id=resolved_campaign_id,
+            chart_path=chart_path,
+        )
+
+    if route.context_type == "customer_campaign":
+        return _answer_customer_question(
+            question=question,
+            route=route,
+            route_campaign_ids=route.campaign_ids,
+            resolved_campaign_id=resolved_campaign_id,
+            question_template=question_template,
+            conversation_history=conversation_history,
         )
 
     comparison_campaign_ids = resolve_comparison_campaign_ids(
@@ -137,7 +169,7 @@ def process_analyst_question(
             campaign_goals_df,
         (
             None
-            if is_scope_request and not route.campaign_ids
+            if scope_request and not route.campaign_ids
             else resolved_campaign_id
         ),
     )
@@ -148,6 +180,7 @@ def process_analyst_question(
         prompt_template=question_template,
         conversation_history=conversation_history,
         context=prebuilt_context,
+        route=route,
     )
 
     return AnalystResult(
@@ -156,3 +189,58 @@ def process_analyst_question(
         chart_path=chart_path,
     )
 
+
+def _answer_customer_question(
+        question: str,
+        route: RouteResult,
+        route_campaign_ids: list[str],
+        resolved_campaign_id: str,
+        question_template: str,
+        conversation_history: list[dict],
+) -> AnalystResult:
+    """
+    Answer a customer-level question with guarded text-to-SQL.
+
+    The model writes SQL against customer_analytic_layer (scoped to the
+    campaigns in the question, or the active campaign), the query runs as a
+    read-only role, and the small result is interpreted with the standard
+    analyst prompt.
+    """
+    if DATA_SOURCE != "postgres":
+        raise ValueError(
+            "Customer-level questions need the Neon database "
+            "(DATA_SOURCE=postgres)."
+        )
+
+    campaign_ids = list(dict.fromkeys(route_campaign_ids)) or [resolved_campaign_id]
+
+    validate_campaign_ids(summary_df=summary_df, campaign_ids=campaign_ids)
+
+    campaign_names = dict(
+        zip(
+            summary_df["campaign_id"].astype(str),
+            summary_df["campaign_name"].astype(str),
+        )
+    )
+
+    query_result = run_customer_query(
+        question=question,
+        campaign_ids=campaign_ids,
+        campaign_names=campaign_names,
+        conversation_history=conversation_history,
+    )
+
+    answer = ask_analyst(
+        campaign_id=resolved_campaign_id,
+        question=question,
+        prompt_template=question_template,
+        conversation_history=conversation_history,
+        context=build_customer_query_context(query_result),
+        route=route,
+    )
+
+    return AnalystResult(
+        answer=answer,
+        campaign_id=resolved_campaign_id,
+        sql=query_result.sql,
+    )

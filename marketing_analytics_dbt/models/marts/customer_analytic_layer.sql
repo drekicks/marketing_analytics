@@ -1,6 +1,21 @@
+{#
+  grants: the app's read-only role (customer text-to-SQL) exists only in Neon.
+
+  replica identity: Neon has a logical-replication publication covering this
+  table, and Postgres rejects DELETE on a published table without a replica
+  identity. Incremental runs update rows with DELETE + INSERT, so:
+    - pre_hook sets it on an existing table before the incremental DELETE
+      (skipped on a first build or full refresh, when the table is new);
+    - post_hook sets it on every newly created or fully refreshed table.
+  FULL (not USING INDEX) avoids index-name clashes with the backup table dbt
+  keeps during --full-refresh. Postgres only; other targets are unaffected.
+#}
 {{ config(
     materialized='incremental',
-    unique_key=['campaign_id', 'customer_id']
+    unique_key=['campaign_id', 'customer_id'],
+    grants={'select': ['app_readonly']} if target.name == 'neon' else {},
+    pre_hook="{% if is_incremental() and target.type == 'postgres' %}alter table {{ this }} replica identity full{% endif %}",
+    post_hook="{% if target.type == 'postgres' %}alter table {{ this }} replica identity full{% endif %}"
 ) }}
 
 select

@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 from dataclasses import dataclass
+
+from app.errors import ConfigurationError
 from typing import TYPE_CHECKING
 
 # try:
@@ -27,10 +29,14 @@ MODEL_NAME = MODEL_NAME or os.getenv("OPENAI_MODEL")
 openai_api_key = openai_api_key or os.getenv("OPENAI_API_KEY")
 
 if not openai_api_key:
-    raise RuntimeError("OPENAI_API_KEY is not configured.")
+    raise ConfigurationError(
+        "OPENAI_API_KEY is not configured. Add it to .env or the app secrets."
+    )
 
 if not MODEL_NAME:
-    raise RuntimeError("OPENAI_MODEL is not configured.")
+    raise ConfigurationError(
+        "OPENAI_MODEL is not configured. Add it to .env or the app secrets."
+    )
 
 @dataclass
 class SessionState:

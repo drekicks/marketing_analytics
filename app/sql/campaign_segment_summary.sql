@@ -1,2 +1,2 @@
 select *
-from dbt_dev.segment_performance_summary;
+from {{analytics_schema}}.segment_performance_summary;

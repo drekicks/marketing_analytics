@@ -1,3 +1,5 @@
+version: 2
+
 models:
   - name: stg_customer
     columns:
@@ -10,24 +12,24 @@ models:
         data_tests:
           - not_null
 
-      - name: stg_rental
-        columns:
-          - name: rental_id
-            data_tests:
-              - unique
-              - not_null
+  - name: stg_rental
+    columns:
+      - name: rental_id
+        data_tests:
+          - unique
+          - not_null
 
-          - name: customer_id
-            data_tests:
-              - not_null
-              - relationships:
-                  arguments:
-                    to: ref('stg_customer')
-                    field: customer_id
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customer')
+                field: customer_id
 
-          - name: inventory_id
-            data_tests:
-              - not_null
+      - name: inventory_id
+        data_tests:
+          - not_null
 #              - relationships:
 #                  arguments:
 #                    to: ref('stg_inventory')

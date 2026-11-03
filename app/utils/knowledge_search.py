@@ -12,7 +12,6 @@ def cosine_similarity(vector_a, vector_b):
 
 
 def search_knowledge_base(question, limit=5):
-    question_embedding = create_embedding(question)
     engine = get_database_engine()
 
     # 1. Check whether the question names a known category
