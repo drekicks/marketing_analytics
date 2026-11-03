@@ -1,13 +1,10 @@
-from openai import OpenAI
-from app.config.settings import openai_api_key
+from app.ai.llm_client_api import generate_analysis
 from app.utils.knowledge_search import search_knowledge_base as search_knowledge
 
-
-if not openai_api_key:
-    raise RuntimeError("OPENAI_API_KEY is not set. Check your .env loading.")
-
-client = OpenAI(api_key=openai_api_key)
-
+NOT_ENOUGH_INFORMATION = (
+    "The available business documentation does not "
+    "provide enough information to answer that question."
+)
 
 
 def answer_with_rag(
@@ -19,18 +16,12 @@ def answer_with_rag(
     results = search_knowledge(question, limit=limit)
 
     if not results:
-        return (
-            "The available business documentation does not "
-            "provide enough information to answer that question."
-        )
+        return NOT_ENOUGH_INFORMATION
 
     top_similarity = results[0]["similarity"]
 
     if top_similarity < min_similarity:
-        return (
-            "The available business documentation does not "
-            "provide enough information to answer that question."
-        )
+        return NOT_ENOUGH_INFORMATION
 
     context = "\n\n".join(
         result["content"]
@@ -64,17 +55,6 @@ Question:
 {question}
 """
 
-    response = client.responses.create(
-        model="gpt-5.5",
-        input=prompt,
-    )
-
-    return response.output_text
-
-# if __name__ == "__main__":
-#     question = "Explain customer segmentation."
-#
-#     answer = answer_with_rag(question)
-#
-#     print(f"\nQuestion: {question}\n")
-#     print(answer)
+    # Same model (OPENAI_MODEL), client, size check and error handling as
+    # every other answer in the app.
+    return generate_analysis(prompt)

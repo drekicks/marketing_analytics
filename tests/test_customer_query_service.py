@@ -2,14 +2,16 @@
 
 import pandas as pd
 import pytest
-from sqlalchemy.exc import ProgrammingError
+from sqlalchemy.exc import OperationalError, ProgrammingError
 
 import app.services.analyst_service as analyst_service
 import app.services.customer_sql_service as customer_sql_service
 from app.config.router import RouteResult
 from app.config.settings import SessionState
 from app.services.customer_sql_service import (
+    CustomerQueryError,
     CustomerQueryResult,
+    execute_customer_query,
     build_customer_query_context,
     build_wrapped_query,
     run_customer_query,
@@ -50,8 +52,13 @@ def fake_db(monkeypatch):
     return outcomes, executed
 
 
-def _db_error(message: str) -> ProgrammingError:
-    return ProgrammingError("SELECT ...", {}, Exception(message))
+def _db_error(message: str) -> CustomerQueryError:
+    """A failure of the model's query itself (what execute_customer_query raises)."""
+    return CustomerQueryError(message)
+
+
+def _connection_error() -> OperationalError:
+    return OperationalError("connect", {}, Exception("could not connect to server"))
 
 
 def test_wrapped_query_scopes_cal_and_limits_rows(monkeypatch):
@@ -103,6 +110,65 @@ def test_gives_up_after_second_database_error(fake_llm, fake_db):
 
     with pytest.raises(ValueError, match="couldn't build a working query"):
         run_customer_query("How many customers?", [ACTIVE_CAMPAIGN_ID])
+
+
+def test_connection_failure_is_not_retried(fake_llm, fake_db):
+    replies, prompts = fake_llm
+    outcomes, executed = fake_db
+    replies.extend(["select count(*) from cal", "select count(*) from cal"])
+    outcomes.append(_connection_error())
+
+    with pytest.raises(OperationalError):
+        run_customer_query("How many customers?", [ACTIVE_CAMPAIGN_ID])
+
+    assert len(executed) == 1
+    assert len(prompts) == 1
+
+
+class _FakeConnection:
+    def __init__(self, query_error=None):
+        self.query_error = query_error
+
+    def exec_driver_sql(self, sql):
+        pass
+
+    def execute(self, statement, params):
+        raise self.query_error
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+
+class _FakeEngine:
+    def __init__(self, connect_error=None, query_error=None):
+        self.connect_error = connect_error
+        self.query_error = query_error
+
+    def begin(self):
+        if self.connect_error:
+            raise self.connect_error
+        return _FakeConnection(self.query_error)
+
+
+def test_query_errors_become_customer_query_errors(monkeypatch):
+    engine = _FakeEngine(
+        query_error=ProgrammingError("SELECT", {}, Exception('column "x" does not exist'))
+    )
+    monkeypatch.setattr(customer_sql_service, "get_readonly_engine", lambda: engine)
+
+    with pytest.raises(CustomerQueryError, match='column "x" does not exist'):
+        execute_customer_query("SELECT x FROM cal", [ACTIVE_CAMPAIGN_ID])
+
+
+def test_connection_errors_are_not_wrapped(monkeypatch):
+    engine = _FakeEngine(connect_error=_connection_error())
+    monkeypatch.setattr(customer_sql_service, "get_readonly_engine", lambda: engine)
+
+    with pytest.raises(OperationalError):
+        execute_customer_query("SELECT 1 FROM cal", [ACTIVE_CAMPAIGN_ID])
 
 
 def test_unsafe_sql_is_rejected_without_running(fake_llm, fake_db):

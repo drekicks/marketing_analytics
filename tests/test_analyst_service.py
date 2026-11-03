@@ -76,3 +76,37 @@ def test_comparison_question_builds_comparison_context(ask_analyst_calls):
     assert context.startswith("CAMPAIGN COMPARISON CONTEXT")
     assert ACTIVE_CAMPAIGN_ID in context
     assert "CMP-2026-003" in context
+
+
+# --- routing happens once -------------------------------------------------
+
+import app.config.router as router_module  # noqa: E402
+
+
+def test_each_question_is_routed_once(monkeypatch, ask_analyst_calls):
+    calls: list[str] = []
+    real_route_question = router_module.route_question
+
+    def counting_route_question(question):
+        calls.append(question)
+        return real_route_question(question)
+
+    monkeypatch.setattr(analyst_service, "route_question", counting_route_question)
+
+    for question in (
+        "Which segment performed best?",
+        "Overall, which segment had the highest revenue?",
+        "Chart revenue by segment",
+        "Compare to CMP-2026-003",
+    ):
+        calls.clear()
+        _ask(question)
+        assert calls == [question]
+
+
+def test_ask_analyst_receives_the_service_route(ask_analyst_calls):
+    _ask("Overall, which segment had the highest revenue?")
+    _ask("Chart revenue by segment")
+
+    assert ask_analyst_calls[0]["route"].context_type == "insight"
+    assert ask_analyst_calls[1]["route"].analysis_type == "visualization"

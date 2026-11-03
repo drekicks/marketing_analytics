@@ -1,18 +1,34 @@
-import streamlit as st
-from app.utils.data_loader import campaign_goals_df, summary_df,unique_campaigns_df
-from app.ai.context_builder import build_campaign_context
-from app.ai.prompt_builder import build_prompt
-from app.ai.prompt_loader import load_prompt
-from app.ai.llm_client_api import generate_analysis
-from app.config.settings import SessionState
-from app.services.analyst_service import process_analyst_question
 from datetime import datetime
 from pathlib import Path
 
+import streamlit as st
+
+from app.ui.errors import user_message
 
 st.set_page_config(page_title="AI Marketing Analytics Assistant",
                    page_icon="📊",
                    layout="wide")
+
+# -------------------------------------------------------------------
+# START-UP
+#
+# Importing the app validates settings and loads campaign data (from Neon
+# in postgres mode). Show a readable message instead of a traceback if that
+# fails; reloading the page retries, because failed loads aren't cached.
+# -------------------------------------------------------------------
+
+try:
+    from app.utils.data_loader import campaign_goals_df, summary_df, unique_campaigns_df
+    from app.ai.context_builder import build_campaign_context
+    from app.ai.prompt_builder import build_prompt
+    from app.ai.prompt_loader import load_prompt
+    from app.ai.llm_client_api import generate_analysis
+    from app.config.settings import SessionState
+    from app.services.analyst_service import process_analyst_question
+except Exception as startup_error:
+    st.title("AI Marketing Analytics Assistant")
+    st.error(f"The app couldn't start. {user_message(startup_error)}")
+    st.stop()
 
 # -------------------------------------------------------------------
 # PAGE HEADER
@@ -223,9 +239,10 @@ if st.button("Generate Executive Summary"):
             # Save the result so it remains visible after Streamlit reruns.
             st.session_state.executive_summary = analysis
 
-        except ValueError as e:
-            # Display expected business/data errors without crashing the app.
-            st.error(f"Analyst:{e}")
+        except Exception as error:
+            # Business/data errors show their own message; AI, database and
+            # unexpected errors get a friendly message (details are logged).
+            st.error(f"Analyst: {user_message(error)}")
 
 st.header("Executive Summary")
 
@@ -272,12 +289,12 @@ question = st.chat_input(
 
 if question:
     # Save and immediately display the user's submitted question.
-    user_message = {
+    user_chat_message = {
         "role": "user",
         "content": question,
     }
 
-    st.session_state.messages.append(user_message)
+    st.session_state.messages.append(user_chat_message)
 
     with st.chat_message("user"):
         st.markdown(question)
@@ -317,10 +334,10 @@ if question:
             "sql": result.sql,
         }
 
-    except ValueError as error:
+    except Exception as error:
         assistant_message = {
             "role": "assistant",
-            "content": f"Analyst: {error}",
+            "content": f"Analyst: {user_message(error)}",
             "chart_path": None,
             "sql": None,
         }

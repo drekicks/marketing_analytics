@@ -1,38 +1,19 @@
-from openai import OpenAI
+from openai import OpenAIError
 
-from app.config.settings import openai_api_key
+from app.ai.llm_client_api import client
+from app.errors import LLMServiceError
 
-if not openai_api_key:
-    raise RuntimeError("OPENAI_API_KEY is not set. Check your .env loading.")
-
-client = OpenAI(api_key=openai_api_key)
-
+# Must match the 1536-dimension vectors stored in ai.knowledge_chunks.
+EMBEDDING_MODEL = "text-embedding-3-small"
 
 
 def create_embedding(text: str) -> list[float]:
-    response = client.embeddings.create(
-            model="text-embedding-3-small",
+    try:
+        response = client.embeddings.create(
+            model=EMBEDDING_MODEL,
             input=text,
         )
-    return response.data[0].embedding
+    except OpenAIError as e:
+        raise LLMServiceError(f"Embedding request failed: {e}") from e
 
-# from utils.knowledge_loader import load_knowledge_documents
-# from utils.knowledge_chunker import chunk_document
-#
-#
-# if __name__ == "__main__":
-#     documents = load_knowledge_documents()
-#
-#     chunks = []
-#
-#     for document in documents:
-#         chunks.extend(chunk_document(document))
-#
-#     first_chunk = chunks[0]
-#
-#     embedding = create_embedding(first_chunk["content"])
-#
-#     print(first_chunk["title"])
-#     print(type(embedding))
-#     print(len(embedding))
-#     print(embedding[:10])
+    return response.data[0].embedding

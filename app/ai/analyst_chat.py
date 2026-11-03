@@ -1,20 +1,10 @@
 from app.ai.llm_client_api import generate_analysis
 from app.ai.prompt_builder import build_prompt
-from app.config.router import route_question
+from app.config.router import RouteResult, is_scope_request, route_question
 from app.ai.context_builder import build_campaign_context, build_segment_context, build_campaign_comparison_context, build_insight_context
 from app.utils.data_loader import summary_df, segment_df, campaign_goals_df
 import re
 from app.services.rag_service import answer_with_rag
-
-SCOPE_TERMS = (
-    "overall",
-    "across all",
-    "across campaigns",
-    "across segments",
-    "portfolio-wide",
-    "big picture",
-    "holistically",
-)
 
 # Shared rule for laying out supporting evidence. Without it the model
 # lists every metric for every item as separate bullets.
@@ -155,10 +145,8 @@ def _get_derived_signal_metric_instruction(
         "parentheses using the same formatting shown there."
     )
 
-# response_mode = get_insight_response_mode(question)
 def _is_scope_request(question: str) -> bool:
-    normalized = question.lower()
-    return any(term in normalized for term in SCOPE_TERMS)
+    return is_scope_request(question)
 
 def _get_response_format_instructions(context_type: str, question: str) -> str:
     if context_type == "insight":
@@ -213,13 +201,22 @@ def ask_analyst(campaign_id: str,
                 prompt_template: str,
                 conversation_history: list[dict[str, str]],
                 context: str | None = None,
+                route: RouteResult | None = None,
                 ) -> str:
+    """
+    Build (or use) the context, fill the analyst prompt, and call the LLM.
+
+    `route` is the route already decided by process_analyst_question. It is
+    used as-is so a question is routed once (and follow-up rerouting is kept).
+    It is only computed here when a caller doesn't pass one.
+    """
 
     conversation_context = _format_conversation_history(conversation_history)
 
-    route = route_question(question)
-    normalized_question = question.lower()
-    is_scope_request = any(term in normalized_question for term in SCOPE_TERMS)
+    if route is None:
+        route = route_question(question)
+
+    scope_request = is_scope_request(question)
 
     resolved_campaign_ids = route.campaign_ids or [campaign_id]
     resolved_campaign_id = resolved_campaign_ids[0]
@@ -254,7 +251,7 @@ def ask_analyst(campaign_id: str,
                 summary_df,
                 segment_df,
                 campaign_goals_df,
-                None if is_scope_request and not route.campaign_ids else resolved_campaign_id
+                None if scope_request and not route.campaign_ids else resolved_campaign_id
             )
 
         elif route.context_type in {"customer", "customer_campaign"}:

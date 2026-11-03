@@ -23,6 +23,27 @@ def extract_campaign_ids(question: str) -> list[str]:
     )
     return [match.upper() for match in matches]
 
+# Words that widen a question to the whole portfolio ("Overall, which ...").
+# Single source of truth: also used by analyst_chat and analyst_service.
+SCOPE_TERMS = (
+    "overall",
+    "across all",
+    "across campaigns",
+    "across segments",
+    "portfolio-wide",
+    "big picture",
+    "holistically",
+)
+
+VS_PATTERN = re.compile(r"\bvs\b\.?")
+
+
+def is_scope_request(question: str) -> bool:
+    """True when the question asks about all campaigns rather than one."""
+    normalized = question.lower()
+    return any(term in normalized for term in SCOPE_TERMS)
+
+
 def route_question(question: str) -> RouteResult:
     normalized = question.lower()
     campaign_ids = extract_campaign_ids(question)
@@ -30,7 +51,6 @@ def route_question(question: str) -> RouteResult:
     comparison_terms = (
         "compare",
         "versus",
-        " vs ",
         "difference",
         "better",
     )
@@ -40,7 +60,6 @@ def route_question(question: str) -> RouteResult:
         "compare with",
         "compared to",
         "versus",
-        "vs"
     )
 
     customer_terms = (
@@ -89,16 +108,6 @@ def route_question(question: str) -> RouteResult:
         "prioritize",
         "delivered",
         "generated",
-    )
-
-    scope_terms = (
-        "overall",
-        "across all",
-        "across campaigns",
-        "across segments",
-        "portfolio-wide",
-        "big picture",
-        "holistically",
     )
 
     visual_terms = (
@@ -228,12 +237,15 @@ def route_question(question: str) -> RouteResult:
 
     has_multiple_campaigns = len(campaign_ids) > 1
 
-    has_comparison_term = any(
+    # "vs" only as a whole word, so words such as "canvas" don't count.
+    has_vs = bool(VS_PATTERN.search(normalized))
+
+    has_comparison_term = has_vs or any(
         term in normalized
         for term in comparison_terms
     )
 
-    has_comparison_reference_term = any(
+    has_comparison_reference_term = has_vs or any(
         term in normalized
         for term in comparison_reference_terms
     )
@@ -258,10 +270,7 @@ def route_question(question: str) -> RouteResult:
         for term in evaluation_terms
     )
 
-    has_scope_term = any(
-        term in normalized
-        for term in scope_terms
-    )
+    has_scope_term = is_scope_request(question)
 
     has_explicit_insight_term = any(
         term in normalized

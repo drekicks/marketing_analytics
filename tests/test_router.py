@@ -1,6 +1,6 @@
 import pytest
 
-from app.config.router import route_question
+from app.config.router import VS_PATTERN, route_question
 
 
 @pytest.mark.parametrize(
@@ -45,3 +45,29 @@ def test_existing_question_types_keep_their_route(question, context_type, analys
     route = route_question(question)
 
     assert (route.context_type, route.analysis_type) == (context_type, analysis_type)
+
+
+@pytest.mark.parametrize(
+    ("text", "matches"),
+    [
+        ("cmp-2026-003 vs cmp-2026-004", True),
+        ("how did we do vs. last month", True),
+        ("canvas campaign", False),
+        ("revsion", False),
+    ],
+)
+def test_vs_matches_only_as_a_whole_word(text, matches):
+    assert bool(VS_PATTERN.search(text)) is matches
+
+
+@pytest.mark.parametrize(
+    "question",
+    [
+        "CMP-2026-003 vs CMP-2026-004",
+        "How did we do vs. CMP-2026-003?",
+    ],
+)
+def test_vs_as_a_word_is_still_a_comparison(question):
+    route = route_question(question)
+
+    assert route.analysis_type == "comparison"

@@ -1,10 +1,12 @@
-from app.utils.data_loader import summary_df,campaign_goals_df,unique_campaigns_df,segment_df
+from app.utils.data_loader import summary_df, campaign_goals_df
 from app.config.settings import SessionState
 from app.services.analyst_service import process_analyst_question
 from app.ai.context_builder import build_campaign_context
 from app.ai.prompt_loader import load_prompt
 from app.ai.prompt_builder import build_prompt
 from app.ai.llm_client_api import generate_analysis
+from app.ui.errors import user_message
+from datetime import datetime
 
 
 # Select the campaign and build the Executive Summary
@@ -33,11 +35,15 @@ def show_executive_summary(default_campaign_id: str,campaign_name) -> None:
     # print(f"Final prompt size: {len(final_prompt):,} characters")
     # print(f"Approximate prompt tokens: {len(final_prompt) // 4:,}")
 
-    analysis = generate_analysis(final_prompt)
-
-    print(analysis)
-    print()
-    print("Executive Summary Complete")
+    try:
+        analysis = generate_analysis(final_prompt)
+    except Exception as error:
+        # Keep going: the chat may still work even if the summary failed.
+        print(f"Analyst: {user_message(error)}")
+    else:
+        print(analysis)
+        print()
+        print("Executive Summary Complete")
     print()
     print("=" * 59)
     print("Ask the Analyst is ready to answer questions.")
@@ -68,7 +74,7 @@ def run_cli_chat(
         session_state: SessionState,
         default_campaign_id: str,
         valid_campaign_ids: set[str],
-        conversation_history: list[str],
+        conversation_history: list[dict],
 )-> None:
 
     while True:
@@ -90,9 +96,19 @@ def run_cli_chat(
                 valid_campaign_ids=valid_campaign_ids,
                 conversation_history=conversation_history,
             )
-        except ValueError as e:
-            print(f"Error: {e}")
+        except Exception as error:
+            print(f"Analyst: {user_message(error)}")
             continue
+
+        # Remember the exchange so follow-up questions have context,
+        # in the same format the Streamlit app uses.
+        conversation_history.append(
+            {
+                "question": question,
+                "answer": result.answer,
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            }
+        )
 
         print(f"\nCampaign: {result.campaign_id}")
         print(f"Analyst: {result.answer}")

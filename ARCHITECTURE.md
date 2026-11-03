@@ -40,6 +40,7 @@ marketing_analytics/
 │   ├── customer_sql.md           Customer text-to-SQL prompt (virtual table `cal`, JSON {sql, explanation})
 │   └── executive_summary.md      Executive Summary prompt
 ├── app/
+│   ├── errors.py                 ConfigurationError, LLMServiceError (no app imports; safe at start-up)
 │   ├── config/
 │   │   ├── settings.py           Loads .env; OPENAI_API_KEY + OPENAI_MODEL (hard fail if missing); SessionState dataclass
 │   │   ├── paths.py              All filesystem paths; creates data/ and output/ on import
@@ -85,7 +86,8 @@ marketing_analytics/
 │   │   ├── campaign_tableau_summary.sql  → raw campaign_results ⨝ customer_segment (Tableau only)
 │   │   └── customer_segmentation.sql     → raw dvdrental tables; builds the segmentation (Tableau / customer_segment)
 │   └── ui/
-│       ├── cli.py                show_executive_summary(), run_cli_chat()
+│       ├── cli.py                show_executive_summary(), run_cli_chat() (keeps conversation history)
+│       ├── errors.py             user_message(): friendly text for any exception (both UIs)
 │       └── campaign_selector.py  Interactive terminal campaign picker
 ├── marketing_analytics_dbt/      dbt project (see §4)
 │   ├── dbt_project.yml
@@ -199,11 +201,11 @@ Tests: generic `not_null`/`unique`/`relationships` in `staging.yml` and `marts.y
 ### Models
 | Use | Model | Where |
 |---|---|---|
-| Executive summary + Ask Analyst | `OPENAI_MODEL` env var (required, no default) | `llm_client_api.py::generate_analysis` |
-| RAG answers | **hard-coded `"gpt-5.5"`** (ignores `OPENAI_MODEL`) | `rag_service.py::answer_with_rag` |
-| Embeddings (ingest + query) | `text-embedding-3-small` (1536 dims) | `embedding_service.py::create_embedding` |
+| Executive summary, Ask Analyst, RAG answers | `OPENAI_MODEL` env var (required, no default) | `llm_client_api.py::generate_analysis` (RAG calls it too) |
+| Customer SQL writing | `OPENAI_MODEL`, structured output | `llm_client_api.py::generate_json` |
+| Embeddings (ingest + query) | `text-embedding-3-small` (1536 dims; must match stored vectors) | `embedding_service.py::create_embedding` (shares the one OpenAI client) |
 
-All text calls use the **Responses API** with a single string `input=`. There is **no separate system message**, no temperature or max-tokens, and no tools or structured outputs. Everything (role, rules, data, history, question) is one user-turn string.
+All text calls use the **Responses API** with a single string `input=`. There is **no separate system message**, no temperature or max-tokens, and no tools. Only the customer SQL call uses structured output (`generate_json`). Everything (role, rules, data, history, question) is one user-turn string.
 
 ### Prompts
 1. **`prompts/executive_summary.md`** (placeholder `{{campaign_metrics}}`). Role: Senior Marketing Analytics Consultant. Rules: no invented metrics, no calculations, sections for Key Strengths / Key Weaknesses / Business Risks / Recommended Next Actions (3–5 numbered), plus a full worked example using real Summer Retention Offer numbers.
@@ -269,13 +271,15 @@ From `requirements.txt` (unpinned):
 | `openai` | Responses API + embeddings |
 | `pandas` | All in-memory analytics, CSV I/O, `pd.read_sql` |
 | `SQLAlchemy` | DB engine, `text()` queries with bound params |
-| `psycopg[binary]` | Postgres driver (psycopg **3**; README says psycopg2) |
+| `psycopg[binary]` | Postgres driver (psycopg 3) |
+| `sqlglot` | Parses and validates model-written SQL (customer text-to-SQL guardrails) |
+| `tabulate` | `DataFrame.to_markdown` for customer query results |
 | `python-dotenv` | `.env` loading |
 | `matplotlib` | PNG bar charts |
 | `numpy` | Bar offsets in `segment_charts.py` |
 | `openpyxl`, `PyYAML`, `requests` | **Not imported anywhere** in the repo |
 
-Not in requirements but needed: `dbt-postgres` (for dbt), `pytest` (for `tools/` tests), and the **pgvector Postgres extension** (server-side; no Python package needed because embeddings are cast from strings).
+Not in `requirements.txt`: `pytest` (in `requirements-dev.txt`), `dbt-postgres` (for dbt), and the **pgvector Postgres extension** (server-side; no Python package needed because embeddings are cast from strings).
 
 ---
 
@@ -353,25 +357,25 @@ Severity is my judgement: 🔴 likely user-visible breakage · 🟠 wrong or was
 3. ✅ **Fixed (Phase 2):** Postgres mode was out of sync with the code. The code now uses the dbt mart names (`incremental_revenue`, `segment_revenue_per_conversion`). `data/demo/campaign_segment_summary.csv` headers were renamed to match, and `insight_signals.py` no longer computes signals at import.
 4. ✅ **Fixed (Phase 2):** dbt schema vs. app SQL. `app/sql/*.sql` uses `{{analytics_schema}}` (default `dbt_dev_analytics`) instead of the stale `dbt_dev`.
 5. 🟠 **`app/utils/dbt_utils.py` calls `run_dbt_build()` at import.** Importing it shells out to `dbt build`. Nothing imports it today, so this is a trap waiting to fire.
-6. 🟠 **CLI has no conversation memory.** `cli.run_cli_chat` never appends to `conversation_history`.
+6. ✅ **Fixed (Phase 5):** The CLI had no conversation memory. `cli.run_cli_chat` now appends each exchange, like Streamlit.
 7. ✅ **Fixed:** Charts disappeared after a rerun. The history loop in `streamlit_app.py` now re-displays each message's `chart_path`.
 8. ✅ **Fixed:** Chart files were shared. `chart_dispatcher.create_visualization` now adds a random suffix to each PNG filename, so concurrent users no longer overwrite each other's charts.
 9. ✅ **Fixed (Phase 2):** `build_segment_context` now filters goals with its `goals_df` argument.
 10. 🟡 `knowledge_search.search_knowledge_base`: the duplicate embedding call is fixed (Phase 2). A category match still ignores `limit` and fakes `similarity = 1.0`.
 11. 🟠 `app/sql/customer_segmentation.sql` contains **two statements** (a stray `SELECT * FROM customer_segment cs` at the end). How `pd.read_sql` handles that depends on the driver.
 12. 🟠 `customer_extract.export_customer` prints validation results but **exports anyway**. Both extract scripts write into `data/demo/`, overwriting the hosted demo's data.
-13. 🟡 Broken tests: `tools/analyst_response_format_test.py` calls `_get_response_format_instructions` with 1 argument (it needs 2). `tools/test_insight_signals.py` imports the non-existent `app.tests.insight_signals_campaign`. Every test import needs `OPENAI_API_KEY`/`OPENAI_MODEL` set because `settings.py` raises at import. `tools/` is git-ignored even though these files are tracked.
-14. 🟡 `staging.yml`: `stg_rental` is indented **inside** `stg_customer`'s `columns:` list, so its tests are not attached to the model.
+13. ✅ **Fixed:** Broken tests. The working tests moved to `tests/` (Phase 2); `tools/analyst_response_format_test.py` was replaced by `tests/test_response_format.py` (Phase 4).
+14. ✅ **Fixed (Phase 1):** `staging.yml` had `stg_rental` nested under `stg_customer`; its tests now attach.
 
 ### Error handling / robustness
-15. 🔴 Streamlit catches only `ValueError`. `RuntimeError` (OpenAI failures from `generate_analysis`), `KeyError`, DB/connection errors, and any exception from `answer_with_rag` (no try/except at all) surface as raw tracebacks.
+15. ✅ **Fixed (Phase 5):** Only `ValueError` was caught. Both UIs now use `app/ui/errors.py::user_message`: `ValueError`/`ConfigurationError` text as written, `LLMServiceError` → "AI service didn't respond", `DBAPIError` → "couldn't reach the database", anything else → a generic message with the traceback logged. Streamlit also guards start-up (settings + data load). RAG errors are covered because RAG now uses `generate_analysis`. A customer-SQL connection failure is no longer retried or reported as a bad query.
 16. 🟠 **RAG needs a live database even in "CSV demo" mode.** Knowledge questions always hit `ai.knowledge_chunks`. **(inferred)** That is why the hosted demo has DB credentials, likely pointing at Neon.
-17. 🟠 A new engine is created per call (`load_sql_extracts`, `search_knowledge_base`). No pooling, retries, or timeouts beyond OpenAI SDK defaults. Postgres-mode loads are not cached.
-18. 🟡 The DB password is interpolated into the URL **without URL-encoding**, so special characters break the connection.
+17. ✅ **Fixed (Phase 2):** One cached engine per process (`pool_pre_ping`); postgres-mode loads cached for an hour.
+18. ✅ **Fixed (Phase 2):** The DB URL is built with `URL.create`, so passwords are escaped.
 19. 🟡 Heavy import-time side effects: env validation, directory creation, data loading, 3 OpenAI clients, and the unused signal computation.
 
 ### Hard-coded values
-20. RAG model `"gpt-5.5"`, embedding model, `limit=3`, `min_similarity=0.35`, `MAX_PROMPT_CHARACTERS=400_000`, last-5 history, chart colours/paths, campaign ID regex `CMP-\d+(-\d+)*`, segment names in validators, example campaign IDs in the sidebar. The executive-summary prompt embeds real numbers from one campaign as its example, which can anchor outputs.
+20. (RAG now uses `OPENAI_MODEL`, Phase 5.) Embedding model, `limit=3`, `min_similarity=0.35`, `MAX_PROMPT_CHARACTERS=400_000`, last-5 history, chart colours/paths, campaign ID regex `CMP-\d+(-\d+)*`, segment names in validators, example campaign IDs in the sidebar. The executive-summary prompt embeds real numbers from one campaign as its example, which can anchor outputs.
 
 ### Security
 21. **SQL injection:** static app SQL and RAG use bound parameters. **Model-written SQL (customer route)** is the one place generated SQL runs, behind the layered guardrails in §5. Treat changes to `customer_sql_service.py`, the read-only role or its grants as security-sensitive. `tools/check_schema.py` uses f-string table names, but they come from a hard-coded dict.
@@ -379,12 +383,12 @@ Severity is my judgement: 🔴 likely user-visible breakage · 🟠 wrong or was
 23. `.devcontainer` runs Streamlit with `--server.enableCORS false --server.enableXsrfProtection false` (fine for Codespaces, not for production).
 
 ### Duplication / dead code / inconsistency
-24. Scope terms are defined three times (`router.py`, `analyst_chat.SCOPE_TERMS`, `analyst_service.scope_terms`). The question is routed twice (service + `ask_analyst`). Context is built in two places. The executive-summary flow is duplicated between `streamlit_app.py` and `cli.py`. The campaign-metadata block is copy-pasted across 3 context builders. The four chart functions are near-duplicates, and `chart_builder`/`chart_dispatcher` repeat the same if-chain.
+24. 🟡 **Partly fixed (Phase 5):** The scope terms now live only in `router.SCOPE_TERMS` / `router.is_scope_request`, and each question is routed once (`ask_analyst(route=...)`). Still duplicated: the executive-summary flow (`streamlit_app.py` and `cli.py`), the campaign-metadata block in 2 context builders, and the near-duplicate chart functions / if-chains.
 25. Unused: `customer_summary` mart; `validate_customer_data` and `validate_segmentation_data`; `cosine_similarity`; `AnalystResult.chart_title`; `SessionState.active_segment`; unused imports in `streamlit_app.py`/`cli.py`; `pie/line/scatter` detection that always errors; commented-out "conversions" metric; `openpyxl`/`PyYAML`/`requests`; `data/demo/customer_extract.csv` (no producer in repo); empty `dvdrental_backup.sql`; `logs/dbt.log`; boilerplate `marketing_analytics_dbt/README.md`.
-26. README drift: says `python -m app.main` (the entry is the root `main.py`), lists `campaign_performance_summary.sql` (the file is `campaign_summary.sql`), mentions `app/generation/` (doesn't exist), says psycopg2 (code uses psycopg 3), and its `ai.knowledge_chunks` DDL lacks the `category` column the code writes and reads. `changelog.md` stops at v0.7.0.
+26. ✅ **Fixed (Phase 5):** README updated: run commands, `.env.example`, Neon/`DATA_SOURCE`, read-only role, dbt `--target neon`, psycopg 3, project structure, extract names, `category` column in the RAG DDL, and the customer text-to-SQL feature.
 27. Data / docs inconsistencies: `metrics.md` says absolute lift / conversion rate are "available in segment_performance_summary" only, but the campaign mart also has them. `segments.md` describes 4 market segments, while `customer_segmentation.sql` defines 10 `primary_segment` values. The validator's `expected_segment` comments out "Category Expansion", which the SQL still assigns, so it would report mismatches.
-28. Router fragility: substring matching (`"vs"` inside other words, `"better"` triggers comparison terms, broad `"what are"`/`"tell me"` RAG triggers). The order of rules determines meaning, and only 2 of the routing tests are enabled.
-29. Prompt contradictions: `executive_summary.md` says "do not use headings" but specifies `#`/`##` sections. `STANDARD_RESPONSE_FORMAT` forbids emphasis while the insight format requires `##` headings. Typo "whe" in `DERIVED_SIGNAL_RESPONSE_FORMAT`.
+28. 🟡 **Partly fixed (Phase 5):** "vs" now matches only as a whole word (`router.VS_PATTERN`). In practice the substring match had no visible effect, because any question with a campaign ID already falls through to the comparison route. Other keyword rules are still substring-based and order-dependent; `tests/test_router.py` pins the expected routes.
+29. 🟡 Prompt contradictions: `executive_summary.md` says "do not use headings" but specifies `#`/`##` sections. (Fixed in Phase 4: the analyst formats now allow tables and the "whe" typo is corrected.)
 30. ✅ **Fixed (Phase 2):** `requirements.txt` is now UTF-8. Still fully unpinned, which is a reproducibility risk for the hosted app.
 31. In the Streamlit sidebar, typing a different campaign ID in chat changes the "Active Campaign" badge but not the selectbox value, so the two can disagree.
 

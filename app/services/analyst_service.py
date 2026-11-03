@@ -1,7 +1,7 @@
 import re
 from dataclasses import dataclass, replace
 from pathlib import Path
-from app.config.router import route_question
+from app.config.router import RouteResult, is_scope_request, route_question
 from app.config.settings import SessionState
 from app.ai.context_builder import build_campaign_comparison_context,build_insight_context
 from app.utils.data_loader import summary_df,campaign_goals_df,segment_df
@@ -76,18 +76,7 @@ def process_analyst_question(
         valid_campaign_ids=valid_campaign_ids,
     )
 
-    scope_terms = (
-        "overall",
-        "across all",
-        "across campaigns",
-        "across segments",
-        "portfolio-wide",
-        "big picture",
-        "holistically",
-    )
-
-    normalized_question = question.lower()
-    is_scope_request = any(term in normalized_question for term in scope_terms)
+    scope_request = is_scope_request(question)
 
     prebuilt_context = None
 
@@ -136,6 +125,7 @@ def process_analyst_question(
             prompt_template=question_template,
             conversation_history=conversation_history,
             context=visualization_context,
+            route=route,
         )
 
         # Return the chart interpretation directly. Falling through would
@@ -150,6 +140,7 @@ def process_analyst_question(
     if route.context_type == "customer_campaign":
         return _answer_customer_question(
             question=question,
+            route=route,
             route_campaign_ids=route.campaign_ids,
             resolved_campaign_id=resolved_campaign_id,
             question_template=question_template,
@@ -178,7 +169,7 @@ def process_analyst_question(
             campaign_goals_df,
         (
             None
-            if is_scope_request and not route.campaign_ids
+            if scope_request and not route.campaign_ids
             else resolved_campaign_id
         ),
     )
@@ -189,6 +180,7 @@ def process_analyst_question(
         prompt_template=question_template,
         conversation_history=conversation_history,
         context=prebuilt_context,
+        route=route,
     )
 
     return AnalystResult(
@@ -200,6 +192,7 @@ def process_analyst_question(
 
 def _answer_customer_question(
         question: str,
+        route: RouteResult,
         route_campaign_ids: list[str],
         resolved_campaign_id: str,
         question_template: str,
@@ -243,6 +236,7 @@ def _answer_customer_question(
         prompt_template=question_template,
         conversation_history=conversation_history,
         context=build_customer_query_context(query_result),
+        route=route,
     )
 
     return AnalystResult(

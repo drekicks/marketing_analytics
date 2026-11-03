@@ -30,8 +30,10 @@ This portfolio project demonstrates an end-to-end Business-Ready Data and AI wor
 - Natural language "Ask Analyst" experience
 - Campaign comparison and performance insights
 - Interactive visualizations
-- PostgreSQL development environment with CSV-powered demo deployment
-- Configurable OpenAI models for balancing quality, latency, and cost
+- Neon (serverless PostgreSQL) as the data source, with a CSV fallback for offline use
+- Guarded text-to-SQL for customer-level questions
+- Comparison answers laid out as tables
+- Configurable OpenAI model (one setting for the whole app)
 
 ## Project Architecture
 
@@ -146,7 +148,7 @@ Current capabilities include:
 - Campaign performance summaries
 - Segment-level performance analysis
 - Campaign-to-campaign comparisons
-- Customer-level campaign analysis
+- Customer-level campaign analysis (guarded text-to-SQL, see below)
 - Portfolio-level insights and derived signals
 - Session-aware follow-up questions
 - Active-campaign switching
@@ -167,6 +169,30 @@ Example questions:
 - `Chart conversion rate by segment`
 - `Plot campaign revenue`
 
+### Customer Questions (Guarded Text-to-SQL)
+
+Questions about individual customers or customer attributes, such as country, customer tier,
+recency, favourite film category, or "how many / which / top 10 customers", are answered with
+SQL that the model writes against the `customer_analytic_layer` dbt model in Neon. All other
+questions use pre-aggregated data prepared by the application.
+
+The generated SQL runs only after layered safety checks:
+
+- **Validation (sqlglot):** exactly one read-only `SELECT`; no DDL, DML, `COPY`, `SET` or
+  `SELECT ... INTO`; only the virtual table `cal`; no system functions. The query that runs is
+  re-generated from the parsed query, so it is exactly what was validated.
+- **Scoping:** `cal` is the customer table pre-filtered to the campaigns in the question (or the
+  active campaign), with a row limit.
+- **Read-only database role:** `app_readonly` can only `SELECT` from `customer_analytic_layer`,
+  runs read-only transactions, and has a 5-second statement timeout.
+
+The SQL used for each answer is shown in an expandable "SQL used" panel.
+
+Example questions:
+
+- `How many High Value customers converted in the test group?`
+- `Which countries had the most converters?` and then `What about Canada?`
+
 ### Data Validation
 
 Validation is performed before Tableau extracts are created.
@@ -186,11 +212,16 @@ This keeps the dashboard data stable and prevents the underlying CSV files from 
 The extract workflow creates curated CSV files such as:
 
 ```text
-campaign_performance_summary.csv
+campaign_summary.csv
 campaign_segment_summary.csv
 campaign_analytic_layer.csv
 campaign_tableau_summary.csv
+campaign_goals.csv
+unique_campaigns.csv
 ```
+
+The same files in `data/demo/` are the app's offline fallback (`DATA_SOURCE=csv`), so they always
+use the same column names as the dbt marts.
 
 These files are intended to serve as controlled Tableau data sources.
 
@@ -198,16 +229,17 @@ These files are intended to serve as controlled Tableau data sources.
 
 ## Technology Stack
 
-- **Database:** PostgreSQL, pgvector
+- **Database:** PostgreSQL on Neon (serverless), pgvector
 - **Transformation / Analytics Engineering:** dbt Core, SQL
 - **SQL client:** DBeaver
 - **Programming language:** Python
 - **Data processing:** pandas
-- **Database access:** SQLAlchemy, psycopg2
+- **Database access:** SQLAlchemy, psycopg 3
+- **SQL validation (text-to-SQL guardrails):** sqlglot
 - **Dashboarding:** Tableau
 - **Python visualization:** Matplotlib
 - **AI integration:** OpenAI API
-- **Application interface:** Python CLI; Streamlit for Demo Mode
+- **Application interface:** Streamlit web app; Python CLI
 - **Development environment:** PyCharm
 - **Testing:** pytest
 - **Version control:** Git and GitHub
@@ -215,39 +247,28 @@ These files are intended to serve as controlled Tableau data sources.
 ## Project Structure
 
 ```text
-project-root/
-|
-app/
-├── ai/
-│   ├── analyst_chat.py
-│   ├── context_builder.py
-│   ├── prompt_builder.py
-│   ├── prompt_loader.py
-│   ├── session_state_manager.py
-│   └── llm_client_api.py
-├── config/
-│   ├── paths.py
-│   ├── router.py
-│   └── settings.py
-├── extracts/
-├── generation/
-├── sql/
-├── ui/
-├── utils/
-└── visualization/
-    ├── chart_builder.py
-    ├── chart_dispatcher.py
-    ├── campaign_charts.py
-    └── segment_charts.py
-prompts/
-|-- main.py
-|-- .env
-|-- .gitignore
-|-- requirements.txt
-`-- README.md
+marketing_analytics/
+├── streamlit_app.py          Streamlit web app
+├── main.py                   CLI entry point
+├── app/
+│   ├── ai/                   prompts, context building, OpenAI calls, session state
+│   ├── config/               settings, paths, question router
+│   ├── services/             analyst orchestration, RAG, customer text-to-SQL
+│   ├── sql/                  SQL extracts read from the dbt marts
+│   ├── ui/                   CLI and shared user-facing error messages
+│   ├── utils/                database, data loading, knowledge ingestion/search
+│   ├── visualization/        matplotlib charts and their text equivalents
+│   └── extracts/             validated CSV exports (Tableau + offline fallback)
+├── prompts/                  prompt templates
+├── marketing_analytics_dbt/  dbt project (staging, marts, seeds, tests, knowledge docs)
+├── data/demo/                CSV snapshots of the marts
+├── tests/                    pytest suite
+├── requirements.txt          app dependencies
+├── requirements-dev.txt      app dependencies + pytest
+└── .env.example              environment variable template
 ```
 
-The exact structure may evolve as the Ask Analyst functionality is expanded.
+See `ARCHITECTURE.md` for a detailed walkthrough of every module and the request flow.
 
 ## Retrieval-Augmented Generation (RAG)
 
@@ -278,10 +299,11 @@ The `ai.knowledge_chunks` table stores the business knowledge used by the RAG wo
 | `id` | Unique identifier for the stored knowledge chunk |
 | `source` | Markdown source file, such as `segments.md` or `metrics.md` |
 | `title` | Business concept represented by the chunk |
+| `category` | Top-level `#` heading the chunk belongs to (used for category lookups) |
 | `content` | Full Markdown content for the business concept |
 | `embedding` | 1536-dimensional vector representation generated by the embedding model |
 
-The table is stored in the `ai` PostgreSQL schema rather than the dbt-managed `dbt_dev` schema because the table is populated by the AI knowledge-ingestion process rather than by dbt.
+The table is stored in the `ai` PostgreSQL schema rather than the dbt-managed `dbt_dev_analytics` schema because the table is populated by the AI knowledge-ingestion process rather than by dbt.
 
 ### Knowledge Ingestion Flow
 
@@ -331,30 +353,51 @@ source .venv/bin/activate
 ### 3. Install dependencies
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
+
+`requirements-dev.txt` installs the app dependencies plus pytest. Deployments use `requirements.txt`.
 
 ### 4. Configure environment variables
 
-Create a `.env` file in the project root.
-
-Example:
+Copy `.env.example` to `.env` in the project root and fill in the values:
 
 ```env
-DB_HOST=localhost
+OPENAI_API_KEY=...
+OPENAI_MODEL=...                  # used for every AI answer
+
+DATA_SOURCE=postgres              # postgres = Neon; csv = offline fallback in data/demo/
+ANALYTICS_SCHEMA=dbt_dev_analytics
+
+DB_HOST=your-endpoint.region.aws.neon.tech
 DB_PORT=5432
-DB_NAME=dvdrental
-DB_USER=your_username
-DB_PASSWORD=your_password
+DB_NAME=...
+DB_USER=...
+DB_PASSWORD=...
+DB_SSLMODE=require
+
+DB_READONLY_USER=app_readonly     # customer text-to-SQL only (see below)
+DB_READONLY_PASSWORD=...
 ```
 
-Additional variables may be required for the AI integration.
+The database settings are also needed in CSV mode for knowledge (RAG) questions.
 
 Do not commit the `.env` file to GitHub.
 
 ### 5. Load the database
 
-Install PostgreSQL and restore the `dvdrental` sample database. Then run any project-specific SQL needed to create the campaign tables, views, or analytical layers.
+Restore the `dvdrental` sample database (plus the `campaign_results` and `customer_segment` tables) into the
+`public` schema of your Neon (or local PostgreSQL) database, then build the dbt project (below).
+
+Create the read-only role used for customer text-to-SQL (once, in the Neon SQL editor):
+
+```sql
+CREATE ROLE app_readonly LOGIN PASSWORD '<strong password>';
+GRANT USAGE ON SCHEMA dbt_dev_analytics TO app_readonly;
+GRANT SELECT ON dbt_dev_analytics.customer_analytic_layer TO app_readonly;
+ALTER ROLE app_readonly SET default_transaction_read_only = on;
+ALTER ROLE app_readonly SET statement_timeout = '5s';
+```
 
 ## dbt Setup
 
@@ -364,13 +407,19 @@ Install:
 
 ```bash
 pip install dbt-postgres
-
-Configure dbt profile in:
-~/.dbt/profiles.yml
-
-dbt debug
-dbt build
 ```
+
+Copy the `neon` output from `marketing_analytics_dbt/profiles.example.yml` into `~/.dbt/profiles.yml`
+and set `NEON_DB_HOST`, `NEON_DB_USER`, `NEON_DB_PASSWORD` and `NEON_DB_NAME`. Then:
+
+```bash
+cd marketing_analytics_dbt
+dbt build --target neon
+```
+
+Models build into `dbt_dev_staging` and `dbt_dev_analytics`. On the `neon` target, dbt also re-grants
+`SELECT` on `customer_analytic_layer` to `app_readonly` and sets its replica identity (required by the
+logical-replication publication used by Fivetran).
 ## pgvector Setup
 
 The RAG workflow uses the pgvector PostgreSQL extension to store and search embedding vectors.
@@ -385,23 +434,49 @@ CREATE EXTENSION IF NOT EXISTS vector;
 CREATE TABLE ai.knowledge_chunks (
     id bigserial primary key,
     source text not null,
+    category text,
     title text not null,
     content text not null,
     embedding vector(1536) not null
 );
 ```
 
+Load or refresh the knowledge store (rebuilds the table):
+
+```bash
+python -m app.utils.knowledge_ingestion
+```
+
 ## Running the Project
 
-### Run Ask Analyst
+### Run the Streamlit app
 
 From the project root:
 
 ```bash
-python -m app.main
+streamlit run streamlit_app.py
 ```
 
-This runs the application without refreshing the Tableau CSV extracts.
+### Run the CLI
+
+```bash
+python main.py
+```
+
+Neither command refreshes the Tableau CSV extracts.
+
+### Run the tests
+
+```bash
+pytest
+```
+
+Tests use the demo CSVs and dummy OpenAI settings, so they need no network. To also check the
+text-to-SQL guardrails against your database:
+
+```bash
+CUSTOMER_SQL_DB_TESTS=1 pytest tests/test_customer_sql_postgres.py
+```
 
 ### Refresh Tableau Extracts
 
@@ -416,18 +491,18 @@ python -m app.extracts.campaign_extract
 ```python
 extracts = load_sql_extracts(
     [
-        "campaign_performance_summary",
+        "campaign_summary",
         "campaign_segment_summary",
         "analytic_layer",
     ]
 )
 
-performance_df = extracts["campaign_performance_summary"]
+performance_df = extracts["campaign_summary"]
 segment_df = extracts["campaign_segment_summary"]
 analytic_df = extracts["analytic_layer"]
 ```
 
-The DataFrames are loaded directly from SQL. CSV is used as a downstream reporting format rather than as the primary source for the Python analysis.
+The DataFrames are loaded directly from SQL (the dbt marts, schema set by `ANALYTICS_SCHEMA`). CSV is used as a downstream reporting format rather than as the primary source for the Python analysis.
 
 ## Design Decisions
 

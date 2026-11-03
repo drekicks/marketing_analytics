@@ -35,7 +35,8 @@ See `.env.example`.
 - `app/ai/analyst_chat.py::ask_analyst`: builds context, fills `prompts/analyst_guidelines.md`, calls the LLM.
 - `app/ai/context_builder.py`: DataFrame rows → labelled text for the LLM. `app/ai/insight_signals.py` holds the pre-computed rankings.
 - `app/ai/llm_client_api.py::generate_analysis`: the only text-generation call (Responses API, `OPENAI_MODEL`).
-- `app/services/rag_service.py` + `app/utils/knowledge_search.py`: RAG (model hard-coded `gpt-5.5`).
+- `app/services/rag_service.py` + `app/utils/knowledge_search.py`: RAG (answers via `generate_analysis`, so `OPENAI_MODEL`).
+- `app/ui/errors.py::user_message` + `app/errors.py` (`ConfigurationError`, `LLMServiceError`): user-facing error text for both UIs.
 - `app/services/customer_sql_service.py` + `prompts/customer_sql.md`: customer-level text-to-SQL (`validate_sql`,
   `run_customer_query`, `build_customer_query_context`). `llm_client_api.generate_json` returns structured `{sql, explanation}`.
 - `app/utils/data_loader.py`: module-level globals `summary_df`, `segment_df`, `campaign_goals_df`, `unique_campaigns_df`
@@ -46,7 +47,11 @@ See `.env.example`.
 
 ## Conventions noticed
 - Python: absolute imports from `app.` and run from the repo root. Type hints with `X | None`. Dataclasses for
-  results and state. Business/data errors are raised as `ValueError` (the UI catches only `ValueError`).
+  results and state. Errors: raise `ValueError` with a user-ready message for business/data problems,
+  `LLMServiceError` for AI-service failures, `ConfigurationError` for missing settings; let DB errors propagate.
+  UIs catch `Exception` and show `user_message(error)`, never raw tracebacks. One OpenAI client (`llm_client_api.client`).
+- Routing: `route_question` runs once per question in `process_analyst_question`; pass `route=` to `ask_analyst`.
+  Scope words live only in `router.SCOPE_TERMS` / `is_scope_request`. Add new routes with a case in `tests/test_router.py`.
 - Module layout: `config/` (settings, paths, routing), `ai/` (prompting and context), `services/` (orchestration),
   `utils/` (I/O and DB), `visualization/`, `extracts/` (offline export scripts), `sql/` (one static query per file,
   loaded by name via `file_utils.load_sql_extracts([...])`).

@@ -16,6 +16,7 @@ from sqlalchemy.exc import DBAPIError
 
 from app.services.customer_sql_service import (
     MAX_RESULT_ROWS,
+    CustomerQueryError,
     execute_customer_query,
     validate_sql,
 )
@@ -82,7 +83,7 @@ def test_conversions_match_the_campaign_mart(campaign_ids):
 
 
 def test_long_running_query_hits_statement_timeout(campaign_ids):
-    with pytest.raises(DBAPIError, match="statement timeout"):
+    with pytest.raises(CustomerQueryError, match="statement timeout"):
         execute_customer_query(
             validate_sql("select count(*) from cal a cross join cal b cross join cal c"),
             campaign_ids,

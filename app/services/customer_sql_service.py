@@ -66,6 +66,10 @@ SQL_RESPONSE_SCHEMA = {
 }
 
 
+class CustomerQueryError(Exception):
+    """The model's query failed in the database (bad column, timeout, ...)."""
+
+
 @dataclass
 class CustomerQueryResult:
     sql: str
@@ -164,13 +168,22 @@ def execute_customer_query(validated_sql: str, campaign_ids: list[str]) -> pd.Da
     """Run validated SQL as the read-only role, in a read-only transaction."""
     engine = get_readonly_engine()
 
+    # Connection problems raised here (engine.begin, SET ...) propagate as
+    # DBAPIError and are shown as "couldn't reach the database".
     with engine.begin() as conn:
         conn.exec_driver_sql("SET TRANSACTION READ ONLY")
         conn.exec_driver_sql(f"SET LOCAL statement_timeout = '{STATEMENT_TIMEOUT}'")
-        result = conn.execute(
-            text(build_wrapped_query(validated_sql)),
-            {"campaign_ids": list(campaign_ids)},
-        )
+
+        # Errors from the model's query itself are worth one retry.
+        try:
+            result = conn.execute(
+                text(build_wrapped_query(validated_sql)),
+                {"campaign_ids": list(campaign_ids)},
+            )
+        except DBAPIError as error:
+            message = str(getattr(error, "orig", error)).strip().splitlines()[0]
+            raise CustomerQueryError(message) from error
+
         return pd.DataFrame(result.fetchall(), columns=list(result.keys()))
 
 
@@ -219,8 +232,9 @@ def run_customer_query(
     """
     Have the model write SQL for a customer-level question and run it safely.
 
-    A database error (for example a misspelt column) gets one retry with the
-    error fed back to the model. Validation failures are not retried.
+    A query error (for example a misspelt column) gets one retry with the
+    error fed back to the model. Validation failures and connection failures
+    are not retried.
     """
     if not campaign_ids:
         raise ValueError("No campaign is selected for this customer question.")
@@ -235,8 +249,8 @@ def run_customer_query(
 
         try:
             rows = execute_customer_query(validated_sql, campaign_ids)
-        except DBAPIError as error:
-            message = str(getattr(error, "orig", error)).strip().splitlines()[0]
+        except CustomerQueryError as error:
+            message = str(error)
             logger.warning(
                 "Customer query attempt %s failed: %s | SQL: %s",
                 attempt, message, validated_sql,

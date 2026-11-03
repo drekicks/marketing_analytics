@@ -3,12 +3,11 @@ import json
 from openai import BadRequestError, OpenAI, OpenAIError
 
 from app.config.settings import MODEL_NAME, openai_api_key
+from app.errors import LLMServiceError  # noqa: F401  (re-exported for callers)
 
-
-if not openai_api_key:
-    raise RuntimeError("OPENAI_API_KEY is not set. Check your .env loading.")
 
 client = OpenAI(api_key=openai_api_key)
+
 
 MAX_PROMPT_CHARACTERS = 400_000
 
@@ -50,7 +49,7 @@ def generate_analysis(prompt: str) -> str:
 
     Raises:
         ValueError: If the prompt is empty or too large.
-        RuntimeError: If the API request fails or returns no text.
+        LLMServiceError: If the API request fails or returns no text.
     """
     if not prompt or not prompt.strip():
         raise ValueError("Prompt cannot be empty.")
@@ -66,7 +65,7 @@ def generate_analysis(prompt: str) -> str:
         analysis = response.output_text
 
         if not analysis or not analysis.strip():
-            raise RuntimeError("LLM request returned no text.")
+            raise LLMServiceError("LLM request returned no text.")
 
         return analysis.strip()
 
@@ -80,10 +79,10 @@ def generate_analysis(prompt: str) -> str:
                 "limiting conversation history, or using a smaller campaign context."
             ) from e
 
-        raise RuntimeError(f"LLM request failed due to a bad request: {e}") from e
+        raise LLMServiceError(f"LLM request failed due to a bad request: {e}") from e
 
     except OpenAIError as e:
-        raise RuntimeError(f"LLM request failed: {e}") from e
+        raise LLMServiceError(f"LLM request failed: {e}") from e
 
 
 def generate_json(prompt: str, schema_name: str, schema: dict) -> dict:
@@ -96,7 +95,7 @@ def generate_json(prompt: str, schema_name: str, schema: dict) -> dict:
 
     Raises:
         ValueError: If the prompt is empty or too large.
-        RuntimeError: If the API request fails or the reply is not valid JSON.
+        LLMServiceError: If the API request fails or the reply is not valid JSON.
     """
     if not prompt or not prompt.strip():
         raise ValueError("Prompt cannot be empty.")
@@ -118,12 +117,12 @@ def generate_json(prompt: str, schema_name: str, schema: dict) -> dict:
         )
 
     except BadRequestError as e:
-        raise RuntimeError(f"LLM request failed due to a bad request: {e}") from e
+        raise LLMServiceError(f"LLM request failed due to a bad request: {e}") from e
 
     except OpenAIError as e:
-        raise RuntimeError(f"LLM request failed: {e}") from e
+        raise LLMServiceError(f"LLM request failed: {e}") from e
 
     try:
         return json.loads(response.output_text)
     except (TypeError, json.JSONDecodeError) as e:
-        raise RuntimeError("LLM returned a reply that is not valid JSON.") from e
+        raise LLMServiceError("LLM returned a reply that is not valid JSON.") from e
