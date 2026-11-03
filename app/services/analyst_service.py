@@ -4,7 +4,7 @@ from pathlib import Path
 from app.config.router import RouteResult, is_scope_request, route_question
 from app.config.settings import SessionState
 from app.ai.context_builder import build_campaign_comparison_context,build_insight_context
-from app.utils.data_loader import summary_df,campaign_goals_df,segment_df
+from app.utils.data_loader import DATA_SOURCE, get_campaign_data
 from app.ai.analyst_chat import ask_analyst
 from app.ai.prompt_loader import load_prompt
 from app.ai.session_state_manager import resolve_campaign_id,resolve_comparison_campaign_ids
@@ -16,7 +16,6 @@ from app.services.customer_sql_service import (
     build_customer_query_context,
     run_customer_query,
 )
-from app.utils.data_loader import DATA_SOURCE
 
 chart_dir = OUTPUT_DIR
 
@@ -45,6 +44,9 @@ def process_analyst_question(
     The CLI and Streamlit interfaces can both call this function and
     decide independently how to display the returned result.
     """
+
+    data = get_campaign_data()
+    summary_df, segment_df, campaign_goals_df = data.summary, data.segment, data.goals
 
     # Determine the analytical route for the current question.
     route = route_question(question)
@@ -213,6 +215,8 @@ def _answer_customer_question(
         )
 
     campaign_ids = list(dict.fromkeys(route_campaign_ids)) or [resolved_campaign_id]
+
+    summary_df = get_campaign_data().summary
 
     validate_campaign_ids(summary_df=summary_df, campaign_ids=campaign_ids)
 

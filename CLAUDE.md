@@ -40,8 +40,9 @@ See `.env.example`.
 - `app/ui/errors.py::user_message` + `app/errors.py` (`ConfigurationError`, `LLMServiceError`): user-facing error text for both UIs.
 - `app/services/customer_sql_service.py` + `prompts/customer_sql.md`: customer-level text-to-SQL (`validate_sql`,
   `run_customer_query`, `build_customer_query_context`). `llm_client_api.generate_json` returns structured `{sql, explanation}`.
-- `app/utils/data_loader.py`: module-level globals `summary_df`, `segment_df`, `campaign_goals_df`, `unique_campaigns_df`
-  (customer-level data is queried from Neon, not loaded).
+- `app/utils/data_loader.py`: `get_campaign_data()` → `CampaignData(summary, segment, goals, unique_campaigns)`, cached
+  (Postgres TTL 10 min; `clear_campaign_data_cache()` backs the sidebar Refresh Data button). Call it inside functions,
+  never import DataFrames at module level, or new campaigns won't appear until a restart. Customer-level data is queried from Neon, not loaded.
 - `app/visualization/`: matplotlib PNG charts (`chart_dispatcher`) and their text equivalents (`chart_builder`).
 - `prompts/*.md`: prompt templates using `{{placeholder}}` syntax (filled by `app/ai/prompt_builder.py`).
 - `tools/synthetic_data_creation/campaign_generation.py`: weekly synthetic campaign generator (results + exactly one goal per campaign
@@ -73,4 +74,4 @@ See `.env.example`.
   read-only transaction, 5s timeout, campaign-scoped `cal` wrapper, row limit). Never execute model SQL any other way,
   and never grant `app_readonly` more than SELECT on `customer_analytic_layer`. Add a rejection test for every new
   threat in `tests/test_customer_sql_validation.py`. DB guardrail tests: `CUSTOMER_SQL_DB_TESTS=1 pytest tests/test_customer_sql_postgres.py`.
-- Many modules do work at import time (settings validation, data loading), so tests rely on `tests/conftest.py`.
+- Many modules do work at import time (settings validation), so tests rely on `tests/conftest.py`.

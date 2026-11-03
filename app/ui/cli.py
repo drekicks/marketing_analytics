@@ -1,4 +1,4 @@
-from app.utils.data_loader import summary_df, campaign_goals_df
+from app.utils.data_loader import get_campaign_data
 from app.config.settings import SessionState
 from app.services.analyst_service import process_analyst_question
 from app.ai.context_builder import build_campaign_context
@@ -17,10 +17,10 @@ def show_executive_summary(default_campaign_id: str,campaign_name) -> None:
     print()
 
     try:
-
+        data = get_campaign_data()
         context = build_campaign_context(
-            summary_df,
-            campaign_goals_df,
+            data.summary,
+            data.goals,
             default_campaign_id
         )
 
