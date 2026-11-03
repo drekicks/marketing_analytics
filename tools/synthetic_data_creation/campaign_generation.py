@@ -12,8 +12,10 @@ Each run:
 3. Jitters each segment's baseline rate and lift so campaigns differ, then simulates
    response, conversion, revenue and costs per customer.
 4. Builds exactly one goal row for the campaign.
-5. Replaces any rows for that campaign_id in public.campaign_results and
-   public.campaign_goals, in one transaction.
+5. Inserts the results and the goal into public.campaign_results and
+   public.campaign_goals, in one transaction. The load is insert-only: Neon
+   publishes campaign_results for logical replication and the table has no
+   replica identity, so Postgres rejects any DELETE on it.
 
 Afterwards run `dbt build --target neon` so the marts pick up the campaign.
 
@@ -451,7 +453,14 @@ def fetch_inputs(engine) -> tuple[list[dict], list[str]]:
 
 
 def load_campaign(engine, campaign: GeneratedCampaign) -> None:
-    """Replace this campaign's rows in both raw tables, in one transaction."""
+    """
+    Insert this campaign's results and goal in one transaction.
+
+    Insert-only on purpose: public.campaign_results is in Neon's logical
+    replication publication without a replica identity, so any DELETE on it
+    fails. If the campaign_id already exists (e.g. a manual run raced the
+    weekly one), nothing is written.
+    """
     from sqlalchemy import text
 
     def insert_sql(table: str, columns: list[str]):
@@ -460,10 +469,18 @@ def load_campaign(engine, campaign: GeneratedCampaign) -> None:
             f"values ({', '.join(':' + c for c in columns)})"
         )
 
-    params = {"campaign_id": campaign.spec.campaign_id}
+    campaign_id = campaign.spec.campaign_id
     with engine.begin() as connection:
-        connection.execute(text("delete from public.campaign_results where campaign_id = :campaign_id"), params)
-        connection.execute(text("delete from public.campaign_goals where campaign_id = :campaign_id"), params)
+        for table in ("campaign_results", "campaign_goals"):
+            exists = connection.execute(
+                text(f"select 1 from public.{table} where campaign_id = :campaign_id limit 1"),
+                {"campaign_id": campaign_id},
+            ).first()
+            if exists:
+                raise ValueError(
+                    f"{campaign_id} already exists in public.{table}; nothing written. "
+                    "Run the generator again to get the next free ID."
+                )
         connection.execute(insert_sql("campaign_results", RESULT_COLUMNS), campaign.results)
         connection.execute(insert_sql("campaign_goals", GOAL_COLUMNS), campaign.goal)
 
