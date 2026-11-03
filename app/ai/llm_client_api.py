@@ -1,3 +1,5 @@
+import json
+
 from openai import BadRequestError, OpenAI, OpenAIError
 
 from app.config.settings import MODEL_NAME, openai_api_key
@@ -82,3 +84,46 @@ def generate_analysis(prompt: str) -> str:
 
     except OpenAIError as e:
         raise RuntimeError(f"LLM request failed: {e}") from e
+
+
+def generate_json(prompt: str, schema_name: str, schema: dict) -> dict:
+    """
+    Send a prompt and return the model's reply parsed as JSON.
+
+    Uses Responses API structured output, so the reply must match `schema`
+    (a strict JSON Schema object). Used where the application needs
+    machine-readable output, such as model-written SQL.
+
+    Raises:
+        ValueError: If the prompt is empty or too large.
+        RuntimeError: If the API request fails or the reply is not valid JSON.
+    """
+    if not prompt or not prompt.strip():
+        raise ValueError("Prompt cannot be empty.")
+
+    _validate_prompt_size(prompt)
+
+    try:
+        response = client.responses.create(
+            model=MODEL_NAME,
+            input=prompt,
+            text={
+                "format": {
+                    "type": "json_schema",
+                    "name": schema_name,
+                    "schema": schema,
+                    "strict": True,
+                }
+            },
+        )
+
+    except BadRequestError as e:
+        raise RuntimeError(f"LLM request failed due to a bad request: {e}") from e
+
+    except OpenAIError as e:
+        raise RuntimeError(f"LLM request failed: {e}") from e
+
+    try:
+        return json.loads(response.output_text)
+    except (TypeError, json.JSONDecodeError) as e:
+        raise RuntimeError("LLM returned a reply that is not valid JSON.") from e

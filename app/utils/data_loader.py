@@ -16,7 +16,6 @@ def load_csv_data() -> tuple[
     pd.DataFrame,
     pd.DataFrame,
     pd.DataFrame,
-    pd.DataFrame,
 ]:
     """
        Load the synthetic datasets used by the hosted demo.
@@ -40,22 +39,16 @@ def load_csv_data() -> tuple[
         / "campaign_goals.csv"
     )
 
-    customer = pd.read_csv(
-        DEMO_DATA_DIR
-        / "campaign_analytic_layer.csv"
-    )
-
     unique_campaigns = pd.read_csv(
         DEMO_DATA_DIR
         / "unique_campaigns.csv"
     )
 
-    return summary, segment, goals, customer, unique_campaigns
+    return summary, segment, goals, unique_campaigns
 
 
 @st.cache_data(ttl=3600)
 def load_postgres_data() -> tuple[
-    pd.DataFrame,
     pd.DataFrame,
     pd.DataFrame,
     pd.DataFrame,
@@ -73,7 +66,6 @@ def load_postgres_data() -> tuple[
         [
             "campaign_segment_summary",
             "campaign_summary",
-            "analytic_layer",
             "unique_campaigns_list",
             "campaign_goals",
         ]
@@ -82,17 +74,16 @@ def load_postgres_data() -> tuple[
     unique_campaigns = extracts["unique_campaigns_list"]
     segment = extracts["campaign_segment_summary"]
     summary = extracts["campaign_summary"]
-    customer = extracts["analytic_layer"]
     goals = extracts["campaign_goals"]
 
-    return summary, segment, goals, customer, unique_campaigns
+    return summary, segment, goals, unique_campaigns
 
 
 if DATA_SOURCE == "csv":
-    summary_df, segment_df, campaign_goals_df, customer_df,unique_campaigns_df = (load_csv_data())
+    summary_df, segment_df, campaign_goals_df, unique_campaigns_df = load_csv_data()
 
 elif DATA_SOURCE == "postgres":
-    summary_df, segment_df, campaign_goals_df, customer_df, unique_campaigns_df = (load_postgres_data())
+    summary_df, segment_df, campaign_goals_df, unique_campaigns_df = load_postgres_data()
 
 else:
     raise ValueError(

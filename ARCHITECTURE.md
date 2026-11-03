@@ -15,7 +15,7 @@
 | NeonDB (Postgres) | ⚠️ The code is plain Postgres via SQLAlchemy + `psycopg` (v3). **Neon is never named anywhere.** The only hint is optional `DB_SSLMODE` support in `app/utils/database.py::get_database_engine`, which a hosted Postgres like Neon needs. **(inferred)** Neon is what the `DB_*` env vars point at in your deployed setup. README and `.idea/dataSources.xml` describe a **local** Postgres (`localhost:5432`, `dvdrental`). |
 | dbt for transformations | ✅ `marketing_analytics_dbt/` (dbt Core, Postgres adapter 1.11 per `logs/dbt.log`; `sources.yml` also supports Snowflake). The app **never runs dbt**. It reads dbt output tables through static SQL files. |
 | OpenAI API for AI features | ✅ `openai` SDK, **Responses API** (`client.responses.create`) for text, and `text-embedding-3-small` for RAG embeddings. |
-| *(implied)* AI generates SQL | ❌ **There is no text-to-SQL.** The LLM never writes or runs SQL. The app loads whole, pre-aggregated tables into pandas when it starts. Python picks rows and formats them as text, and the LLM only interprets that text. The only SQL that runs per question is the pgvector similarity search used by RAG. |
+| *(implied)* AI generates SQL | ⚠️ **Only for customer-level questions (Phase 3).** These go through guarded text-to-SQL against `customer_analytic_layer` (`app/services/customer_sql_service.py`, see §5). Every other question uses pre-aggregated mart tables loaded into pandas at start-up: Python picks rows and formats them as text, and the LLM only interprets that text. |
 | *(not mentioned)* | Also present: **pgvector** for RAG, **matplotlib** for charts, **Tableau** workbook + CSV extracts, and a **CSV "demo mode"** that is the default data source. |
 
 ---
@@ -37,6 +37,7 @@ marketing_analytics/
 ├── .devcontainer/              GitHub Codespaces config, auto-runs `streamlit run streamlit_app.py`
 ├── prompts/                    LLM prompt templates with {{placeholders}}
 │   ├── analyst_guidelines.md     Ask Analyst prompt
+│   ├── customer_sql.md           Customer text-to-SQL prompt (virtual table `cal`, JSON {sql, explanation})
 │   └── executive_summary.md      Executive Summary prompt
 ├── app/
 │   ├── config/
@@ -54,6 +55,7 @@ marketing_analytics/
 │   │   └── llm_client_api.py     The OpenAI text call (generate_analysis) + prompt-size guard
 │   ├── services/
 │   │   ├── analyst_service.py    process_analyst_question(): UI-agnostic orchestrator used by both UIs
+│   │   ├── customer_sql_service.py  Customer questions: validate_sql(), run_customer_query() (guarded text-to-SQL)
 │   │   └── rag_service.py        answer_with_rag(): knowledge-question path (pgvector search + OpenAI)
 │   ├── visualization/
 │   │   ├── chart_dispatcher.py   create_visualization(): picks which chart function to call
@@ -113,7 +115,7 @@ marketing_analytics/
    - `data_loader.py` reads `DATA_SOURCE` (default `"csv"`):
      - `csv` → `load_csv_data()` (wrapped in `@st.cache_data`) reads `data/demo/campaign_summary.csv`, `campaign_segment_summary.csv`, `campaign_goals.csv`, `campaign_analytic_layer.csv`, `unique_campaigns.csv`.
      - `postgres` → `load_postgres_data()` (`@st.cache_data(ttl=3600)`) → `file_utils.load_sql_extracts([...])` runs five `app/sql/*.sql` files, including goals from the `campaign_goals` seed. `{{analytics_schema}}` is replaced with `ANALYTICS_SCHEMA` (default `dbt_dev_analytics`).
-   - The result is five module-level globals: `summary_df`, `segment_df`, `campaign_goals_df`, `customer_df`, `unique_campaigns_df`.
+   - The result is four module-level globals: `summary_df`, `segment_df`, `campaign_goals_df`, `unique_campaigns_df`. Customer-level data is not loaded into memory; customer questions query Neon directly (step 7d).
 2. Importing `app/ai/llm_client_api.py`, `app/services/rag_service.py`, and `app/utils/embedding_service.py` each creates its own `OpenAI(...)` client.
 3. *(Removed in Phase 2: `insight_signals.py` used to compute unused signals at import time.)*
 4. `streamlit_app.py` initialises `st.session_state`: `analytics_session` (a `SessionState`), `executive_summary`, `messages` (visible chat), `analyst_history` (Q/A pairs sent to the LLM). It also builds `campaign_options`, sets the first campaign as active, and renders the sidebar selector (`handle_campaign_change` clears chat and summary when the campaign changes).
@@ -135,14 +137,15 @@ marketing_analytics/
 | 7a | **Visualization route:** `create_visualization(...)` saves a PNG to `output/charts/<id>_segment_revenue.png` (etc.). `build_visualization_context(...)` renders the same numbers as text. `ask_analyst(...)` is then called once with a wrapper instruction and that context, and the result is returned immediately. | `app/visualization/chart_dispatcher.py`, `chart_builder.py`, `analyst_service.py` ~73–125 |
 | 7b | **Comparison route:** `resolve_comparison_campaign_ids` pairs a single mentioned ID with the *previous* active campaign → `build_campaign_comparison_context` (validates IDs and concatenates per-campaign contexts). | `session_state_manager.py`, `context_builder.py` |
 | 7c | **Insight route:** `build_insight_context(...)`. With a scope word and no ID it is portfolio-wide (sums across campaigns + derived signals across all campaign×segment rows). Otherwise it covers a single campaign (overall + per-segment + derived signals). | `context_builder.py::build_insight_context`, `insight_signals.py` |
-| 8 | `ask_analyst(campaign_id, question, prompt_template, conversation_history, context)` **re-routes the question again**. If no context was passed it builds one: `knowledge` → **returns `answer_with_rag(question)` immediately** (step 8R); `campaign` → `build_campaign_context`/comparison; `segment` → `build_segment_context`; `insight` → `build_insight_context`; `customer_campaign` → `build_customer_context`. | `app/ai/analyst_chat.py::ask_analyst` |
+| 8 | `ask_analyst(campaign_id, question, prompt_template, conversation_history, context)` **re-routes the question again**. If no context was passed it builds one: `knowledge` → **returns `answer_with_rag(question)` immediately** (step 8R); `campaign` → `build_campaign_context`/comparison; `segment` → `build_segment_context`; `insight` → `build_insight_context`. A `customer_campaign` route always arrives with a context from step 7d; without one it raises `ValueError`. | `app/ai/analyst_chat.py::ask_analyst` |
 | 9 | **Prompt assembly.** `build_prompt` fills `{{response_format_instructions}}` (`STANDARD_RESPONSE_FORMAT`, `INSIGHT_RESPONSE_FORMAT`, or `DERIVED_SIGNAL_RESPONSE_FORMAT`, picked by `_get_response_format_instructions`), `{{campaign_context}}`, `{{conversation_history}}` (last 5 Q/A pairs via `_format_conversation_history`), and `{{question}}`. The question may have extra ranking instructions appended by `_build_question_with_instructions` / `_get_derived_signal_metric_instruction`. | `analyst_chat.py`, `app/ai/prompt_builder.py::build_prompt` |
 | 10 | **OpenAI call.** `generate_analysis(prompt)` rejects empty or >400,000-character prompts. It calls `client.responses.create(model=MODEL_NAME, input=prompt)`, returns `response.output_text.strip()`, and maps context-length errors to `ValueError` and other API errors to `RuntimeError`. | `app/ai/llm_client_api.py::generate_analysis` |
 | 8R | **RAG path:** `search_knowledge_base(question, limit=3)` embeds the question. If any `ai.knowledge_chunks.category` string appears in the question it returns **all** chunks of that category (similarity hard-coded to 1.0). Otherwise it runs a pgvector cosine search (`embedding <=> CAST(:embedding AS vector)`). Below 0.35 similarity the app returns a canned "not enough information" answer. Otherwise an inline prompt goes to `client.responses.create(model="gpt-5.5", ...)`. | `app/services/rag_service.py::answer_with_rag`, `app/utils/knowledge_search.py`, `embedding_service.py` |
-| 11 | Returns `AnalystResult(answer, campaign_id, chart_path)`. | `analyst_service.py` |
+| 7d | **Customer route (text-to-SQL):** `route_question` sends customer-grain questions (country, tier, recency, favourite category, "how many / which / top N customers") to `customer_campaign`. A short follow-up ("What about Canada?") after a customer question stays on this route. `_answer_customer_question` requires `DATA_SOURCE=postgres`. Scope is the campaign IDs in the question (validated), else the active campaign. `run_customer_query` fills `prompts/customer_sql.md` and calls `generate_json` (structured `{sql, explanation}`). `validate_sql` checks it and re-generates the SQL. `execute_customer_query` runs it as the read-only role, scoped to those campaigns with a row limit; one retry on a DB error. `build_customer_query_context` turns ≤50 result rows into a markdown table, which goes to `ask_analyst(context=...)`. | `app/services/analyst_service.py`, `app/services/customer_sql_service.py` |
+| 11 | Returns `AnalystResult(answer, campaign_id, chart_path, sql)`. The UI shows `sql` in a "SQL used" expander. | `analyst_service.py` |
 | 12 | Streamlit appends `{question, answer, timestamp}` to `analyst_history`, appends the assistant message (with `chart_path`) to `messages`, renders `st.markdown(answer)`, and calls `st.image(chart_path)` if a chart exists. A `ValueError` is shown as "Analyst: <error>". | `streamlit_app.py` ~276–318 |
 
-**SQL at question time:** none against the analytics tables, since those DataFrames are already in memory. The only per-question SQL is the RAG lookup in `knowledge_search.py` (bound parameters, not generated by the LLM).
+**SQL at question time:** for most questions, none against the analytics tables, since those DataFrames are already in memory. The exceptions are the RAG lookup in `knowledge_search.py` (bound parameters) and **customer questions**, which run one model-written, validated SELECT as the read-only role (step 7d).
 
 ---
 
@@ -206,12 +209,22 @@ All text calls use the **Responses API** with a single string `input=`. There is
 3. **Response-format inserts** in `app/ai/analyst_chat.py`: `STANDARD_RESPONSE_FORMAT` (conclusion sentence, bullets, no emphasis), `INSIGHT_RESPONSE_FORMAT` (five required `##` sections), `DERIVED_SIGNAL_RESPONSE_FORMAT` (for portfolio "overall" questions), and `DERIVED_SIGNAL_PRIORITY_INSTRUCTIONS` plus a per-metric instruction appended to the question for "which segment had the highest X" questions.
 4. **Visualization wrapper instruction**, inline in `app/services/analyst_service.py` (~96–108).
 5. **RAG prompt**, inline f-string in `app/services/rag_service.py` (Markdown rules, no LaTeX, use only the context).
+6. **`prompts/customer_sql.md`** (placeholders `{{campaign_scope}}`, `{{conversation_history}}`, `{{previous_error}}`, `{{question}}`): describes the virtual table `cal` (columns, allowed values, metric definitions) and rules (one SELECT, only `cal`, ≤50 rows, ORDER BY). Returns structured JSON `{sql, explanation}` via `llm_client_api.generate_json`.
 
 ### How data/schema reaches the model
-There is no schema in the prompt. The model never sees table or column names. `app/ai/context_builder.py` turns specific DataFrame rows into labelled, pre-formatted text ("Campaign Revenue: $10,282.98", "Conversion Rate: 18.0%"). `app/ai/insight_signals.py` pre-computes argmax/argmin rankings so the model doesn't have to do arithmetic. Conversation memory is the last 5 Q/A pairs as plain text.
+For prepared-context questions there is no schema in the prompt and the model never sees table or column names. (The customer SQL prompt is the exception: it describes the one virtual table `cal`.) `app/ai/context_builder.py` turns specific DataFrame rows into labelled, pre-formatted text ("Campaign Revenue: $10,282.98", "Conversion Rate: 18.0%"). `app/ai/insight_signals.py` pre-computes argmax/argmin rankings so the model doesn't have to do arithmetic. Conversation memory is the last 5 Q/A pairs as plain text.
 
 ### Parsing and validation
 - **Before the call:** `build_prompt` raises on unresolved `{{vars}}`. `_validate_prompt_size` caps prompts at 400k characters. Campaign IDs are validated (`validate_campaign_ids` for comparisons, plus the "not found" checks in each context builder).
+- **Customer SQL guardrails (layered):**
+  1. `validate_sql`, using sqlglot: exactly one query statement. No DDL/DML/COPY/SET/SELECT INTO/FOR UPDATE anywhere, including inside CTEs. Only `cal` or the query's own CTEs, with no schema-qualified tables. No `pg_*`/`dblink`/`lo_*`/`current_setting`/`set_config` functions.
+  2. The SQL is re-generated from the parse tree with comments removed, so the validated text is what runs.
+  3. The `WITH cal AS (... WHERE campaign_id = ANY(:campaign_ids))` wrapper enforces campaign scope, plus `LIMIT 51`.
+  4. Read-only Neon role `app_readonly` with SELECT on `customer_analytic_layer` only, `default_transaction_read_only`, and `statement_timeout = 5s`.
+  5. `SET TRANSACTION READ ONLY` + `SET LOCAL statement_timeout` per query.
+  6. Only ≤50 result rows reach the interpretation prompt.
+
+  Tested in `tests/test_customer_sql_validation.py` and `tests/test_customer_sql_postgres.py`.
 - **After the call:** only "non-empty text" (`generate_analysis`). Output is free-form Markdown rendered directly with `st.markdown`. Nothing checks that the model followed the format or quoted correct numbers. The RAG path has no validation or error handling at all.
 
 ---
@@ -225,12 +238,22 @@ There is no schema in the prompt. The model never sees table or column names. `a
 | `DATA_SOURCE` | No (default `csv`) | `app/utils/data_loader.py` | `csv` or `postgres` (target: `postgres` on Neon) |
 | `ANALYTICS_SCHEMA` | No (default `dbt_dev_analytics`) | `app/utils/database.py::get_analytics_schema` | Schema substituted for `{{analytics_schema}}` in `app/sql/*.sql`. Validated as a plain identifier. |
 | `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` | For postgres mode, **RAG**, ingestion, extracts | `app/utils/database.py::get_database_engine` | Built with `URL.create` (password escaped). One cached engine per process with `pool_pre_ping`. |
-| `DB_SSLMODE` | No; **(inferred)** needed for Neon | `database.py` | Passed as `connect_args["sslmode"]` |
+| `DB_SSLMODE` | `require` for Neon | `database.py` | Passed as `connect_args["sslmode"]` |
+| `DB_READONLY_USER`, `DB_READONLY_PASSWORD` | For customer questions (no fallback) | `database.py::get_readonly_engine` | Restricted role for model-written SQL. Create it in Neon with the SQL below. dbt re-grants SELECT on `customer_analytic_layer` on every `--target neon` build (config in the model). |
 | *(dbt)* `~/.dbt/profiles.yml`, profile `marketing_analytics_dbt` | For dbt only | `dbt_project.yml` | Not in repo. The log shows a Postgres target with schema `public` at `dbt debug` time. |
 
 Files: `.env` at the project root, loaded by `settings.py` (CWD-based `load_dotenv()`) and again by `database.py` (explicit path). Streamlit `st.secrets` support is **commented out** in `settings.py`. **(inferred)** On Streamlit Community Cloud this still works because top-level secrets are exported as environment variables.
 
 No real secrets are committed (`.env` is git-ignored, and `.env.example` holds placeholders).
+
+Read-only role for customer text-to-SQL (run once in the Neon SQL editor, then `dbt build --target neon`):
+```sql
+CREATE ROLE app_readonly LOGIN PASSWORD '<strong password>';
+GRANT USAGE ON SCHEMA dbt_dev_analytics TO app_readonly;
+GRANT SELECT ON dbt_dev_analytics.customer_analytic_layer TO app_readonly;
+ALTER ROLE app_readonly SET default_transaction_read_only = on;
+ALTER ROLE app_readonly SET statement_timeout = '5s';
+```
 
 ---
 
@@ -303,6 +326,9 @@ flowchart TD
     SVC -->|visualization| VIZ
     SVC --> AC
     AC -->|knowledge route| RAG
+    SVC -->|customer route| CSQL[customer_sql_service<br/>validate_sql → read-only role]
+    CSQL -->|generate_json| OAI
+    CSQL -->|scoped SELECT| MARTS
     RAG -->|vector search| KC
     RAG -->|gpt-5.5 hard-coded| OAI[(OpenAI API)]
     AC --> CB
@@ -321,7 +347,7 @@ Severity is my judgement: 🔴 likely user-visible breakage · 🟠 wrong or was
 
 ### Bugs found by reading (not executed)
 1. ✅ **Fixed:** Charts came with the wrong answer and cost two LLM calls. The visualization branch of `analyst_service.process_analyst_question` fell through to a second `ask_analyst(context=None)` call that overwrote the chart interpretation. It now returns right after the chart-interpretation call.
-2. 🔴 **Customer-level questions crash in both data modes.** `context_builder.build_customer_context` reads `row['treatment_grp']` and `row['cnvrsn_flg']`, but `customer_analytic_layer` (and `data/demo/campaign_analytic_layer.csv`) have `treatment_group` / `conversion_flag`, which raises `KeyError`. That error is not caught by the UI's `except ValueError`. Even with the names fixed, it emits ~10k customer blocks (several MB), well past the 400k-character guard.
+2. ✅ **Fixed (Phase 3):** Customer-level questions crashed (wrong column names, ~10k rows in the prompt). `build_customer_context` is removed. Customer questions now use guarded text-to-SQL against `customer_analytic_layer`, and only ≤50 aggregated rows reach the model.
 3. ✅ **Fixed (Phase 2):** Postgres mode was out of sync with the code. The code now uses the dbt mart names (`incremental_revenue`, `segment_revenue_per_conversion`). `data/demo/campaign_segment_summary.csv` headers were renamed to match, and `insight_signals.py` no longer computes signals at import.
 4. ✅ **Fixed (Phase 2):** dbt schema vs. app SQL. `app/sql/*.sql` uses `{{analytics_schema}}` (default `dbt_dev_analytics`) instead of the stale `dbt_dev`.
 5. 🟠 **`app/utils/dbt_utils.py` calls `run_dbt_build()` at import.** Importing it shells out to `dbt build`. Nothing imports it today, so this is a trap waiting to fire.
@@ -346,8 +372,8 @@ Severity is my judgement: 🔴 likely user-visible breakage · 🟠 wrong or was
 20. RAG model `"gpt-5.5"`, embedding model, `limit=3`, `min_similarity=0.35`, `MAX_PROMPT_CHARACTERS=400_000`, last-5 history, chart colours/paths, campaign ID regex `CMP-\d+(-\d+)*`, segment names in validators, example campaign IDs in the sidebar. The executive-summary prompt embeds real numbers from one campaign as its example, which can anchor outputs.
 
 ### Security
-21. **SQL injection:** none found. All app SQL is static, and RAG queries use bound parameters. `tools/check_schema.py` uses f-string table names, but they come from a hard-coded dict.
-22. **Prompt injection:** user text, conversation history, and RAG chunks are concatenated into one prompt with no system/user separation. The impact is limited because the model has no tools and no DB access.
+21. **SQL injection:** static app SQL and RAG use bound parameters. **Model-written SQL (customer route)** is the one place generated SQL runs, behind the layered guardrails in §5. Treat changes to `customer_sql_service.py`, the read-only role or its grants as security-sensitive. `tools/check_schema.py` uses f-string table names, but they come from a hard-coded dict.
+22. **Prompt injection:** user text, conversation history, and RAG chunks are concatenated into one prompt with no system/user separation. For prepared-context answers the impact is limited because the model has no tools. On the customer route the model writes SQL, so a prompt-injected question can only produce a validated, read-only SELECT on campaign-scoped `customer_analytic_layer` rows.
 23. `.devcontainer` runs Streamlit with `--server.enableCORS false --server.enableXsrfProtection false` (fine for Codespaces, not for production).
 
 ### Duplication / dead code / inconsistency

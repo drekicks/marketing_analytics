@@ -181,6 +181,37 @@ def route_question(question: str) -> RouteResult:
         "explain",
     )
 
+    # Attributes that only exist at customer grain (customer_analytic_layer),
+    # so these questions are answered with guarded text-to-SQL.
+    customer_attribute_terms = (
+        "country",
+        "countries",
+        "high value",
+        "medium value",
+        "low value",
+        "customer tier",
+        "tier",
+        "recency",
+        "lapsed",
+        "favorite",
+        "favourite",
+        "film category",
+        "genre",
+        "category engagement",
+        "converters",
+        "win-back vip",
+        "win-back growth",
+        "win-back reactivation",
+        "upsell",
+        "engagement growth",
+        "customer id",
+    )
+
+    # "How many ... customers", "which customers", "top 10 customers", ...
+    customer_question_pattern = re.compile(
+        r"\b(how many|which|top \d+|list|show)\b.*\bcustomers?\b"
+    )
+
     def is_knowledge_question(question: str) -> bool:
         q = question.lower()
 
@@ -348,6 +379,21 @@ def route_question(question: str) -> RouteResult:
             analysis_type="summary",
             campaign_ids=[],
             visualization_request=None,
+        )
+
+    # Customer-level question: needs customer-grain attributes or counts.
+    # Checked before segments because words such as "group" ("test group")
+    # would otherwise send these to the segment summary.
+    has_customer_attribute_term = any(
+        term in normalized
+        for term in customer_attribute_terms
+    )
+
+    if has_customer_attribute_term or customer_question_pattern.search(normalized):
+        return RouteResult(
+            analysis_type="detail",
+            context_type="customer_campaign",
+            campaign_ids=campaign_ids,
         )
 
     # Explicit segment subject.

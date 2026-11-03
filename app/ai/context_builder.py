@@ -45,7 +45,7 @@ def build_segment_context(segment_df:pd.DataFrame,
                      f"Offer: {goal_row['offer']}",
                      f"Channel: {goal_row['channel']}",
                      f"Duration: {goal_row['duration']}",
-                     f"Budget: ${goal_row['budget']:,}",
+                     f"Budget: ${float(goal_row['budget']):,.0f}",
                      f"Target KPI: {goal_row['target_kpi']}",
                      f"Secondary KPI: {goal_row['secondary_kpi']}",
                      f"Target Audience: {goal_row['audience']}",
@@ -133,7 +133,7 @@ def build_campaign_context(summary_df:pd.DataFrame,
                      f"Offer: {goal_row['offer']}",
                      f"Channel: {goal_row['channel']}",
                      f"Duration: {goal_row['duration']}",
-                     f"Budget: ${goal_row['budget']:,}",
+                     f"Budget: ${float(goal_row['budget']):,.0f}",
                      f"Target KPI: {goal_row['target_kpi']}",
                      f"Secondary KPI: {goal_row['secondary_kpi']}",
                      f"Target Audience: {goal_row['audience']}",
@@ -184,79 +184,6 @@ def build_campaign_comparison_context(
         ]
     )
 
-
-def build_customer_context(customer_df:pd.DataFrame,
-                           goals_df: pd.DataFrame,
-                           campaign_id: str,) -> str:
-    """
-       Grain:
-           One row per customer and campaign.
-
-       Used for:
-           Customer-level targeting and response questions.
-       """
-
-    campaign_id = str(campaign_id)
-
-    campaign_customer_rows = customer_df[
-        customer_df["campaign_id"] == campaign_id
-    ]
-
-    goal_rows = goals_df[
-        goals_df["campaign_id"] == campaign_id
-    ]
-
-    if campaign_customer_rows.empty:
-        raise ValueError(f"{campaign_id} not found")
-
-    if goal_rows.empty:
-        raise ValueError(f"Goal data for {campaign_id} not found")
-
-    if len(goal_rows) != 1:
-        raise ValueError(
-            f"Expected one goal row for campaign_id={campaign_id}, "
-            f"found {len(goal_rows)}"
-        )
-
-    campaign_name = campaign_customer_rows['campaign_name'].iloc[0]
-    start_date = campaign_customer_rows['start_date'].iloc[0]
-    end_date = campaign_customer_rows['end_date'].iloc[0]
-    goal_row = goal_rows.iloc[0]
-
-    context_lines = [
-                     f"Campaign Name: {campaign_name}",
-                     f"Campaign ID: {campaign_id}",
-                     f"Start Date: {start_date}",
-                     f"End Date: {end_date}\n",
-                     "Campaign Metadata\n"
-                     f"------------------",
-                     f"Campaign Goal: {goal_row['campaign_goal']}",
-                     f"Offer: {goal_row['offer']}",
-                     f"Channel: {goal_row['channel']}",
-                     f"Duration: {goal_row['duration']}",
-                     f"Budget: ${goal_row['budget']:,}",
-                     f"Target KPI: {goal_row['target_kpi']}",
-                     f"Secondary KPI: {goal_row['secondary_kpi']}",
-                     f"Target Audience: {goal_row['audience']}",
-                     "",
-                     ]
-    for _, row in campaign_customer_rows.iterrows():
-        context_lines.extend([
-                      "Customer Details\n"
-                      f"------------------",
-                      f"Customer ID: {row['customer_id']}",
-                      f"Customer Tier: {row['customer_tier']}",
-                      f"Segment: {row['customer_segment']}",
-                      f"Treatment Group: {row['treatment_grp']}",
-                      f"Converted: {row['cnvrsn_flg']}",
-                      "",
-                      "Campaign Performance:\n"
-                     f"---------------------",
-                     f"Campaign Revenue: ${row['campaign_revenue']:,.2f}",
-                     f"Campaign Cost: ${row['total_campaign_cost']:,.2f}\n",
-                     ]
-        )
-    return "\n".join(context_lines)
 
 def build_insight_context(
     summary_df,

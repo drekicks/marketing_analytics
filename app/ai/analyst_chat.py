@@ -1,8 +1,8 @@
 from app.ai.llm_client_api import generate_analysis
 from app.ai.prompt_builder import build_prompt
 from app.config.router import route_question
-from app.ai.context_builder import build_campaign_context, build_segment_context, build_customer_context, build_campaign_comparison_context, build_insight_context
-from app.utils.data_loader import summary_df, segment_df, campaign_goals_df, customer_df
+from app.ai.context_builder import build_campaign_context, build_segment_context, build_campaign_comparison_context, build_insight_context
+from app.utils.data_loader import summary_df, segment_df, campaign_goals_df
 import re
 from app.services.rag_service import answer_with_rag
 
@@ -216,10 +216,11 @@ def ask_analyst(campaign_id: str,
             )
 
         elif route.context_type in {"customer", "customer_campaign"}:
-            context = build_customer_context(
-                customer_df,
-                campaign_goals_df,
-                resolved_campaign_id
+            # Customer questions are answered with guarded SQL; the context
+            # is built by analyst_service._answer_customer_question.
+            raise ValueError(
+                "Customer-level questions must be routed through "
+                "process_analyst_question()."
             )
 
         else:

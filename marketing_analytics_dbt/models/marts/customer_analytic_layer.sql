@@ -1,6 +1,8 @@
+{# The app's read-only role (customer text-to-SQL) exists only in Neon. #}
 {{ config(
     materialized='incremental',
-    unique_key=['campaign_id', 'customer_id']
+    unique_key=['campaign_id', 'customer_id'],
+    grants={'select': ['app_readonly']} if target.name == 'neon' else {}
 ) }}
 
 select

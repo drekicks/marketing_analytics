@@ -99,3 +99,6 @@ def run_cli_chat(
 
         if result.chart_path:
             print(f"\nChart saved to: {result.chart_path}")
+
+        if result.sql:
+            print(f"\nSQL used:\n{result.sql}")

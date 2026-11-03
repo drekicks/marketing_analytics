@@ -189,6 +189,7 @@ with st.sidebar:
         - Compare to CMP-2026-003
         - What are the key takeaways?
         - Chart revenue by segment.
+        - Which countries had the most converters?
         - Define customer segments.
         - Explain lapsed customers.
         """)
@@ -260,6 +261,11 @@ for message in st.session_state.messages:
         if chart_path and Path(chart_path).exists():
             st.image(chart_path)
 
+        # Customer-level answers come from model-written SQL; show it.
+        if message.get("sql"):
+            with st.expander("SQL used"):
+                st.code(message["sql"], language="sql")
+
 question = st.chat_input(
     "Ask a business question about campaign performance..."
 )
@@ -308,6 +314,7 @@ if question:
                 str(result.chart_path)
                 if result.chart_path else None
             ),
+            "sql": result.sql,
         }
 
     except ValueError as error:
@@ -315,6 +322,7 @@ if question:
             "role": "assistant",
             "content": f"Analyst: {error}",
             "chart_path": None,
+            "sql": None,
         }
 
     st.session_state.messages.append(assistant_message)
@@ -324,4 +332,8 @@ if question:
 
         if assistant_message["chart_path"]:
             st.image(assistant_message["chart_path"])
+
+        if assistant_message["sql"]:
+            with st.expander("SQL used"):
+                st.code(assistant_message["sql"], language="sql")
 
