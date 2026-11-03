@@ -26,3 +26,6 @@ tableau/
 
 tools/*
 !tools/synthetic_data_creation/
+
+# dbt anonymous user id written next to profiles.yml
+.github/dbt/.user.yml
