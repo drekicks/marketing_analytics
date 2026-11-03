@@ -93,35 +93,57 @@ Presentation Layer
 flowchart TD
 
     A[User Question]
-
+    S[Analyst Service]
     B[Router]
     C[Session Manager]
-    D[Context Builder]
 
+    D[Context Builder]
     E[Visualization Service]
-    F[Analyst Service]
+    K[Customer SQL Service]
+    V[SQL Validator<br/>one read-only SELECT]
+    J[RAG Service]
+
+    M[(dbt marts<br/>Neon or CSV)]
+    N[(Neon read-only role<br/>customer_analytic_layer)]
+    P[(Neon pgvector<br/>knowledge chunks)]
 
     G[Matplotlib]
     H[OpenAI API]
-
     I[Presentation Layer]
-    J[RAG Service]
 
-    A --> B
-    B --> C
-    C --> D
-    B --> J
+    A --> S
+    S --> B
+    S --> C
 
-    D --> E
-    D --> F
+    B -->|campaign, segment,<br/>comparison, insight| D
+    B -->|chart| E
+    B -->|customer question| K
+    B -->|definition| J
 
+    M --> D
+    M --> E
+    D -->|prepared context| H
     E --> G
-    F --> H
+    E -->|chart data| H
+
+    K -->|write SQL| H
+    H -->|SQL| V
+    V --> N
+    N -->|result table| K
+    K -->|explain result| H
+
+    P --> J
+    J -->|retrieved definitions| H
 
     G --> I
     H --> I
-    J --> H
 ```
+
+The Analyst Service routes each question once. Campaign, segment, comparison and insight questions use
+context prepared from the dbt marts. Charts are drawn with Matplotlib, and the same numbers are sent to
+the model to explain. Definition questions retrieve business knowledge from pgvector. Customer-level
+questions are the only path where the model writes SQL: the query must pass the validator and runs as the
+read-only `app_readonly` role, and only the small result table goes back to the model to explain.
 
 ### SQL Analysis
 
