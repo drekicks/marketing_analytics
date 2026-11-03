@@ -189,7 +189,7 @@ Tests: generic `not_null`/`unique`/`relationships` in `staging.yml` and `marts.y
 ### What the app actually queries
 - **Default (CSV mode):** no database at all for analytics. It reads `data/demo/*.csv`, which are snapshots exported by `app/extracts/campaign_extract.py`.
 - **Postgres mode (Neon):** `dbt_dev_analytics.campaign_performance_summary` (also the campaign list), `.segment_performance_summary`, `.customer_analytic_layer`, and `.campaign_goals` (seed). The schema comes from `ANALYTICS_SCHEMA`.
-- **Always (RAG):** `ai.knowledge_chunks` (pgvector), written by `app/utils/knowledge_ingestion.py`.
+- **Always (RAG), in all modes including CSV:** `ai.knowledge_chunks` (pgvector) in Neon, written by `app/utils/knowledge_ingestion.py`.
 - **Goals:** the dbt seed `marketing_analytics_dbt/seeds/campaign_goals.csv` → `dbt_dev_analytics.campaign_goals` in postgres mode. CSV mode uses the exported copy `data/demo/campaign_goals.csv`.
 
 > ✅ Schema: `dbt_project.yml` sets `+schema: staging/analytics` (models and seeds). With dbt's default `generate_schema_name` and target schema `dbt_dev`, everything the app reads lands in `dbt_dev_analytics`, locally and in Neon (`--target neon`, see `profiles.example.yml`). The demo CSVs use the same column names as the marts (checked by `tests/test_context_builders.py`).
@@ -369,7 +369,7 @@ Severity is my judgement: 🔴 likely user-visible breakage · 🟠 wrong or was
 
 ### Error handling / robustness
 15. ✅ **Fixed (Phase 5):** Only `ValueError` was caught. Both UIs now use `app/ui/errors.py::user_message`: `ValueError`/`ConfigurationError` text as written, `LLMServiceError` → "AI service didn't respond", `DBAPIError` → "couldn't reach the database", anything else → a generic message with the traceback logged. Streamlit also guards start-up (settings + data load). RAG errors are covered because RAG now uses `generate_analysis`. A customer-SQL connection failure is no longer retried or reported as a bad query.
-16. 🟠 **RAG needs a live database even in "CSV demo" mode.** Knowledge questions always hit `ai.knowledge_chunks`. **(inferred)** That is why the hosted demo has DB credentials, likely pointing at Neon.
+16. ℹ️ **By design:** knowledge (RAG) questions always use Neon: `ai.knowledge_chunks` and the pgvector similarity search live in Postgres, and `DATA_SOURCE=csv` only switches the campaign data (`app/utils/data_loader.py`). CSV mode therefore isn't fully offline; without `DB_*`, knowledge questions show the "couldn't reach the database" message. Documented in the README and `.env.example`.
 17. ✅ **Fixed (Phase 2):** One cached engine per process (`pool_pre_ping`); postgres-mode loads cached for an hour.
 18. ✅ **Fixed (Phase 2):** The DB URL is built with `URL.create`, so passwords are escaped.
 19. 🟡 Heavy import-time side effects: env validation, directory creation, data loading, 3 OpenAI clients, and the unused signal computation.
