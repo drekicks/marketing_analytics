@@ -169,8 +169,10 @@ Source `dvdrental`, with schema `public` on Postgres and `RAW` on Snowflake. Tab
 |---|---|---|---|
 | `campaign_performance_summary` | 1 row / campaign | `stg_campaign_results` | ✅ `app/sql/campaign_summary.sql` → `summary_df` |
 | `segment_performance_summary` | 1 row / campaign × segment | `stg_campaign_results` (TEST and CONTROL aggregated separately, then joined; lift, incremental revenue, ROI) | ✅ `app/sql/campaign_segment_summary.sql` → `segment_df` |
-| `customer_analytic_layer` | 1 row / customer × campaign (incremental on `updated_at`) | `stg_campaign_results` ⨝ `stg_customer_segment` | ✅ `app/sql/analytic_layer.sql` → `customer_df` |
+| `customer_analytic_layer` | 1 row / customer × campaign (incremental on `updated_at`) | `stg_campaign_results` ⨝ `stg_customer_segment` | ✅ queried live by customer text-to-SQL (`customer_sql_service`, read-only role); `app/sql/analytic_layer.sql` feeds the CSV/Tableau export only |
 | `customer_summary` | 1 row / customer | `stg_customer`, `stg_rental`, `stg_payment` | ❌ unused |
+
+`customer_analytic_layer` is incremental (DELETE + INSERT on `unique_key`). Neon has a logical-replication publication covering it, and Postgres rejects DELETE on a published table without a replica identity, so the model's `pre_hook`/`post_hook` set `REPLICA IDENTITY FULL` (Postgres targets only). On the `neon` target the model also grants SELECT to `app_readonly` on every build.
 
 Lineage:
 ```
