@@ -8,6 +8,7 @@ the campaign list, and user_message() turns errors into readable text.
 """
 
 import logging
+import sys
 from datetime import datetime
 
 import chainlit as cl
@@ -16,6 +17,15 @@ from chainlit.input_widget import Select
 from app.ui.errors import user_message
 
 logger = logging.getLogger(__name__)
+
+# Chainlit's CLI applies nest_asyncio, which breaks asyncio task detection on Python 3.14:
+# static files (favicon, logo) then fail with anyio.NoEventLoopError. Render uses 3.12.
+if sys.version_info >= (3, 14):
+    logger.warning(
+        "Chainlit doesn't run correctly on Python %d.%d (nest_asyncio). "
+        "Use a Python 3.12 or 3.13 environment for the Chainlit app.",
+        *sys.version_info[:2],
+    )
 
 # Importing the app validates settings (OpenAI key and model). Keep the
 # error so every chat can show it instead of crashing the server.

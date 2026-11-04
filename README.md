@@ -503,6 +503,16 @@ pip install -r requirements-chainlit.txt
 chainlit run chainlit_app.py
 ```
 
+Use Python 3.12 or 3.13 for Chainlit (Render uses 3.12). On Python 3.14, Chainlit's `nest_asyncio` patch breaks
+static files and the page logs `anyio.NoEventLoopError`. If your main `.venv` is 3.14, make a separate one, for
+example on Windows:
+
+```bash
+py -3.13 -m venv .venv-chainlit
+.venv-chainlit\Scripts\pip install -r requirements-chainlit.txt
+.venv-chainlit\Scripts\chainlit run chainlit_app.py
+```
+
 Opens at http://localhost:8000. The Chainlit app uses the same back end as Streamlit: campaign picker
 (settings button next to the message box), example-question buttons, executive summary, refresh data, charts,
 and a "SQL used" panel for customer questions.

@@ -3,6 +3,7 @@
 
 # Virtual environment
 .venv/
+.venv-chainlit/
 
 # Python cache
 __pycache__/
