@@ -8,6 +8,7 @@ from app.ui.chainlit_support import (
     SQL_ELEMENT_NAME,
     campaign_label,
     campaign_options,
+    campaign_profiles,
     format_sql_for_display,
     reply_parts,
     welcome_text,
@@ -95,3 +96,31 @@ def test_format_sql_for_display_only_changes_whitespace():
 
 def test_format_sql_for_display_returns_unparseable_text_unchanged():
     assert format_sql_for_display("not sql (((") == "not sql ((("
+
+
+def test_campaign_profiles_from_demo_data():
+    data = get_campaign_data()
+    profiles = campaign_profiles(data.unique_campaigns)
+    options = campaign_options(data.unique_campaigns)
+
+    assert [(p.campaign_id, p.label) for p in profiles] == options
+    assert [p.default for p in profiles] == [True] + [False] * (len(profiles) - 1)
+    assert all("Channel:" in p.description for p in profiles)
+
+
+def test_campaign_profiles_dedupe_and_tolerate_missing_details():
+    frame = pd.DataFrame(
+        {
+            "campaign_id": ["CMP-2026-004", "CMP-2026-004", "CMP-2025-002"],
+            "campaign_name": ["Spring", "Spring again", "Summer"],
+        }
+    )
+
+    profiles = campaign_profiles(frame)
+
+    assert [p.campaign_id for p in profiles] == ["CMP-2026-004", "CMP-2025-002"]
+    assert profiles[0].description == "CMP-2026-004 — Spring"
+
+
+def test_welcome_text_points_to_the_campaign_menu():
+    assert "campaign menu at the top left" in welcome_text("CMP-2026-004 — Spring")
