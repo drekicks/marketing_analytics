@@ -12,7 +12,7 @@ See `ARCHITECTURE.md` for the full map, the request flow, and the known-issues l
 ```bash
 pip install -r requirements-dev.txt   # app deps + pytest (deploys use requirements.txt)
 streamlit run streamlit_app.py         # web app (hosted demo entry point)
-chainlit run chainlit_app.py           # chat app (pip install -r requirements-chainlit.txt; Render via render.yaml)
+chainlit run chainlit_app.py           # chat app (pip install -r requirements-chainlit.txt; Python ≤ 3.13, nest_asyncio breaks on 3.14; Render via render.yaml)
 python main.py                         # CLI version (README's `python -m app.main` is wrong)
 python -m app.extracts.campaign_extract     # validate + re-export data/demo/*.csv from the marts (overwrites demo data)
 python -m app.utils.knowledge_ingestion     # rebuild ai.knowledge_chunks embeddings (TRUNCATEs table)
