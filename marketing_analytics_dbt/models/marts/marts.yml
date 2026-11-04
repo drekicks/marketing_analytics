@@ -49,6 +49,37 @@ models:
         data_tests:
           - not_null
 
+      - name: absolute_lift
+        description: >
+          (test_conversion_rate - control_conversion_rate) * 100, in percentage points,
+          from unrounded rates.
+
+      - name: test_audience
+        description: Number of customers in the TEST (contacted) group.
+        data_tests:
+          - not_null
+
+      - name: control_audience
+        description: Number of customers in the CONTROL (held-out) group.
+        data_tests:
+          - not_null
+
+      - name: incremental_conversions
+        description: >
+          Conversions caused by the campaign: (test_conversion_rate - control_conversion_rate)
+          * test_audience, rounded to a whole number. Computed campaign-wide, so it need not
+          equal the sum of the segment rows.
+
+      - name: incremental_revenue
+        description: >
+          test revenue minus expected revenue, where expected revenue is the CONTROL revenue
+          per customer * test_audience. Computed campaign-wide.
+
+      - name: marketing_roi
+        description: >
+          (incremental_revenue - total_campaign_cost) / total_campaign_cost, as a ratio
+          (0.25 = 25%). Computed campaign-wide.
+
   - name: segment_performance_summary
     description: >
       Segment-level performance summary containing audience,

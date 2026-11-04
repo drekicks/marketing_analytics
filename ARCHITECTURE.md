@@ -170,7 +170,7 @@ Source `dvdrental`, with schema `public` on Postgres and `RAW` on Snowflake. Tab
 ### Marts (tables, `+schema: analytics`)
 | Model | Grain | Built from | Used by app? |
 |---|---|---|---|
-| `campaign_performance_summary` | 1 row / campaign | `stg_campaign_results` | ✅ `app/sql/campaign_summary.sql` → `summary_df` |
+| `campaign_performance_summary` | 1 row / campaign | `stg_campaign_results` (campaign-wide lift, incremental conversions/revenue and ROI, using the segment formulas; need not equal the segment sum) | ✅ `app/sql/campaign_summary.sql` → `summary_df` |
 | `segment_performance_summary` | 1 row / campaign × segment | `stg_campaign_results` (TEST and CONTROL aggregated separately, then joined; lift, incremental revenue, ROI) | ✅ `app/sql/campaign_segment_summary.sql` → `segment_df` |
 | `customer_analytic_layer` | 1 row / customer × campaign (incremental on `updated_at`) | `stg_campaign_results` ⨝ `stg_customer_segment` | ✅ queried live by customer text-to-SQL (`customer_sql_service`, read-only role); `app/sql/analytic_layer.sql` feeds the CSV/Tableau export only |
 | `customer_summary` | 1 row / customer | `stg_customer`, `stg_rental`, `stg_payment` | ❌ unused |
