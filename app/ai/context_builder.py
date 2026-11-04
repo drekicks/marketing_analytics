@@ -2,6 +2,29 @@ import pandas as pd
 from app.ai.campaign_id_validation import validate_campaign_ids
 from app.ai.insight_signals import calculate_segment_signals, format_segment_signals
 
+# Campaign-level KPI columns of campaign_performance_summary, formatted for goal evaluation.
+# Columns that are missing (e.g. marts built before they existed) or null are skipped.
+_CAMPAIGN_KPI_FORMATS = [
+    ("test_conversion_rate", "Test Conversion Rate", lambda v: f"{float(v):.1%}"),
+    ("control_conversion_rate", "Control Conversion Rate", lambda v: f"{float(v):.1%}"),
+    ("absolute_lift", "Absolute Lift", lambda v: f"{float(v):g} percentage points"),
+    ("incremental_conversions", "Incremental Conversions", lambda v: f"{int(round(float(v))):,}"),
+    ("incremental_revenue", "Incremental Revenue", lambda v: f"${float(v):,.2f}"),
+    ("marketing_roi", "Marketing ROI", lambda v: f"{float(v):.1%}"),
+]
+
+
+def _campaign_kpi_lines(row: pd.Series) -> list[str]:
+    """Lift and incremental KPI lines for one campaign summary row."""
+    lines = []
+    for column, label, fmt in _CAMPAIGN_KPI_FORMATS:
+        value = row.get(column)
+        if value is None or pd.isna(value):
+            continue
+        lines.append(f"{label}: {fmt(value)}")
+    return lines
+
+
 def build_segment_context(segment_df:pd.DataFrame,
                           goals_df: pd.DataFrame,
                           campaign_id: str
@@ -147,6 +170,7 @@ def build_campaign_context(summary_df:pd.DataFrame,
                      f"Conversion Rate: {summary_row['conversion_rate']:.1%}",
                      f"Revenue Per Customer: ${summary_row['revenue_per_customer']:.2f}",
                      f"Revenue Per Conversion: ${summary_row['revenue_per_conversion']:.2f}",
+                     *_campaign_kpi_lines(summary_row),
                      ]
     return "\n".join(context_lines)
 
@@ -292,6 +316,7 @@ def build_insight_context(
         f"Campaign Cost: ${campaign['total_campaign_cost']:,.2f}",
         f"Revenue Per Customer: "
         f"${campaign['revenue_per_customer']:,.2f}",
+        *_campaign_kpi_lines(campaign),
         "",
         "SEGMENT PERFORMANCE",
         "-------------------",

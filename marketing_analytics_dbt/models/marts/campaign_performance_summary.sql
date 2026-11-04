@@ -52,7 +52,11 @@ select
     count(
             case
             when response_flag='Y' and conversion_flag='Y' then 1 end
-    ) as conversions
+    ) as conversions,
+    count(case when treatment_group = 'TEST' then 1 end) as test_audience,
+    count(case when treatment_group = 'CONTROL' then 1 end) as control_audience,
+    sum(case when treatment_group = 'TEST' then campaign_revenue else 0 end) as test_revenue,
+    sum(case when treatment_group = 'CONTROL' then campaign_revenue else 0 end) as control_revenue
 {#    round(#}
 {#            count(*) filter (#}
 {#                where treatment_group='TEST'#}
@@ -107,6 +111,19 @@ select
     round(conversions::numeric/nullif(audience_size, 0),2) as conversion_rate,
     round(campaign_revenue/nullif(audience_size, 0),2) as revenue_per_customer,
     round(campaign_revenue/nullif(conversions, 0),2) as revenue_per_conversion,
-    round((test_conversion_rate-control_conversion_rate)*100,0) as absolute_lift
+    round((test_conversion_rate-control_conversion_rate)*100,0) as absolute_lift,
+    test_audience,
+    control_audience,
+    {# Campaign-wide versions of the segment mart's formulas (unrounded rates), so they
+       need not equal the sum of the segment rows. #}
+    round((test_conversion_rate-control_conversion_rate)*test_audience,0)::integer as incremental_conversions,
+    round(test_revenue-(control_revenue/nullif(control_audience, 0))*test_audience,2) as incremental_revenue
 from cmpgn_prfrmnc
-) select * from full_fnl
+),
+roi_fnl as
+(
+select
+    *,
+    round((incremental_revenue-total_campaign_cost)/nullif(total_campaign_cost, 0),2) as marketing_roi
+from full_fnl
+) select * from roi_fnl

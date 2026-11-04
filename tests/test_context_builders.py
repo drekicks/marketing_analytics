@@ -40,7 +40,8 @@ CAMPAIGN_MART_COLUMNS = [
     "audience_size", "campaign_revenue", "total_campaign_cost",
     "test_conversion_rate", "control_conversion_rate", "conversions",
     "conversion_rate", "revenue_per_customer", "revenue_per_conversion",
-    "absolute_lift",
+    "absolute_lift", "test_audience", "control_audience", "incremental_conversions",
+    "incremental_revenue", "marketing_roi",
 ]
 
 
@@ -95,3 +96,60 @@ def test_segment_context_uses_goals_argument():
     # The goals passed in must be used, not the module-level goals table.
     with pytest.raises(ValueError, match="Goal data"):
         build_segment_context(segment_df, campaign_goals_df.iloc[0:0], CAMPAIGN_IDS[0])
+
+
+KPI_LABELS = [
+    "Test Conversion Rate:",
+    "Control Conversion Rate:",
+    "Absolute Lift:",
+    "Incremental Conversions:",
+    "Incremental Revenue: $",
+    "Marketing ROI:",
+]
+
+
+@pytest.mark.parametrize("campaign_id", CAMPAIGN_IDS)
+def test_campaign_context_includes_goal_kpis(campaign_id):
+    context = build_campaign_context(summary_df, campaign_goals_df, campaign_id)
+
+    for label in KPI_LABELS:
+        assert label in context
+
+
+def test_campaign_kpi_values_are_formatted_from_the_mart():
+    row = summary_df[summary_df["campaign_id"] == "CMP-2026-004"].iloc[0]
+    context = build_campaign_context(summary_df, campaign_goals_df, "CMP-2026-004")
+
+    assert f"Absolute Lift: {float(row['absolute_lift']):g} percentage points" in context
+    assert f"Incremental Conversions: {int(row['incremental_conversions']):,}" in context
+    assert f"Marketing ROI: {float(row['marketing_roi']):.1%}" in context
+
+
+def test_campaign_context_without_kpi_columns_still_builds():
+    # Marts built before these columns existed must not break the app.
+    old_summary = summary_df.drop(
+        columns=["incremental_conversions", "incremental_revenue", "marketing_roi"]
+    )
+    context = build_campaign_context(old_summary, campaign_goals_df, CAMPAIGN_IDS[0])
+
+    assert "Absolute Lift:" in context
+    assert "Incremental Conversions:" not in context
+    assert "Marketing ROI:" not in context
+
+
+def test_comparison_context_includes_kpis_for_each_campaign():
+    context = build_campaign_comparison_context(
+        summary_df, campaign_goals_df, CAMPAIGN_IDS[:2]
+    )
+
+    assert context.count("Incremental Conversions:") == 2
+    assert context.count("Absolute Lift:") == 2
+
+
+@pytest.mark.parametrize("campaign_id", CAMPAIGN_IDS)
+def test_single_campaign_insight_context_includes_kpis(campaign_id):
+    context = build_insight_context(summary_df, segment_df, campaign_goals_df, campaign_id)
+    overall = context.split("OVERALL PERFORMANCE", 1)[1].split("SEGMENT PERFORMANCE", 1)[0]
+
+    for label in KPI_LABELS:
+        assert label in overall
