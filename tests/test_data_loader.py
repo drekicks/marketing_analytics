@@ -44,3 +44,82 @@ def test_unsupported_data_source(monkeypatch):
         assert "Unsupported DATA_SOURCE" in str(error)
     else:
         raise AssertionError("expected ValueError")
+
+
+# --- framework-neutral cache ----------------------------------------------
+
+
+def _frames(campaign_id):
+    frame = pd.DataFrame({"campaign_id": [campaign_id]})
+    return frame, frame, frame, frame
+
+
+def test_postgres_data_is_cached_then_reloaded_after_ttl(monkeypatch):
+    calls = []
+    clock = [1000.0]
+
+    def fake_load():
+        calls.append(clock[0])
+        return _frames(f"CMP-{len(calls)}")
+
+    monkeypatch.setattr(data_loader, "DATA_SOURCE", "postgres")
+    monkeypatch.setattr(data_loader, "load_postgres_data", fake_load)
+    monkeypatch.setattr(data_loader.time, "monotonic", lambda: clock[0])
+    data_loader.clear_campaign_data_cache()
+    try:
+        first = data_loader.get_campaign_data()
+        clock[0] += data_loader.POSTGRES_CACHE_TTL_SECONDS - 1
+        assert data_loader.get_campaign_data() is first
+        assert len(calls) == 1
+
+        clock[0] += 2
+        reloaded = data_loader.get_campaign_data()
+        assert len(calls) == 2
+        assert reloaded.summary["campaign_id"].tolist() == ["CMP-2"]
+    finally:
+        monkeypatch.undo()
+        data_loader.clear_campaign_data_cache()
+
+
+def test_csv_data_is_loaded_once(monkeypatch):
+    calls = []
+    monkeypatch.setattr(data_loader, "DATA_SOURCE", "csv")
+    monkeypatch.setattr(data_loader, "load_csv_data", lambda: calls.append(1) or _frames("CMP-1"))
+    data_loader.clear_campaign_data_cache()
+    try:
+        data_loader.get_campaign_data()
+        data_loader.get_campaign_data()
+        assert len(calls) == 1
+    finally:
+        monkeypatch.undo()
+        data_loader.clear_campaign_data_cache()
+
+
+def test_failed_load_is_not_cached(monkeypatch):
+    attempts = []
+
+    def flaky_load():
+        attempts.append(1)
+        if len(attempts) == 1:
+            raise RuntimeError("Neon is waking up")
+        return _frames("CMP-1")
+
+    monkeypatch.setattr(data_loader, "DATA_SOURCE", "postgres")
+    monkeypatch.setattr(data_loader, "load_postgres_data", flaky_load)
+    data_loader.clear_campaign_data_cache()
+    try:
+        try:
+            data_loader.get_campaign_data()
+        except RuntimeError:
+            pass
+        assert data_loader.get_campaign_data().summary["campaign_id"].tolist() == ["CMP-1"]
+        assert len(attempts) == 2
+    finally:
+        monkeypatch.undo()
+        data_loader.clear_campaign_data_cache()
+
+
+def test_data_loader_does_not_import_streamlit():
+    source = open(data_loader.__file__, encoding="utf-8").read()
+
+    assert "import streamlit" not in source

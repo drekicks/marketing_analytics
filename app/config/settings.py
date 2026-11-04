@@ -38,6 +38,23 @@ if not MODEL_NAME:
         "OPENAI_MODEL is not configured. Add it to .env or the app secrets."
     )
 
+# Optional per-purpose overrides; each falls back to OPENAI_MODEL.
+# Use a fast model for routine answers (OPENAI_MODEL) and keep a stronger one
+# where quality changes the numbers (customer SQL) or is most visible (summary).
+SQL_MODEL_NAME = (os.getenv("OPENAI_SQL_MODEL") or "").strip() or MODEL_NAME
+SUMMARY_MODEL_NAME = (os.getenv("OPENAI_SUMMARY_MODEL") or "").strip() or MODEL_NAME
+
+# Reasoning effort sent with every request ("default" = don't send it and use
+# the model's own default). Lower effort answers faster.
+REASONING_EFFORTS = ("none", "minimal", "low", "medium", "high", "xhigh", "default")
+REASONING_EFFORT = (os.getenv("OPENAI_REASONING_EFFORT") or "low").strip().lower()
+
+if REASONING_EFFORT not in REASONING_EFFORTS:
+    raise ConfigurationError(
+        f"OPENAI_REASONING_EFFORT must be one of {', '.join(REASONING_EFFORTS)}; "
+        f"got {REASONING_EFFORT!r}."
+    )
+
 @dataclass
 class SessionState:
     active_campaign_id: str | None = None

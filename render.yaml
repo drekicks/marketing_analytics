@@ -1,0 +1,47 @@
+# Render Blueprint for the Chainlit chat app.
+# Render dashboard -> New -> Blueprint -> select this repository.
+# Secrets are entered in the dashboard (sync: false); none are stored here.
+services:
+  - type: web
+    name: marketing-analytics-chainlit
+    runtime: python
+    # "starter" stays on (no sleeping, no slow first load); "free" sleeps when idle.
+    plan: starter
+    branch: main
+    buildCommand: pip install -r requirements-chainlit.txt
+    startCommand: chainlit run chainlit_app.py --headless --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: DATA_SOURCE
+        value: postgres
+      - key: ANALYTICS_SCHEMA
+        value: dbt_dev_analytics
+      - key: DB_SSLMODE
+        value: require
+      - key: DB_PORT
+        value: "5432"
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        sync: false
+      - key: OPENAI_SQL_MODEL
+        sync: false
+      - key: OPENAI_SUMMARY_MODEL
+        sync: false
+      - key: OPENAI_REASONING_EFFORT
+        value: low
+      - key: DB_HOST
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_READONLY_USER
+        sync: false
+      - key: DB_READONLY_PASSWORD
+        sync: false

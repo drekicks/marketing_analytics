@@ -98,6 +98,7 @@ AI Layer
 Presentation Layer
 - CLI
 - Streamlit
+- Chainlit (chat app, hosted always-on)
 - Matplotlib
 
 ## Project Workflow
@@ -274,7 +275,7 @@ These files are intended to serve as controlled Tableau data sources.
 - **Dashboarding:** Tableau
 - **Python visualization:** Matplotlib
 - **AI integration:** OpenAI API
-- **Application interface:** Streamlit web app; Python CLI
+- **Application interface:** Chainlit chat app; Streamlit web app; Python CLI
 - **Development environment:** PyCharm
 - **Testing:** pytest
 - **Version control:** Git and GitHub
@@ -399,7 +400,10 @@ Copy `.env.example` to `.env` in the project root and fill in the values:
 
 ```env
 OPENAI_API_KEY=...
-OPENAI_MODEL=...                  # used for every AI answer
+OPENAI_MODEL=...                  # routine answers (e.g. gpt-5.4-mini)
+OPENAI_SQL_MODEL=...              # optional: customer SQL (a stronger model)
+OPENAI_SUMMARY_MODEL=...          # optional: executive summary
+OPENAI_REASONING_EFFORT=low       # optional; lower = faster
 
 DATA_SOURCE=postgres              # postgres = Neon; csv = offline fallback in data/demo/
 ANALYTICS_SCHEMA=dbt_dev_analytics
@@ -492,13 +496,54 @@ From the project root:
 streamlit run streamlit_app.py
 ```
 
+### Run the Chainlit chat app
+
+```bash
+pip install -r requirements-chainlit.txt
+chainlit run chainlit_app.py
+```
+
+Opens at http://localhost:8000. The Chainlit app uses the same back end as Streamlit: campaign picker
+(settings button next to the message box), example-question buttons, executive summary, refresh data, charts,
+and a "SQL used" panel for customer questions.
+
 ### Run the CLI
 
 ```bash
 python main.py
 ```
 
-Neither command refreshes the Tableau CSV extracts.
+None of these commands refreshes the Tableau CSV extracts.
+
+### Deploy the Chainlit app to Render
+
+Free hosting (including Streamlit Community Cloud) puts an idle app to sleep, so the first visitor waits for a
+cold start. The Chainlit app is set up for an always-on Render service instead:
+
+1. Render dashboard: **New → Blueprint**, then select this repository. Render reads `render.yaml`.
+2. Enter the secret values (`OPENAI_API_KEY`, `OPENAI_MODEL`, optionally `OPENAI_SQL_MODEL` and `OPENAI_SUMMARY_MODEL`, `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`,
+   `DB_READONLY_USER`, `DB_READONLY_PASSWORD`). `DATA_SOURCE`, `ANALYTICS_SCHEMA`, `DB_PORT` and
+   `DB_SSLMODE` are preset.
+3. Keep the **Starter** plan (about $7/month); the free plan also sleeps when idle.
+
+The app loads the campaign data when it starts, so the first visitor doesn't wait for the database. Neon's
+free compute still pauses after a few idle minutes; the first query after that takes a little longer.
+The app is public; Chainlit's password login (`@cl.password_auth_callback` + `CHAINLIT_AUTH_SECRET`) can be
+added if access should be restricted.
+
+### Compare models before switching
+
+Answer time is mostly the OpenAI calls, so the model and reasoning effort matter most. A typical setup is a fast
+model for routine answers (`OPENAI_MODEL`), a stronger one for customer SQL (`OPENAI_SQL_MODEL`, where a wrong
+query means wrong numbers) and the executive summary (`OPENAI_SUMMARY_MODEL`), with `OPENAI_REASONING_EFFORT=low`.
+To compare options on the app's own questions (real API calls, small cost):
+
+```bash
+python -m scripts.compare_models --models gpt-5.4,gpt-5.4-mini --efforts low,medium --sql-model gpt-5.4
+```
+
+It writes `output/model_comparison/<timestamp>.md` with a speed table and the answers side by side. Use
+`DATA_SOURCE=postgres` to include customer SQL questions, and `--questions file.txt` for your own list.
 
 ### Run the tests
 

@@ -1,10 +1,11 @@
 import os
+import threading
+import time
 from dataclasses import dataclass
 
 import pandas as pd
 from app.config.paths import DEMO_DATA_DIR
 from app.utils.file_utils import load_sql_extracts
-import streamlit as st
 
 
 DATA_SOURCE = os.getenv("DATA_SOURCE",
@@ -24,7 +25,6 @@ class CampaignData:
     unique_campaigns: pd.DataFrame
 
 
-@st.cache_data
 def load_csv_data() -> tuple[
     pd.DataFrame,
     pd.DataFrame,
@@ -61,7 +61,6 @@ def load_csv_data() -> tuple[
     return summary, segment, goals, unique_campaigns
 
 
-@st.cache_data(ttl=POSTGRES_CACHE_TTL_SECONDS)
 def load_postgres_data() -> tuple[
     pd.DataFrame,
     pd.DataFrame,
@@ -72,8 +71,8 @@ def load_postgres_data() -> tuple[
     Load application datasets from the dbt marts in PostgreSQL (Neon).
 
     Every dataset, including campaign goals (a dbt model), comes from the
-    schema set by ANALYTICS_SCHEMA. Results are cached for
-    POSTGRES_CACHE_TTL_SECONDS so Streamlit reruns don't re-query the database.
+    schema set by ANALYTICS_SCHEMA. get_campaign_data() caches the result for
+    POSTGRES_CACHE_TTL_SECONDS so each question doesn't re-query the database.
     """
 
     extracts = load_sql_extracts(
@@ -93,6 +92,21 @@ def load_postgres_data() -> tuple[
     return summary, segment, goals, unique_campaigns
 
 
+# In-process cache shared by every UI (Streamlit, Chainlit, CLI) and every
+# user session in this process. Framework-neutral on purpose: the back end
+# must not depend on one UI's caching. Failed loads are never cached.
+_cache_lock = threading.Lock()
+_cache: dict = {"source": None, "data": None, "loaded_at": 0.0}
+
+
+def _cache_is_fresh(source: str) -> bool:
+    if _cache["data"] is None or _cache["source"] != source:
+        return False
+    if source == "csv":
+        return True
+    return time.monotonic() - _cache["loaded_at"] < POSTGRES_CACHE_TTL_SECONDS
+
+
 def get_campaign_data() -> CampaignData:
     """
     Return the campaign datasets, loading them if the cache is empty or stale.
@@ -101,26 +115,32 @@ def get_campaign_data() -> CampaignData:
     module-level copies would never refresh in a long-running app, so new
     campaigns written to Neon would not appear until a restart.
     """
-    if DATA_SOURCE == "csv":
-        loaded = load_csv_data()
-    elif DATA_SOURCE == "postgres":
-        loaded = load_postgres_data()
-    else:
+    source = DATA_SOURCE
+
+    if source not in ("csv", "postgres"):
         raise ValueError(
-            f"Unsupported DATA_SOURCE: {DATA_SOURCE}. "
+            f"Unsupported DATA_SOURCE: {source}. "
             "Use 'postgres' or 'csv'."
         )
 
-    summary, segment, goals, unique_campaigns = loaded
-    return CampaignData(
-        summary=summary,
-        segment=segment,
-        goals=goals,
-        unique_campaigns=unique_campaigns,
-    )
+    with _cache_lock:
+        if _cache_is_fresh(source):
+            return _cache["data"]
+
+        loaded = load_csv_data() if source == "csv" else load_postgres_data()
+
+        summary, segment, goals, unique_campaigns = loaded
+        data = CampaignData(
+            summary=summary,
+            segment=segment,
+            goals=goals,
+            unique_campaigns=unique_campaigns,
+        )
+        _cache.update(source=source, data=data, loaded_at=time.monotonic())
+        return data
 
 
 def clear_campaign_data_cache() -> None:
     """Drop cached datasets so the next get_campaign_data() reloads them."""
-    load_csv_data.clear()
-    load_postgres_data.clear()
+    with _cache_lock:
+        _cache.update(source=None, data=None, loaded_at=0.0)

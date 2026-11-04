@@ -12,6 +12,7 @@ See `ARCHITECTURE.md` for the full map, the request flow, and the known-issues l
 ```bash
 pip install -r requirements-dev.txt   # app deps + pytest (deploys use requirements.txt)
 streamlit run streamlit_app.py         # web app (hosted demo entry point)
+chainlit run chainlit_app.py           # chat app (pip install -r requirements-chainlit.txt; Render via render.yaml)
 python main.py                         # CLI version (README's `python -m app.main` is wrong)
 python -m app.extracts.campaign_extract     # validate + re-export data/demo/*.csv from the marts (overwrites demo data)
 python -m app.utils.knowledge_ingestion     # rebuild ai.knowledge_chunks embeddings (TRUNCATEs table)
@@ -30,18 +31,22 @@ Env (`.env` at repo root): `OPENAI_API_KEY` and `OPENAI_MODEL` are required at i
 See `.env.example`.
 
 ## Key files
-- `streamlit_app.py`: UI and session state. `app/ui/cli.py` and `main.py` are the CLI.
+- `streamlit_app.py`: Streamlit UI and session state. `chainlit_app.py` (+ testable helpers in `app/ui/chainlit_support.py`):
+  Chainlit chat UI on the same back end. `app/ui/cli.py` and `main.py` are the CLI. UIs stay thin: logic belongs in `app/services/`.
 - `app/services/analyst_service.py::process_analyst_question`: the UI-agnostic orchestrator.
 - `app/config/router.py::route_question`: keyword router → `RouteResult(context_type, analysis_type, campaign_ids, visualization_request)`.
 - `app/ai/analyst_chat.py::ask_analyst`: builds context, fills `prompts/analyst_guidelines.md`, calls the LLM.
 - `app/ai/context_builder.py`: DataFrame rows → labelled text for the LLM. `app/ai/insight_signals.py` holds the pre-computed rankings.
-- `app/ai/llm_client_api.py::generate_analysis`: the only text-generation call (Responses API, `OPENAI_MODEL`).
+- `app/ai/llm_client_api.py`: all OpenAI calls. `generate_analysis(prompt, purpose="answer"|"summary")` and `generate_json`
+  (SQL) pick `OPENAI_MODEL` / `OPENAI_SUMMARY_MODEL` / `OPENAI_SQL_MODEL` and send `OPENAI_REASONING_EFFORT` (default `low`;
+  retried once without it if a model rejects it). `configure_models()` overrides at runtime. Compare models with
+  `python -m scripts.compare_models` (real API calls).
 - `app/services/rag_service.py` + `app/utils/knowledge_search.py`: RAG (answers via `generate_analysis`, so `OPENAI_MODEL`).
 - `app/ui/errors.py::user_message` + `app/errors.py` (`ConfigurationError`, `LLMServiceError`): user-facing error text for both UIs.
 - `app/services/customer_sql_service.py` + `prompts/customer_sql.md`: customer-level text-to-SQL (`validate_sql`,
   `run_customer_query`, `build_customer_query_context`). `llm_client_api.generate_json` returns structured `{sql, explanation}`.
 - `app/utils/data_loader.py`: `get_campaign_data()` → `CampaignData(summary, segment, goals, unique_campaigns)`, cached
-  (Postgres TTL 10 min; `clear_campaign_data_cache()` backs the sidebar Refresh Data button). Call it inside functions,
+  (framework-neutral in-process cache, no Streamlit import; Postgres TTL 10 min; `clear_campaign_data_cache()` backs the Refresh Data buttons). Call it inside functions,
   never import DataFrames at module level, or new campaigns won't appear until a restart. Customer-level data is queried from Neon, not loaded.
 - `app/visualization/`: matplotlib PNG charts (`chart_dispatcher`) and their text equivalents (`chart_builder`).
 - `prompts/*.md`: prompt templates using `{{placeholder}}` syntax (filled by `app/ai/prompt_builder.py`).
