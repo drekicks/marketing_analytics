@@ -115,7 +115,7 @@ def _executive_summary(campaign_id: str) -> str:
         template=load_prompt("executive_summary"),
         variables={"campaign_metrics": context},
     )
-    return generate_analysis(prompt)
+    return generate_analysis(prompt, purpose="summary")
 
 
 async def _answer(question: str) -> None:

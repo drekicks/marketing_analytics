@@ -250,7 +250,7 @@ if st.button("Generate Executive Summary"):
             final_prompt = build_prompt(template=template, variables={"campaign_metrics": context})
 
             # Send the completed prompt to the configured LLM.
-            analysis = generate_analysis(final_prompt)
+            analysis = generate_analysis(final_prompt, purpose="summary")
 
             # Save the result so it remains visible after Streamlit reruns.
             st.session_state.executive_summary = analysis

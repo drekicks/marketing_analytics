@@ -202,8 +202,10 @@ Tests: generic `not_null`/`unique`/`relationships` in `staging.yml` and `marts.y
 ### Models
 | Use | Model | Where |
 |---|---|---|
-| Executive summary, Ask Analyst, RAG answers | `OPENAI_MODEL` env var (required, no default) | `llm_client_api.py::generate_analysis` (RAG calls it too) |
-| Customer SQL writing | `OPENAI_MODEL`, structured output | `llm_client_api.py::generate_json` |
+| Ask Analyst and RAG answers | `OPENAI_MODEL` (required) | `llm_client_api.py::generate_analysis` |
+| Executive summary | `OPENAI_SUMMARY_MODEL`, else `OPENAI_MODEL` | `generate_analysis(purpose="summary")` |
+| Customer SQL writing | `OPENAI_SQL_MODEL`, else `OPENAI_MODEL`; structured output | `llm_client_api.py::generate_json` |
+| Reasoning effort (all calls) | `OPENAI_REASONING_EFFORT`, default `low` (`default` = don't send) | `_create_response`; retried once without it if a model rejects it |
 | Embeddings (ingest + query) | `text-embedding-3-small` (1536 dims; must match stored vectors) | `embedding_service.py::create_embedding` (shares the one OpenAI client) |
 
 All text calls use the **Responses API** with a single string `input=`. There is **no separate system message**, no temperature or max-tokens, and no tools. Only the customer SQL call uses structured output (`generate_json`). Everything (role, rules, data, history, question) is one user-turn string.

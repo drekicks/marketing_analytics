@@ -400,7 +400,10 @@ Copy `.env.example` to `.env` in the project root and fill in the values:
 
 ```env
 OPENAI_API_KEY=...
-OPENAI_MODEL=...                  # used for every AI answer
+OPENAI_MODEL=...                  # routine answers (e.g. gpt-5.4-mini)
+OPENAI_SQL_MODEL=...              # optional: customer SQL (a stronger model)
+OPENAI_SUMMARY_MODEL=...          # optional: executive summary
+OPENAI_REASONING_EFFORT=low       # optional; lower = faster
 
 DATA_SOURCE=postgres              # postgres = Neon; csv = offline fallback in data/demo/
 ANALYTICS_SCHEMA=dbt_dev_analytics
@@ -518,7 +521,7 @@ Free hosting (including Streamlit Community Cloud) puts an idle app to sleep, so
 cold start. The Chainlit app is set up for an always-on Render service instead:
 
 1. Render dashboard: **New → Blueprint**, then select this repository. Render reads `render.yaml`.
-2. Enter the secret values (`OPENAI_API_KEY`, `OPENAI_MODEL`, `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`,
+2. Enter the secret values (`OPENAI_API_KEY`, `OPENAI_MODEL`, optionally `OPENAI_SQL_MODEL` and `OPENAI_SUMMARY_MODEL`, `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`,
    `DB_READONLY_USER`, `DB_READONLY_PASSWORD`). `DATA_SOURCE`, `ANALYTICS_SCHEMA`, `DB_PORT` and
    `DB_SSLMODE` are preset.
 3. Keep the **Starter** plan (about $7/month); the free plan also sleeps when idle.
@@ -527,6 +530,20 @@ The app loads the campaign data when it starts, so the first visitor doesn't wai
 free compute still pauses after a few idle minutes; the first query after that takes a little longer.
 The app is public; Chainlit's password login (`@cl.password_auth_callback` + `CHAINLIT_AUTH_SECRET`) can be
 added if access should be restricted.
+
+### Compare models before switching
+
+Answer time is mostly the OpenAI calls, so the model and reasoning effort matter most. A typical setup is a fast
+model for routine answers (`OPENAI_MODEL`), a stronger one for customer SQL (`OPENAI_SQL_MODEL`, where a wrong
+query means wrong numbers) and the executive summary (`OPENAI_SUMMARY_MODEL`), with `OPENAI_REASONING_EFFORT=low`.
+To compare options on the app's own questions (real API calls, small cost):
+
+```bash
+python -m scripts.compare_models --models gpt-5.4,gpt-5.4-mini --efforts low,medium --sql-model gpt-5.4
+```
+
+It writes `output/model_comparison/<timestamp>.md` with a speed table and the answers side by side. Use
+`DATA_SOURCE=postgres` to include customer SQL questions, and `--questions file.txt` for your own list.
 
 ### Run the tests
 

@@ -37,7 +37,10 @@ See `.env.example`.
 - `app/config/router.py::route_question`: keyword router → `RouteResult(context_type, analysis_type, campaign_ids, visualization_request)`.
 - `app/ai/analyst_chat.py::ask_analyst`: builds context, fills `prompts/analyst_guidelines.md`, calls the LLM.
 - `app/ai/context_builder.py`: DataFrame rows → labelled text for the LLM. `app/ai/insight_signals.py` holds the pre-computed rankings.
-- `app/ai/llm_client_api.py::generate_analysis`: the only text-generation call (Responses API, `OPENAI_MODEL`).
+- `app/ai/llm_client_api.py`: all OpenAI calls. `generate_analysis(prompt, purpose="answer"|"summary")` and `generate_json`
+  (SQL) pick `OPENAI_MODEL` / `OPENAI_SUMMARY_MODEL` / `OPENAI_SQL_MODEL` and send `OPENAI_REASONING_EFFORT` (default `low`;
+  retried once without it if a model rejects it). `configure_models()` overrides at runtime. Compare models with
+  `python -m scripts.compare_models` (real API calls).
 - `app/services/rag_service.py` + `app/utils/knowledge_search.py`: RAG (answers via `generate_analysis`, so `OPENAI_MODEL`).
 - `app/ui/errors.py::user_message` + `app/errors.py` (`ConfigurationError`, `LLMServiceError`): user-facing error text for both UIs.
 - `app/services/customer_sql_service.py` + `prompts/customer_sql.md`: customer-level text-to-SQL (`validate_sql`,

@@ -36,7 +36,7 @@ def show_executive_summary(default_campaign_id: str,campaign_name) -> None:
     # print(f"Approximate prompt tokens: {len(final_prompt) // 4:,}")
 
     try:
-        analysis = generate_analysis(final_prompt)
+        analysis = generate_analysis(final_prompt, purpose="summary")
     except Exception as error:
         # Keep going: the chat may still work even if the summary failed.
         print(f"Analyst: {user_message(error)}")

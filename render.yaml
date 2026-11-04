@@ -27,6 +27,12 @@ services:
         sync: false
       - key: OPENAI_MODEL
         sync: false
+      - key: OPENAI_SQL_MODEL
+        sync: false
+      - key: OPENAI_SUMMARY_MODEL
+        sync: false
+      - key: OPENAI_REASONING_EFFORT
+        value: low
       - key: DB_HOST
         sync: false
       - key: DB_NAME
