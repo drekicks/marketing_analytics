@@ -514,7 +514,7 @@ py -3.13 -m venv .venv-chainlit
 ```
 
 Opens at http://localhost:8000. The Chainlit app uses the same back end as Streamlit: campaign picker
-(settings button next to the message box), example-question buttons, executive summary, refresh data, charts,
+(campaign menu at the top left of the header), example-question buttons, executive summary, refresh data, charts,
 and a "SQL used" panel for customer questions.
 
 ### Run the CLI

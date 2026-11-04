@@ -12,7 +12,6 @@ import sys
 from datetime import datetime
 
 import chainlit as cl
-from chainlit.input_widget import Select
 
 from app.ui.errors import user_message
 
@@ -43,6 +42,7 @@ try:
         SQL_ELEMENT_NAME,
         campaign_label,
         campaign_options,
+        campaign_profiles,
         reply_parts,
         welcome_text,
     )
@@ -65,19 +65,6 @@ else:
 
 async def _send_error(prefix: str, error: Exception) -> None:
     await cl.Message(content=f"{prefix}{user_message(error)}").send()
-
-
-def _campaign_settings(options: list[tuple[str, str]], active: str) -> cl.ChatSettings:
-    return cl.ChatSettings(
-        [
-            Select(
-                id="campaign",
-                label="Campaign",
-                items={label: campaign_id for campaign_id, label in options},
-                initial_value=active,
-            )
-        ]
-    )
 
 
 def _welcome_actions() -> list[cl.Action]:
@@ -184,26 +171,39 @@ async def on_chat_start() -> None:
         await cl.Message(content="No campaigns were found in the data.").send()
         return
 
-    active = options[0][0]
+    # The campaign menu in the header is Chainlit's chat profile selector; picking a
+    # campaign starts a new chat, so each chat analyses one campaign.
+    chosen = cl.user_session.get("chat_profile")
+    valid_ids = {campaign_id for campaign_id, _ in options}
+    active = chosen if chosen in valid_ids else options[0][0]
+
     cl.user_session.set("campaign_options", options)
     cl.user_session.set("analytics_session", SessionState(active_campaign_id=active))
     cl.user_session.set("analyst_history", [])
 
-    await _campaign_settings(options, active).send()
     await _send_welcome()
 
 
-@cl.on_settings_update
-async def on_settings_update(settings: dict) -> None:
-    session = cl.user_session.get("analytics_session")
-    new_campaign = settings.get("campaign")
-    if session is None or not new_campaign or new_campaign == session.active_campaign_id:
-        return
+@cl.set_chat_profiles
+async def chat_profiles(current_user=None, language=None) -> list[cl.ChatProfile]:
+    """One menu entry per campaign, read on each page load so new campaigns appear."""
+    if startup_error is not None:
+        return []
+    try:
+        data = await cl.make_async(get_campaign_data)()
+    except Exception:  # noqa: BLE001 - on_chat_start shows the error
+        logger.exception("Couldn't load campaigns for the campaign menu")
+        return []
 
-    # A manual campaign change starts a new analysis, as in the Streamlit app.
-    session.active_campaign_id = new_campaign
-    cl.user_session.set("analyst_history", [])
-    await _send_welcome()
+    return [
+        cl.ChatProfile(
+            name=profile.campaign_id,
+            display_name=profile.label,
+            markdown_description=profile.description,
+            default=profile.default,
+        )
+        for profile in campaign_profiles(data.unique_campaigns)
+    ]
 
 
 @cl.on_message
@@ -257,5 +257,9 @@ async def on_refresh_data(action: cl.Action) -> None:
 
     options = campaign_options(data.unique_campaigns)
     cl.user_session.set("campaign_options", options)
-    await _campaign_settings(options, session.active_campaign_id).send()
-    await cl.Message(content=f"Data refreshed: {len(options)} campaigns available.").send()
+    await cl.Message(
+        content=(
+            f"Data refreshed: {len(options)} campaigns available. "
+            "Reload the page to see new campaigns in the campaign menu."
+        )
+    ).send()

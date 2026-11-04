@@ -51,6 +51,39 @@ def campaign_options(unique_campaigns: pd.DataFrame) -> list[tuple[str, str]]:
     return options
 
 
+@dataclass(frozen=True)
+class CampaignProfile:
+    """One entry of the campaign menu in the Chainlit header."""
+
+    campaign_id: str
+    label: str
+    description: str
+    default: bool = False
+
+
+def campaign_profiles(unique_campaigns: pd.DataFrame) -> list[CampaignProfile]:
+    """Campaign menu entries (same order and labels as campaign_options); the first is the default."""
+    details = {}
+    for row in unique_campaigns.to_dict("records"):
+        campaign_id = str(row.get("campaign_id", "")).strip()
+        parts = []
+        if row.get("channel"):
+            parts.append(f"Channel: {row['channel']}")
+        if row.get("campaign_start_date"):
+            parts.append(f"Starts: {row['campaign_start_date']}")
+        details.setdefault(campaign_id, " · ".join(parts))
+
+    return [
+        CampaignProfile(
+            campaign_id=campaign_id,
+            label=label,
+            description=details.get(campaign_id) or label,
+            default=index == 0,
+        )
+        for index, (campaign_id, label) in enumerate(campaign_options(unique_campaigns))
+    ]
+
+
 def campaign_label(options: list[tuple[str, str]], campaign_id: str) -> str:
     """Display label for a campaign id (the id itself if it isn't listed)."""
     return dict(options).get(campaign_id, campaign_id)
@@ -61,7 +94,7 @@ def welcome_text(label: str) -> str:
         f"**Active campaign:** {label}\n\n"
         "Ask a question about campaign performance, segments, customers, "
         "comparisons or definitions, or pick one of the examples below. "
-        "Change the campaign with the settings button next to the message box."
+        "Change the campaign with the campaign menu at the top left."
     )
 
 
