@@ -53,7 +53,11 @@ Use these definitions so answers match the rest of the application:
 5. When listing customers, include `customer_id` and the columns needed to answer the question.
 6. Round money to 2 decimals and rates to 4 decimals (cast to numeric before `round`).
 7. Give every computed column a readable snake_case alias, e.g. `conversion_rate`, `converters`.
-8. If the question cannot be answered from this table, write the closest useful query and say what
+8. When the question asks for counts, converters or conversions by group (country, tier, segment,
+   treatment group, favourite category, ...), also return each group's `audience` (all customers in
+   the group) and `conversion_rate`, so counts can be read in context. Keep the asked-for measure as
+   the first metric column and order by it.
+9. If the question cannot be answered from this table, write the closest useful query and say what
    is missing in the explanation.
 
 # CAMPAIGNS IN SCOPE

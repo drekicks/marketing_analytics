@@ -71,3 +71,24 @@ def test_ctes_named_by_the_query_are_allowed():
     )
 
     assert "converters" in validated
+
+
+def test_sql_prompt_asks_for_audience_and_conversion_rate_by_group():
+    from app.ai.prompt_loader import load_prompt
+
+    prompt = load_prompt("customer_sql")
+
+    assert "also return each group's `audience`" in prompt
+    assert "`conversion_rate`" in prompt
+
+
+def test_rule_8_style_context_query_is_accepted():
+    sql = (
+        "select country, "
+        "count(*) filter (where conversion_flag = 'Y') as converters, "
+        "count(*) as audience, "
+        "round(avg(case when conversion_flag = 'Y' then 1.0 else 0 end)::numeric, 4) as conversion_rate "
+        "from cal group by country order by converters desc limit 10"
+    )
+
+    assert "conversion_rate" in validate_sql(sql)
