@@ -31,6 +31,7 @@ This is an "AI analyst" for marketing campaigns. A business user picks a campaig
 ```
 marketing_analytics/
 ├── streamlit_app.py            Streamlit UI (the web app / hosted demo entry point)
+├── chainlit_app.py            Chainlit chat UI (same back end; deployed always-on via render.yaml)
 ├── main.py                     CLI entry point (terminal version of the same app)
 ├── requirements.txt            Python deps (UTF-8, unpinned)
 ├── .env.example                Env var template (incomplete, see §6)

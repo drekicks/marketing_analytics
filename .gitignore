@@ -29,3 +29,7 @@ tools/*
 
 # dbt anonymous user id written next to profiles.yml
 .github/dbt/.user.yml
+
+# Chainlit runtime files (translations are regenerated at start-up)
+.chainlit/translations/
+.files/
