@@ -17,8 +17,9 @@
       <excludeFolder url="file://$MODULE_DIR$/app/tests" />
       <excludeFolder url="file://$MODULE_DIR$/marketing_analytics_dbt/logs" />
       <excludeFolder url="file://$MODULE_DIR$/marketing_analytics_dbt/target" />
+      <excludeFolder url="file://$MODULE_DIR$/.venv-chainlit" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.14 (marketing_analytics)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.13 (marketing_analytics)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
