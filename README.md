@@ -3,6 +3,7 @@
 🚀 Live Demo:
 
 https://campaign-analytics-ai.streamlit.app
+https://marketing-analytics-chainlit.onrender.com
 
 An AI-powered analytics application that enables business users to explore marketing campaign performance and governed business knowledge using natural language. Generate executive summaries, compare campaigns, visualize key metrics, ask analytical questions, and retrieve trusted business definitions and metric logic through an interactive Streamlit interface.
 
