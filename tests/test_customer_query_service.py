@@ -13,6 +13,7 @@ from app.services.customer_sql_service import (
     CustomerQueryResult,
     execute_customer_query,
     build_customer_query_context,
+    build_display_sql,
     build_wrapped_query,
     run_customer_query,
 )
@@ -227,6 +228,7 @@ def service_fakes(monkeypatch):
             rows=pd.DataFrame({"count": [42]}),
             truncated=False,
             campaign_ids=kwargs["campaign_ids"],
+            display_sql="WITH cal AS (...) SELECT COUNT(*) FROM cal",
         )
 
     def fake_ask_analyst(**kwargs):
@@ -255,7 +257,8 @@ def test_customer_question_returns_sql_and_interprets_result(service_fakes):
     result = _ask("How many customers in Canada converted?")
 
     assert result.answer == "42 customers."
-    assert result.sql == "SELECT COUNT(*) FROM cal"
+    # Users see the runnable, campaign-scoped SQL, not the bare `cal` query.
+    assert result.sql == "WITH cal AS (...) SELECT COUNT(*) FROM cal"
     assert query_calls[0]["campaign_ids"] == [ACTIVE_CAMPAIGN_ID]
     assert len(ask_calls) == 1
     assert ask_calls[0]["context"].startswith("CUSTOMER QUERY RESULT")
@@ -281,7 +284,7 @@ def test_follow_up_stays_on_customer_route(service_fakes):
     _ask("How many customers in Canada converted?", session=session)
     result = _ask("What about Mexico?", session=session)
 
-    assert result.sql == "SELECT COUNT(*) FROM cal"
+    assert result.sql == "WITH cal AS (...) SELECT COUNT(*) FROM cal"
     assert len(query_calls) == 2
 
 
@@ -304,3 +307,66 @@ def test_customer_question_needs_postgres(monkeypatch, service_fakes):
 
     with pytest.raises(ValueError, match="DATA_SOURCE=postgres"):
         _ask("How many customers in Canada converted?")
+
+
+# --- runnable SQL shown to users ----------------------------------------
+
+
+def _parse_display(sql):
+    import sqlglot
+
+    statements = [s for s in sqlglot.parse(sql, read="postgres") if s is not None]
+    assert len(statements) == 1
+    return statements[0]
+
+
+def test_display_sql_scopes_cal_to_the_campaigns():
+    sql = build_display_sql(
+        "SELECT country, COUNT(*) AS n FROM cal GROUP BY 1 ORDER BY 2 DESC LIMIT 10",
+        ["CMP-2026-004"],
+    )
+
+    assert sql.startswith("WITH cal AS (")
+    assert "FROM dbt_dev_analytics.customer_analytic_layer" in sql
+    assert "campaign_id IN ('CMP-2026-004')" in sql
+    _parse_display(sql)
+
+
+def test_display_sql_puts_cal_before_model_ctes():
+    sql = build_display_sql(
+        "WITH t AS (SELECT * FROM cal WHERE treatment_group = 'TEST') SELECT COUNT(*) FROM t",
+        ["CMP-2026-004", "CMP-2026-003"],
+    )
+
+    assert sql.index("cal AS (") < sql.index("t AS (")
+    assert sql.count("WITH") == 1
+    assert "campaign_id IN ('CMP-2026-004', 'CMP-2026-003')" in sql
+    _parse_display(sql)
+
+
+def test_display_sql_handles_set_operations():
+    sql = build_display_sql("SELECT 'a' FROM cal UNION ALL SELECT 'b' FROM cal", ["CMP-2026-004"])
+
+    assert sql.startswith("WITH cal AS (")
+    assert "UNION ALL" in sql
+    _parse_display(sql)
+
+
+def test_display_sql_escapes_campaign_ids():
+    sql = build_display_sql("SELECT 1 FROM cal", ["x'); drop table cal; --"])
+
+    assert "'x''); drop table cal; --'" in sql
+    _parse_display(sql)
+
+
+def test_run_customer_query_returns_display_sql(fake_llm, fake_db):
+    replies, _ = fake_llm
+    results, _ = fake_db
+    replies.append("select customer_tier, count(*) as n from cal group by 1 order by 2 desc")
+    results.append(pd.DataFrame({"customer_tier": ["High Value"], "n": [3]}))
+
+    result = run_customer_query("How many by tier?", [ACTIVE_CAMPAIGN_ID])
+
+    assert "FROM cal" in result.sql and "customer_analytic_layer" not in result.sql
+    assert result.display_sql.startswith("WITH cal AS (")
+    assert f"campaign_id IN ('{ACTIVE_CAMPAIGN_ID}')" in result.display_sql

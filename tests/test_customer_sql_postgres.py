@@ -17,6 +17,7 @@ from sqlalchemy.exc import DBAPIError
 from app.services.customer_sql_service import (
     MAX_RESULT_ROWS,
     CustomerQueryError,
+    build_display_sql,
     execute_customer_query,
     validate_sql,
 )
@@ -80,6 +81,21 @@ def test_conversions_match_the_campaign_mart(campaign_ids):
         ).scalar()
 
     assert int(rows["conversions"].iloc[0]) == expected
+
+
+def test_display_sql_runs_as_is_and_matches_the_app(campaign_ids):
+    # The SQL shown to users must give the same answer when pasted into Postgres.
+    requested = campaign_ids[:1]
+    validated = validate_sql(
+        "select treatment_group, count(*) as audience from cal group by 1 order by 1"
+    )
+
+    app_rows = execute_customer_query(validated, requested)
+    with get_readonly_engine().connect() as conn:
+        result = conn.execute(text(build_display_sql(validated, requested)))
+        pasted = [tuple(row) for row in result]
+
+    assert pasted == [tuple(row) for row in app_rows.itertuples(index=False)]
 
 
 def test_long_running_query_hits_statement_timeout(campaign_ids):
