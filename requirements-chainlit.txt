@@ -1,4 +1,4 @@
 # Dependencies for the Chainlit app (chainlit_app.py), e.g. on Render.
 # Kept separate so the Streamlit Cloud install stays unchanged.
 -r requirements.txt
-chainlit==2.12.0
+chainlit
