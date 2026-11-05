@@ -221,6 +221,14 @@ def route_question(question: str) -> RouteResult:
         r"\b(how many|which|top \d+|list|show)\b.*\bcustomers?\b"
     )
 
+    # Customer behaviour without the word "customer": "Who spent the most?",
+    # "biggest spenders", "spend per customer".
+    customer_activity_pattern = re.compile(
+        r"\bwho\b.*\b(spent|spend|spends|bought|buys|purchased|converted|convert)\b"
+        r"|\bspenders?\b"
+        r"|\bspend per customer\b"
+    )
+
     # A specific customer: "customer 7470", "customer ID 7470", "customer #7470".
     customer_reference_pattern = re.compile(r"\bcustomer\s*(?:id\s*)?#?\s*\d+\b")
 
@@ -381,6 +389,7 @@ def route_question(question: str) -> RouteResult:
     has_customer_grain_signal = (
         any(term in normalized for term in customer_attribute_terms)
         or bool(customer_question_pattern.search(normalized))
+        or bool(customer_activity_pattern.search(normalized))
     )
     if customer_reference_pattern.search(normalized) or (
         has_scope_term and not has_explicit_insight_term and has_customer_grain_signal
@@ -416,7 +425,11 @@ def route_question(question: str) -> RouteResult:
         for term in customer_attribute_terms
     )
 
-    if has_customer_attribute_term or customer_question_pattern.search(normalized):
+    if (
+        has_customer_attribute_term
+        or customer_question_pattern.search(normalized)
+        or customer_activity_pattern.search(normalized)
+    ):
         return RouteResult(
             analysis_type="detail",
             context_type="customer_campaign",

@@ -21,6 +21,12 @@ from app.config.router import VS_PATTERN, route_question
         "What did customer #7470 buy across campaigns?",
         "Across all campaigns, which countries had the most converters?",
         "Overall, how many customers converted?",
+        "Which customers spent the most across all campaigns?",
+        "Who spent the most across all campaigns?",
+        "Who are our biggest spenders overall?",
+        "Across all campaigns, what is the average spend per customer?",
+        "Who converted in the test group?",
+        "Top spenders this campaign",
     ],
 )
 def test_customer_level_questions_route_to_customer_sql(question):
@@ -38,6 +44,7 @@ def test_customer_level_questions_route_to_customer_sql(question):
         ("What are the key takeaways?", "insight", "insight"),
         ("What are the key takeaways across all campaigns?", "insight", "insight"),
         ("Across all campaigns, which segment converted best?", "insight", "insight"),
+        ("How much did we spend on the campaign?", "campaign", "summary"),
         ("Chart revenue by segment", "segment", "visualization"),
         ("Plot campaign conversion rate", "campaign", "visualization"),
         ("What does Churn Watchlist mean?", "knowledge", "summary"),
