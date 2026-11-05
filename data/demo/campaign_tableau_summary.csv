@@ -556,3 +556,278 @@ CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,V
 CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,Very Low,High Engagement,2026-03-01,2026-04-30,4.2,0.7,2,1,2.1,4.2
 CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,Very Low,Low Engagement,2026-03-01,2026-04-30,0.0,0.1,1,0,0.0,0.0
 CMP-2026-004,Spring Reactivation TM,Win-Back,Medium Value,Win-Back Growth,TEST,Very Low,Medium Engagement,2026-03-01,2026-04-30,3.62,0.8,3,1,1.21,3.62
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,CONTROL,High,High Engagement,2026-09-04,2026-11-02,8.56,0.0,3,1,2.85,8.56
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,CONTROL,High,Medium Engagement,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,CONTROL,High Engagement,High Engagement Category,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,CONTROL,Moderate,Medium Engagement,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,CONTROL,Very High,High Engagement,2026-09-04,2026-11-02,13.88,0.0,27,4,0.51,3.47
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,CONTROL,Very High,Low Engagement,2026-09-04,2026-11-02,78.02,0.0,25,12,3.12,6.5
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,CONTROL,Very High,Medium Engagement,2026-09-04,2026-11-02,77.56,0.0,25,10,3.1,7.76
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,CONTROL,Very High Engagement,Low Engagement Category,2026-09-04,2026-11-02,0.0,0.0,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,TEST,High,High Engagement,2026-09-04,2026-11-02,42.62,5.9,14,9,3.04,4.74
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,TEST,High,Low Engagement,2026-09-04,2026-11-02,0.0,0.5,5,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,TEST,High,Medium Engagement,2026-09-04,2026-11-02,19.47,2.2,7,3,2.78,6.49
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,TEST,High Engagement,High Engagement Category,2026-09-04,2026-11-02,0.0,0.1,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,TEST,High Engagement,Medium Engagement Category,2026-09-04,2026-11-02,0.0,0.1,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,TEST,Moderate,Low Engagement,2026-09-04,2026-11-02,8.42,0.6,1,1,8.42,8.42
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,TEST,Moderate,Medium Engagement,2026-09-04,2026-11-02,0.0,0.1,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,TEST,Very High,High Engagement,2026-09-04,2026-11-02,362.15,46.3,163,60,2.22,6.04
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,TEST,Very High,Low Engagement,2026-09-04,2026-11-02,134.02,17.4,59,23,2.27,5.83
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,TEST,Very High,Medium Engagement,2026-09-04,2026-11-02,272.99,26.9,89,36,3.07,7.58
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,TEST,Very High Engagement,High Engagement Category,2026-09-04,2026-11-02,14.58,1.4,4,2,3.65,7.29
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,TEST,Very High Engagement,Low Engagement Category,2026-09-04,2026-11-02,3.94,0.8,3,1,1.31,3.94
+CMP-2026-005,Fall Welcome Offer EM,Champion,High Value,Champion,TEST,Very High Engagement,Medium Engagement Category,2026-09-04,2026-11-02,14.23,1.2,2,2,7.12,7.12
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,CONTROL,High,High Engagement,2026-09-04,2026-11-02,119.3,0.0,63,19,1.89,6.28
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,CONTROL,High,Low Engagement,2026-09-04,2026-11-02,57.03,0.0,25,10,2.28,5.7
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,CONTROL,High,Medium Engagement,2026-09-04,2026-11-02,50.44,0.0,38,8,1.33,6.31
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,CONTROL,High Engagement,High Engagement Category,2026-09-04,2026-11-02,12.62,0.0,3,2,4.21,6.31
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,CONTROL,High Engagement,Medium Engagement Category,2026-09-04,2026-11-02,0.0,0.0,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,CONTROL,Moderate,High Engagement,2026-09-04,2026-11-02,47.78,0.0,35,10,1.37,4.78
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,CONTROL,Moderate,Low Engagement,2026-09-04,2026-11-02,36.56,0.0,33,6,1.11,6.09
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,CONTROL,Moderate,Medium Engagement,2026-09-04,2026-11-02,59.9,0.0,26,10,2.3,5.99
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,CONTROL,Moderate Engagement,High Engagement Category,2026-09-04,2026-11-02,3.78,0.0,3,1,1.26,3.78
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,CONTROL,Moderate Engagement,Low Engagement Category,2026-09-04,2026-11-02,3.74,0.0,2,1,1.87,3.74
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,CONTROL,Very High,High Engagement,2026-09-04,2026-11-02,84.83,0.0,45,18,1.89,4.71
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,CONTROL,Very High,Low Engagement,2026-09-04,2026-11-02,49.24,0.0,29,8,1.7,6.16
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,CONTROL,Very High,Medium Engagement,2026-09-04,2026-11-02,45.91,0.0,17,7,2.7,6.56
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,CONTROL,Very High Engagement,High Engagement Category,2026-09-04,2026-11-02,0.0,0.0,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,CONTROL,Very High Engagement,Low Engagement Category,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,CONTROL,Very High Engagement,Medium Engagement Category,2026-09-04,2026-11-02,5.48,0.0,1,1,5.48,5.48
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,High,High Engagement,2026-09-04,2026-11-02,465.69,65.3,228,85,2.04,5.48
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,High,Low Engagement,2026-09-04,2026-11-02,249.34,40.3,143,52,1.74,4.8
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,High,Medium Engagement,2026-09-04,2026-11-02,282.32,42.3,143,56,1.97,5.04
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,High Engagement,High Engagement Category,2026-09-04,2026-11-02,47.46,6.6,16,10,2.97,4.75
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,High Engagement,Low Engagement Category,2026-09-04,2026-11-02,10.17,2.2,7,3,1.45,3.39
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,High Engagement,Medium Engagement Category,2026-09-04,2026-11-02,11.8,1.5,5,2,2.36,5.9
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,Moderate,High Engagement,2026-09-04,2026-11-02,413.39,53.0,165,73,2.51,5.66
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,Moderate,Low Engagement,2026-09-04,2026-11-02,192.08,25.2,92,32,2.09,6.0
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,Moderate,Medium Engagement,2026-09-04,2026-11-02,179.82,24.5,90,31,2.0,5.8
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,Moderate Engagement,High Engagement Category,2026-09-04,2026-11-02,19.94,2.7,7,4,2.85,4.99
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,Moderate Engagement,Low Engagement Category,2026-09-04,2026-11-02,7.0,1.4,4,2,1.75,3.5
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,Moderate Engagement,Medium Engagement Category,2026-09-04,2026-11-02,12.84,1.3,3,2,4.28,6.42
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,Very High,High Engagement,2026-09-04,2026-11-02,386.74,56.1,176,77,2.2,5.02
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,Very High,Low Engagement,2026-09-04,2026-11-02,227.96,30.9,99,42,2.3,5.43
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,Very High,Medium Engagement,2026-09-04,2026-11-02,169.61,25.7,97,32,1.75,5.3
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,Very High Engagement,High Engagement Category,2026-09-04,2026-11-02,23.5,2.9,9,4,2.61,5.88
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,Very High Engagement,Low Engagement Category,2026-09-04,2026-11-02,3.17,0.7,2,1,1.59,3.17
+CMP-2026-005,Fall Welcome Offer EM,Champion,Medium Value,Upsell - Scale,TEST,Very High Engagement,Medium Engagement Category,2026-09-04,2026-11-02,6.64,1.4,4,2,1.66,3.32
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,High Value,Churn Watchlist,CONTROL,High,Medium Engagement,2026-09-04,2026-11-02,3.94,0.0,2,1,1.97,3.94
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,High Value,Churn Watchlist,CONTROL,Very High,High Engagement,2026-09-04,2026-11-02,26.97,0.0,27,5,1.0,5.39
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,High Value,Churn Watchlist,CONTROL,Very High,Low Engagement,2026-09-04,2026-11-02,7.62,0.0,4,1,1.91,7.62
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,High Value,Churn Watchlist,CONTROL,Very High,Medium Engagement,2026-09-04,2026-11-02,7.62,0.0,9,2,0.85,3.81
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,High Value,Churn Watchlist,TEST,High,High Engagement,2026-09-04,2026-11-02,3.78,0.9,4,1,0.95,3.78
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,High Value,Churn Watchlist,TEST,High,Low Engagement,2026-09-04,2026-11-02,3.88,1.1,6,1,0.65,3.88
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,High Value,Churn Watchlist,TEST,High,Medium Engagement,2026-09-04,2026-11-02,0.0,0.1,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,High Value,Churn Watchlist,TEST,High Engagement,High Engagement Category,2026-09-04,2026-11-02,4.01,0.6,1,1,4.01,4.01
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,High Value,Churn Watchlist,TEST,Moderate,High Engagement,2026-09-04,2026-11-02,4.27,0.6,1,1,4.27,4.27
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,High Value,Churn Watchlist,TEST,Moderate,Medium Engagement,2026-09-04,2026-11-02,9.26,0.6,1,1,9.26,9.26
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,High Value,Churn Watchlist,TEST,Very High,High Engagement,2026-09-04,2026-11-02,254.44,29.9,94,41,2.71,6.21
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,High Value,Churn Watchlist,TEST,Very High,Low Engagement,2026-09-04,2026-11-02,114.23,12.8,38,18,3.01,6.35
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,High Value,Churn Watchlist,TEST,Very High,Medium Engagement,2026-09-04,2026-11-02,107.5,13.3,53,16,2.03,6.72
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,High Value,Churn Watchlist,TEST,Very High Engagement,High Engagement Category,2026-09-04,2026-11-02,3.34,0.8,3,1,1.11,3.34
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,High Value,Churn Watchlist,TEST,Very High Engagement,Low Engagement Category,2026-09-04,2026-11-02,6.82,0.6,1,1,6.82,6.82
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,High Value,Churn Watchlist,TEST,Very High Engagement,Medium Engagement Category,2026-09-04,2026-11-02,0.0,0.2,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,High,High Engagement,2026-09-04,2026-11-02,7.6,0.0,7,2,1.09,3.8
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,High,Low Engagement,2026-09-04,2026-11-02,2.66,0.0,7,1,0.38,2.66
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,High,Medium Engagement,2026-09-04,2026-11-02,6.98,0.0,4,2,1.75,3.49
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Moderate,High Engagement,2026-09-04,2026-11-02,8.34,0.0,19,2,0.44,4.17
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Moderate,Low Engagement,2026-09-04,2026-11-02,12.77,0.0,13,3,0.98,4.26
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Moderate,Medium Engagement,2026-09-04,2026-11-02,2.97,0.0,8,1,0.37,2.97
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Moderate Engagement,High Engagement Category,2026-09-04,2026-11-02,6.78,0.0,2,1,3.39,6.78
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Moderate Engagement,Low Engagement Category,2026-09-04,2026-11-02,0.0,0.0,3,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Very High,Low Engagement,2026-09-04,2026-11-02,0.0,0.0,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,CONTROL,Very High,Medium Engagement,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,TEST,High,High Engagement,2026-09-04,2026-11-02,44.24,8.7,37,10,1.2,4.42
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,TEST,High,Low Engagement,2026-09-04,2026-11-02,20.28,4.7,17,6,1.19,3.38
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,TEST,High,Medium Engagement,2026-09-04,2026-11-02,40.73,7.9,29,10,1.4,4.07
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,TEST,High Engagement,High Engagement Category,2026-09-04,2026-11-02,0.0,0.1,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,TEST,High Engagement,Low Engagement Category,2026-09-04,2026-11-02,3.12,0.7,2,1,1.56,3.12
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,TEST,Moderate,High Engagement,2026-09-04,2026-11-02,214.92,29.7,102,39,2.11,5.51
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,TEST,Moderate,Low Engagement,2026-09-04,2026-11-02,78.09,13.2,57,15,1.37,5.21
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,TEST,Moderate,Medium Engagement,2026-09-04,2026-11-02,68.67,12.8,53,15,1.3,4.58
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,TEST,Moderate Engagement,High Engagement Category,2026-09-04,2026-11-02,11.56,2.1,6,3,1.93,3.85
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,TEST,Moderate Engagement,Low Engagement Category,2026-09-04,2026-11-02,10.93,1.5,5,2,2.19,5.47
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,TEST,Moderate Engagement,Medium Engagement Category,2026-09-04,2026-11-02,0.0,0.2,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,TEST,Very High,High Engagement,2026-09-04,2026-11-02,18.98,2.2,7,3,2.71,6.33
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,TEST,Very High,Low Engagement,2026-09-04,2026-11-02,8.15,1.3,3,2,2.72,4.08
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Low Value,Churn Watchlist,TEST,Very High,Medium Engagement,2026-09-04,2026-11-02,4.74,0.8,3,1,1.58,4.74
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,High,High Engagement,2026-09-04,2026-11-02,50.29,0.0,34,8,1.48,6.29
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,High,Low Engagement,2026-09-04,2026-11-02,26.16,0.0,21,5,1.25,5.23
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,High,Medium Engagement,2026-09-04,2026-11-02,24.93,0.0,24,5,1.04,4.99
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,High Engagement,High Engagement Category,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Moderate,High Engagement,2026-09-04,2026-11-02,50.92,0.0,27,9,1.89,5.66
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Moderate,Low Engagement,2026-09-04,2026-11-02,26.13,0.0,13,3,2.01,8.71
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Moderate,Medium Engagement,2026-09-04,2026-11-02,21.48,0.0,21,5,1.02,4.3
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Moderate Engagement,High Engagement Category,2026-09-04,2026-11-02,0.0,0.0,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Moderate Engagement,Medium Engagement Category,2026-09-04,2026-11-02,0.0,0.0,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Very High,High Engagement,2026-09-04,2026-11-02,16.91,0.0,23,3,0.74,5.64
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Very High,Low Engagement,2026-09-04,2026-11-02,17.02,0.0,14,4,1.22,4.26
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Very High,Medium Engagement,2026-09-04,2026-11-02,18.7,0.0,12,4,1.56,4.68
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,CONTROL,Very High Engagement,High Engagement Category,2026-09-04,2026-11-02,0.0,0.0,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,High,High Engagement,2026-09-04,2026-11-02,269.76,37.1,131,48,2.06,5.62
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,High,Low Engagement,2026-09-04,2026-11-02,154.51,22.3,78,29,1.98,5.33
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,High,Medium Engagement,2026-09-04,2026-11-02,81.68,16.3,78,17,1.05,4.8
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,High Engagement,High Engagement Category,2026-09-04,2026-11-02,5.82,1.7,7,2,0.83,2.91
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,High Engagement,Low Engagement Category,2026-09-04,2026-11-02,5.9,0.9,4,1,1.48,5.9
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,High Engagement,Medium Engagement Category,2026-09-04,2026-11-02,0.0,0.2,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Moderate,High Engagement,2026-09-04,2026-11-02,207.48,27.2,92,36,2.26,5.76
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Moderate,Low Engagement,2026-09-04,2026-11-02,87.23,14.4,59,17,1.48,5.13
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Moderate,Medium Engagement,2026-09-04,2026-11-02,84.78,12.5,50,15,1.7,5.65
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Moderate Engagement,High Engagement Category,2026-09-04,2026-11-02,35.3,3.5,10,5,3.53,7.06
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Moderate Engagement,Low Engagement Category,2026-09-04,2026-11-02,9.33,0.8,3,1,3.11,9.33
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Very High,High Engagement,2026-09-04,2026-11-02,134.16,18.5,70,23,1.92,5.83
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Very High,Low Engagement,2026-09-04,2026-11-02,76.75,11.0,40,14,1.92,5.48
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Very High,Medium Engagement,2026-09-04,2026-11-02,83.3,14.0,55,17,1.51,4.9
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Very High Engagement,High Engagement Category,2026-09-04,2026-11-02,18.28,1.9,4,3,4.57,6.09
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Very High Engagement,Low Engagement Category,2026-09-04,2026-11-02,0.0,0.1,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Churn Watchlist,Medium Value,Churn Watchlist,TEST,Very High Engagement,Medium Engagement Category,2026-09-04,2026-11-02,2.63,0.9,4,1,0.66,2.63
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,CONTROL,Low,High Engagement,2026-09-04,2026-11-02,115.45,0.0,79,19,1.46,6.08
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,CONTROL,Low,Low Engagement,2026-09-04,2026-11-02,72.57,0.0,57,14,1.27,5.18
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,CONTROL,Low,Medium Engagement,2026-09-04,2026-11-02,75.09,0.0,49,14,1.53,5.36
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,CONTROL,Low Engagement,High Engagement Category,2026-09-04,2026-11-02,18.59,0.0,7,4,2.66,4.65
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,CONTROL,Low Engagement,Low Engagement Category,2026-09-04,2026-11-02,9.92,0.0,3,2,3.31,4.96
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,CONTROL,Low Engagement,Medium Engagement Category,2026-09-04,2026-11-02,2.7,0.0,2,1,1.35,2.7
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,CONTROL,Very Low,High Engagement,2026-09-04,2026-11-02,172.56,0.0,114,33,1.51,5.23
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,CONTROL,Very Low,Low Engagement,2026-09-04,2026-11-02,54.26,0.0,58,11,0.94,4.93
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,CONTROL,Very Low,Medium Engagement,2026-09-04,2026-11-02,113.53,0.0,70,20,1.62,5.68
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,CONTROL,Very Low Engagement,High Engagement Category,2026-09-04,2026-11-02,16.16,0.0,5,2,3.23,8.08
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,CONTROL,Very Low Engagement,Low Engagement Category,2026-09-04,2026-11-02,3.61,0.0,2,1,1.81,3.61
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,CONTROL,Very Low Engagement,Medium Engagement Category,2026-09-04,2026-11-02,3.63,0.0,3,1,1.21,3.63
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,TEST,Low,High Engagement,2026-09-04,2026-11-02,588.82,94.8,373,115,1.58,5.12
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,TEST,Low,Low Engagement,2026-09-04,2026-11-02,367.26,59.8,223,75,1.65,4.9
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,TEST,Low,Medium Engagement,2026-09-04,2026-11-02,268.22,54.2,217,65,1.24,4.13
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,TEST,Low Engagement,High Engagement Category,2026-09-04,2026-11-02,17.06,3.6,16,4,1.07,4.27
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,TEST,Low Engagement,Low Engagement Category,2026-09-04,2026-11-02,13.52,1.9,9,2,1.5,6.76
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,TEST,Low Engagement,Medium Engagement Category,2026-09-04,2026-11-02,15.11,3.2,12,4,1.26,3.78
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,TEST,Very Low,High Engagement,2026-09-04,2026-11-02,698.13,101.4,379,127,1.84,5.5
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,TEST,Very Low,Low Engagement,2026-09-04,2026-11-02,473.78,72.6,261,93,1.82,5.09
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,TEST,Very Low,Medium Engagement,2026-09-04,2026-11-02,341.79,52.9,219,62,1.56,5.51
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,TEST,Very Low Engagement,High Engagement Category,2026-09-04,2026-11-02,55.15,6.7,22,9,2.51,6.13
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,TEST,Very Low Engagement,Low Engagement Category,2026-09-04,2026-11-02,28.88,3.6,11,5,2.63,5.78
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Engagement Growth,TEST,Very Low Engagement,Medium Engagement Category,2026-09-04,2026-11-02,17.78,2.7,12,3,1.48,5.93
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,CONTROL,High,High Engagement,2026-09-04,2026-11-02,11.63,0.0,13,2,0.89,5.82
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,CONTROL,High,Low Engagement,2026-09-04,2026-11-02,7.76,0.0,6,2,1.29,3.88
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,CONTROL,High,Medium Engagement,2026-09-04,2026-11-02,8.11,0.0,11,2,0.74,4.06
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,CONTROL,High Engagement,High Engagement Category,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,CONTROL,High Engagement,Low Engagement Category,2026-09-04,2026-11-02,0.0,0.0,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,CONTROL,Moderate,High Engagement,2026-09-04,2026-11-02,30.38,0.0,30,5,1.01,6.08
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,CONTROL,Moderate,Low Engagement,2026-09-04,2026-11-02,51.72,0.0,28,11,1.85,4.7
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,CONTROL,Moderate,Medium Engagement,2026-09-04,2026-11-02,18.48,0.0,22,3,0.84,6.16
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,CONTROL,Moderate Engagement,High Engagement Category,2026-09-04,2026-11-02,2.7,0.0,3,1,0.9,2.7
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,CONTROL,Moderate Engagement,Low Engagement Category,2026-09-04,2026-11-02,0.0,0.0,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,CONTROL,Very High,High Engagement,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,CONTROL,Very High,Low Engagement,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,CONTROL,Very High,Medium Engagement,2026-09-04,2026-11-02,0.0,0.0,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,TEST,High,High Engagement,2026-09-04,2026-11-02,84.46,16.6,71,19,1.19,4.45
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,TEST,High,Low Engagement,2026-09-04,2026-11-02,61.7,12.6,46,16,1.34,3.86
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,TEST,High,Medium Engagement,2026-09-04,2026-11-02,21.41,7.0,40,6,0.54,3.57
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,TEST,High Engagement,High Engagement Category,2026-09-04,2026-11-02,7.9,1.4,4,2,1.98,3.95
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,TEST,High Engagement,Low Engagement Category,2026-09-04,2026-11-02,0.0,0.1,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,TEST,High Engagement,Medium Engagement Category,2026-09-04,2026-11-02,0.0,0.2,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,TEST,Moderate,High Engagement,2026-09-04,2026-11-02,212.61,35.7,142,43,1.5,4.94
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,TEST,Moderate,Low Engagement,2026-09-04,2026-11-02,148.23,21.2,77,27,1.93,5.49
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,TEST,Moderate,Medium Engagement,2026-09-04,2026-11-02,98.71,16.6,71,19,1.39,5.2
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,TEST,Moderate Engagement,High Engagement Category,2026-09-04,2026-11-02,33.76,3.4,9,5,3.75,6.75
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,TEST,Moderate Engagement,Low Engagement Category,2026-09-04,2026-11-02,7.29,0.7,2,1,3.65,7.29
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,TEST,Moderate Engagement,Medium Engagement Category,2026-09-04,2026-11-02,4.2,0.8,3,1,1.4,4.2
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,TEST,Very High,High Engagement,2026-09-04,2026-11-02,25.02,3.1,11,4,2.27,6.26
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,TEST,Very High,Low Engagement,2026-09-04,2026-11-02,0.0,0.6,6,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,TEST,Very High,Medium Engagement,2026-09-04,2026-11-02,0.0,0.4,4,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Growth,Low Value,Upsell - Core,TEST,Very High Engagement,Low Engagement Category,2026-09-04,2026-11-02,2.65,0.6,1,1,2.65,2.65
+CMP-2026-005,Fall Welcome Offer EM,Growth,Medium Value,Engagement Growth,CONTROL,Low,High Engagement,2026-09-04,2026-11-02,22.02,0.0,18,5,1.22,4.4
+CMP-2026-005,Fall Welcome Offer EM,Growth,Medium Value,Engagement Growth,CONTROL,Low,Low Engagement,2026-09-04,2026-11-02,7.34,0.0,10,2,0.73,3.67
+CMP-2026-005,Fall Welcome Offer EM,Growth,Medium Value,Engagement Growth,CONTROL,Low,Medium Engagement,2026-09-04,2026-11-02,39.5,0.0,19,7,2.08,5.64
+CMP-2026-005,Fall Welcome Offer EM,Growth,Medium Value,Engagement Growth,CONTROL,Low Engagement,High Engagement Category,2026-09-04,2026-11-02,3.68,0.0,4,1,0.92,3.68
+CMP-2026-005,Fall Welcome Offer EM,Growth,Medium Value,Engagement Growth,CONTROL,Low Engagement,Medium Engagement Category,2026-09-04,2026-11-02,0.0,0.0,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Growth,Medium Value,Engagement Growth,CONTROL,Very Low,High Engagement,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Growth,Medium Value,Engagement Growth,CONTROL,Very Low,Low Engagement,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Growth,Medium Value,Engagement Growth,TEST,Low,High Engagement,2026-09-04,2026-11-02,148.55,21.7,87,26,1.71,5.71
+CMP-2026-005,Fall Welcome Offer EM,Growth,Medium Value,Engagement Growth,TEST,Low,Low Engagement,2026-09-04,2026-11-02,186.12,23.0,80,30,2.33,6.2
+CMP-2026-005,Fall Welcome Offer EM,Growth,Medium Value,Engagement Growth,TEST,Low,Medium Engagement,2026-09-04,2026-11-02,135.99,17.7,67,22,2.03,6.18
+CMP-2026-005,Fall Welcome Offer EM,Growth,Medium Value,Engagement Growth,TEST,Low Engagement,High Engagement Category,2026-09-04,2026-11-02,3.76,0.8,3,1,1.25,3.76
+CMP-2026-005,Fall Welcome Offer EM,Growth,Medium Value,Engagement Growth,TEST,Low Engagement,Low Engagement Category,2026-09-04,2026-11-02,0.0,0.1,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Growth,Medium Value,Engagement Growth,TEST,Low Engagement,Medium Engagement Category,2026-09-04,2026-11-02,3.66,0.7,2,1,1.83,3.66
+CMP-2026-005,Fall Welcome Offer EM,Growth,Medium Value,Engagement Growth,TEST,Very Low,High Engagement,2026-09-04,2026-11-02,12.83,2.5,10,3,1.28,4.28
+CMP-2026-005,Fall Welcome Offer EM,Growth,Medium Value,Engagement Growth,TEST,Very Low,Low Engagement,2026-09-04,2026-11-02,0.0,0.3,3,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Growth,Medium Value,Engagement Growth,TEST,Very Low,Medium Engagement,2026-09-04,2026-11-02,0.0,0.3,3,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Growth,Medium Value,Engagement Growth,TEST,Very Low Engagement,High Engagement Category,2026-09-04,2026-11-02,3.62,0.7,2,1,1.81,3.62
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,High Value,Win-Back VIP,CONTROL,Very High,High Engagement,2026-09-04,2026-11-02,0.0,0.0,3,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,High Value,Win-Back VIP,CONTROL,Very High,Low Engagement,2026-09-04,2026-11-02,0.0,0.0,4,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,High Value,Win-Back VIP,CONTROL,Very High,Medium Engagement,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,High Value,Win-Back VIP,TEST,High,Low Engagement,2026-09-04,2026-11-02,9.42,0.7,2,1,4.71,9.42
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,High Value,Win-Back VIP,TEST,Very High,High Engagement,2026-09-04,2026-11-02,12.56,2.5,15,2,0.84,6.28
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,High Value,Win-Back VIP,TEST,Very High,Low Engagement,2026-09-04,2026-11-02,0.0,0.7,7,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,High Value,Win-Back VIP,TEST,Very High,Medium Engagement,2026-09-04,2026-11-02,0.0,1.0,10,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,High,High Engagement,2026-09-04,2026-11-02,5.1,0.0,1,1,5.1,5.1
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,High,Low Engagement,2026-09-04,2026-11-02,5.76,0.0,3,1,1.92,5.76
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,High,Medium Engagement,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Low,High Engagement,2026-09-04,2026-11-02,15.17,0.0,11,5,1.38,3.03
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Low,Low Engagement,2026-09-04,2026-11-02,6.87,0.0,8,2,0.86,3.44
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Low,Medium Engagement,2026-09-04,2026-11-02,15.67,0.0,14,2,1.12,7.84
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Moderate,High Engagement,2026-09-04,2026-11-02,5.26,0.0,7,1,0.75,5.26
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Moderate,Low Engagement,2026-09-04,2026-11-02,3.08,0.0,3,1,1.03,3.08
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Moderate,Medium Engagement,2026-09-04,2026-11-02,0.0,0.0,3,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Moderate Engagement,Low Engagement Category,2026-09-04,2026-11-02,0.0,0.0,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Moderate Engagement,Medium Engagement Category,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Very High Engagement,High Engagement Category,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Very High Engagement,Medium Engagement Category,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Very Low,High Engagement,2026-09-04,2026-11-02,37.19,0.0,29,6,1.28,6.2
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Very Low,Low Engagement,2026-09-04,2026-11-02,26.98,0.0,17,5,1.59,5.4
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Very Low,Medium Engagement,2026-09-04,2026-11-02,55.93,0.0,19,9,2.94,6.21
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Very Low Engagement,Low Engagement Category,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,CONTROL,Very Low Engagement,Medium Engagement Category,2026-09-04,2026-11-02,10.26,0.0,1,1,10.26,10.26
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,High,High Engagement,2026-09-04,2026-11-02,8.53,2.0,10,2,0.85,4.27
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,High,Low Engagement,2026-09-04,2026-11-02,2.94,0.8,3,1,0.98,2.94
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,High,Medium Engagement,2026-09-04,2026-11-02,5.5,1.6,6,2,0.92,2.75
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,High Engagement,Low Engagement Category,2026-09-04,2026-11-02,5.28,0.6,1,1,5.28,5.28
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Low,High Engagement,2026-09-04,2026-11-02,106.42,15.6,56,20,1.9,5.32
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Low,Low Engagement,2026-09-04,2026-11-02,59.72,9.5,35,12,1.71,4.98
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Low,Medium Engagement,2026-09-04,2026-11-02,51.84,9.7,37,12,1.4,4.32
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Low Engagement,High Engagement Category,2026-09-04,2026-11-02,6.42,1.0,5,1,1.28,6.42
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Low Engagement,Low Engagement Category,2026-09-04,2026-11-02,3.07,0.8,3,1,1.02,3.07
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Low Engagement,Medium Engagement Category,2026-09-04,2026-11-02,0.0,0.2,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Moderate,High Engagement,2026-09-04,2026-11-02,66.89,9.7,32,13,2.09,5.15
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Moderate,Low Engagement,2026-09-04,2026-11-02,16.73,3.2,12,4,1.39,4.18
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Moderate,Medium Engagement,2026-09-04,2026-11-02,33.16,4.2,12,6,2.76,5.53
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Moderate Engagement,High Engagement Category,2026-09-04,2026-11-02,0.0,0.1,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Moderate Engagement,Medium Engagement Category,2026-09-04,2026-11-02,0.0,0.2,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Very High,High Engagement,2026-09-04,2026-11-02,0.0,0.3,3,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Very High,Medium Engagement,2026-09-04,2026-11-02,2.15,0.6,1,1,2.15,2.15
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Very Low,High Engagement,2026-09-04,2026-11-02,140.72,24.5,105,28,1.34,5.03
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Very Low,Low Engagement,2026-09-04,2026-11-02,171.01,27.2,87,37,1.97,4.62
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Very Low,Medium Engagement,2026-09-04,2026-11-02,91.15,15.4,59,19,1.54,4.8
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Very Low Engagement,High Engagement Category,2026-09-04,2026-11-02,16.92,2.0,5,3,3.38,5.64
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Very Low Engagement,Low Engagement Category,2026-09-04,2026-11-02,11.41,1.2,2,2,5.71,5.71
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Low Value,Win-Back Reactivation,TEST,Very Low Engagement,Medium Engagement Category,2026-09-04,2026-11-02,3.39,0.8,3,1,1.13,3.39
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,CONTROL,High,High Engagement,2026-09-04,2026-11-02,6.72,0.0,7,1,0.96,6.72
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,CONTROL,High,Low Engagement,2026-09-04,2026-11-02,0.0,0.0,5,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,CONTROL,High,Medium Engagement,2026-09-04,2026-11-02,3.32,0.0,6,1,0.55,3.32
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Low,High Engagement,2026-09-04,2026-11-02,11.97,0.0,3,1,3.99,11.97
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Low,Low Engagement,2026-09-04,2026-11-02,8.06,0.0,3,1,2.69,8.06
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Low,Medium Engagement,2026-09-04,2026-11-02,0.0,0.0,3,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Moderate,High Engagement,2026-09-04,2026-11-02,14.13,0.0,5,2,2.83,7.07
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Moderate,Low Engagement,2026-09-04,2026-11-02,18.47,0.0,7,3,2.64,6.16
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Moderate,Medium Engagement,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very High,High Engagement,2026-09-04,2026-11-02,3.44,0.0,5,1,0.69,3.44
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very High,Low Engagement,2026-09-04,2026-11-02,6.42,0.0,1,1,6.42,6.42
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very High,Medium Engagement,2026-09-04,2026-11-02,0.0,0.0,3,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,CONTROL,Very Low,High Engagement,2026-09-04,2026-11-02,0.0,0.0,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,High,High Engagement,2026-09-04,2026-11-02,9.37,3.2,22,2,0.43,4.69
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,High,Low Engagement,2026-09-04,2026-11-02,40.5,4.8,13,7,3.12,5.79
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,High,Medium Engagement,2026-09-04,2026-11-02,40.62,5.4,19,7,2.14,5.8
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,High Engagement,High Engagement Category,2026-09-04,2026-11-02,0.0,0.2,2,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,Low,High Engagement,2026-09-04,2026-11-02,16.4,2.4,9,3,1.82,5.47
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,Low,Low Engagement,2026-09-04,2026-11-02,21.96,2.3,8,3,2.75,7.32
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,Low,Medium Engagement,2026-09-04,2026-11-02,11.1,1.4,9,1,1.23,11.1
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,Low Engagement,Low Engagement Category,2026-09-04,2026-11-02,11.74,1.4,4,2,2.94,5.87
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,Moderate,High Engagement,2026-09-04,2026-11-02,55.09,7.3,28,9,1.97,6.12
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,Moderate,Low Engagement,2026-09-04,2026-11-02,44.48,6.8,23,9,1.93,4.94
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,Moderate,Medium Engagement,2026-09-04,2026-11-02,33.03,3.5,10,5,3.3,6.61
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,Moderate Engagement,High Engagement Category,2026-09-04,2026-11-02,0.0,0.1,1,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,Very High,High Engagement,2026-09-04,2026-11-02,15.23,4.4,19,5,0.8,3.05
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,Very High,Low Engagement,2026-09-04,2026-11-02,22.09,3.3,18,3,1.23,7.36
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,Very High,Medium Engagement,2026-09-04,2026-11-02,21.08,3.4,14,4,1.51,5.27
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,Very High Engagement,Medium Engagement Category,2026-09-04,2026-11-02,2.83,0.6,1,1,2.83,2.83
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,Very Low,High Engagement,2026-09-04,2026-11-02,0.0,0.3,3,0,0.0,0.0
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,Very Low,Low Engagement,2026-09-04,2026-11-02,3.73,0.6,1,1,3.73,3.73
+CMP-2026-005,Fall Welcome Offer EM,Win-Back,Medium Value,Win-Back Growth,TEST,Very Low,Medium Engagement,2026-09-04,2026-11-02,4.34,0.8,3,1,1.45,4.34
