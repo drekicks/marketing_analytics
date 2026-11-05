@@ -61,7 +61,8 @@ See `.env.example`.
   `LLMServiceError` for AI-service failures, `ConfigurationError` for missing settings; let DB errors propagate.
   UIs catch `Exception` and show `user_message(error)`, never raw tracebacks. One OpenAI client (`llm_client_api.client`).
 - Routing: `route_question` runs once per question in `process_analyst_question`; pass `route=` to `ask_analyst`.
-  Scope words live only in `router.SCOPE_TERMS` / `is_scope_request`. Add new routes with a case in `tests/test_router.py`.
+  Scope words live only in `router.SCOPE_TERMS` / `is_scope_request`. Customer-grain questions (a specific customer ID, or a
+  scope word plus a customer attribute) route to customer SQL before broad insight; with a scope word they cover all campaigns. Add new routes with a case in `tests/test_router.py`.
 - Module layout: `config/` (settings, paths, routing), `ai/` (prompting and context), `services/` (orchestration),
   `utils/` (I/O and DB), `visualization/`, `extracts/` (offline export scripts), `sql/` (one static query per file,
   loaded by name via `file_utils.load_sql_extracts([...])`).
