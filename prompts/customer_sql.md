@@ -41,6 +41,7 @@ Use these definitions so answers match the rest of the application:
 - Test / control conversion rate: the conversion rate within `treatment_group = 'TEST'` / `'CONTROL'`
 - Absolute lift: (test conversion rate − control conversion rate) × 100, in percentage points
 - Revenue per converter: revenue / conversions (use `nullif(conversions, 0)`)
+- Revenue / amount spent by a customer: `sum(campaign_revenue)`
 - Contacted customers: `treatment_group = 'TEST'`
 
 # RULES
@@ -57,7 +58,10 @@ Use these definitions so answers match the rest of the application:
    treatment group, favourite category, ...), also return each group's `audience` (all customers in
    the group) and `conversion_rate`, so counts can be read in context. Keep the asked-for measure as
    the first metric column and order by it.
-9. If the question cannot be answered from this table, write the closest useful query and say what
+9. When several campaigns are in scope and the question asks for a customer's or group's total
+   (e.g. "across all campaigns"), aggregate across all of them; add a per-campaign breakdown only
+   if the question asks for it.
+10. If the question cannot be answered from this table, write the closest useful query and say what
    is missing in the explanation.
 
 # CAMPAIGNS IN SCOPE

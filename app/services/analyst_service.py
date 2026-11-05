@@ -214,9 +214,15 @@ def _answer_customer_question(
             "(DATA_SOURCE=postgres)."
         )
 
-    campaign_ids = list(dict.fromkeys(route_campaign_ids)) or [resolved_campaign_id]
-
     summary_df = get_campaign_data().summary
+
+    if route_campaign_ids:
+        campaign_ids = list(dict.fromkeys(route_campaign_ids))
+    elif is_scope_request(question):
+        # "Across all campaigns ..." covers every campaign, not just the active one.
+        campaign_ids = list(dict.fromkeys(summary_df["campaign_id"].astype(str)))
+    else:
+        campaign_ids = [resolved_campaign_id]
 
     validate_campaign_ids(summary_df=summary_df, campaign_ids=campaign_ids)
 

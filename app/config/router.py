@@ -221,6 +221,9 @@ def route_question(question: str) -> RouteResult:
         r"\b(how many|which|top \d+|list|show)\b.*\bcustomers?\b"
     )
 
+    # A specific customer: "customer 7470", "customer ID 7470", "customer #7470".
+    customer_reference_pattern = re.compile(r"\bcustomer\s*(?:id\s*)?#?\s*\d+\b")
+
     def is_knowledge_question(question: str) -> bool:
         q = question.lower()
 
@@ -371,6 +374,21 @@ def route_question(question: str) -> RouteResult:
                 metric=metric,
                 chart_type="bar"
             ),
+        )
+
+    # Customer-grain questions win over broad insight: "Across all campaigns, how much
+    # has customer 7470 spent?" needs customer rows, which the insight context lacks.
+    has_customer_grain_signal = (
+        any(term in normalized for term in customer_attribute_terms)
+        or bool(customer_question_pattern.search(normalized))
+    )
+    if customer_reference_pattern.search(normalized) or (
+        has_scope_term and not has_explicit_insight_term and has_customer_grain_signal
+    ):
+        return RouteResult(
+            analysis_type="detail",
+            context_type="customer_campaign",
+            campaign_ids=campaign_ids,
         )
 
     # Broad synthesis request

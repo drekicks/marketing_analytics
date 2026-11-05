@@ -370,3 +370,30 @@ def test_run_customer_query_returns_display_sql(fake_llm, fake_db):
     assert "FROM cal" in result.sql and "customer_analytic_layer" not in result.sql
     assert result.display_sql.startswith("WITH cal AS (")
     assert f"campaign_id IN ('{ACTIVE_CAMPAIGN_ID}')" in result.display_sql
+
+
+# --- campaign scope for customer questions -------------------------------
+
+
+def test_customer_question_across_all_campaigns_uses_every_campaign(service_fakes):
+    query_calls, _ = service_fakes
+
+    _ask("Across all campaigns, how much has customer ID 7470 spent?")
+
+    assert sorted(query_calls[0]["campaign_ids"]) == sorted(VALID_CAMPAIGN_IDS)
+
+
+def test_customer_question_without_scope_uses_active_campaign(service_fakes):
+    query_calls, _ = service_fakes
+
+    _ask("How much has customer 7470 spent?")
+
+    assert query_calls[0]["campaign_ids"] == [ACTIVE_CAMPAIGN_ID]
+
+
+def test_named_campaigns_win_over_scope_words(service_fakes):
+    query_calls, _ = service_fakes
+
+    _ask("Across all campaigns, how much has customer 7470 spent in CMP-2026-003?")
+
+    assert query_calls[0]["campaign_ids"] == ["CMP-2026-003"]
