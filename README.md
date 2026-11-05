@@ -222,7 +222,7 @@ The generated SQL runs only after layered safety checks:
 - **Read-only database role:** `app_readonly` can only `SELECT` from `customer_analytic_layer`,
   runs read-only transactions, and has a 5-second statement timeout.
 
-The SQL used for each answer is shown in an expandable "SQL used" panel.
+The SQL used for each answer is shown in an expandable "SQL used" panel. It includes the campaign filter, so it can be pasted into Postgres and gives the same result.
 
 Example questions:
 

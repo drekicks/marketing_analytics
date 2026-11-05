@@ -246,5 +246,5 @@ def _answer_customer_question(
     return AnalystResult(
         answer=answer,
         campaign_id=resolved_campaign_id,
-        sql=query_result.sql,
+        sql=query_result.display_sql or query_result.sql,
     )

@@ -77,6 +77,8 @@ class CustomerQueryResult:
     rows: pd.DataFrame
     truncated: bool
     campaign_ids: list[str]
+    # The same query written to run as-is in Postgres (scoped `cal` CTE); shown to users.
+    display_sql: str = ""
 
 
 def _reject(reason: str) -> None:
@@ -162,6 +164,38 @@ def build_wrapped_query(validated_sql: str) -> str:
         f"SELECT * FROM ({validated_sql}) AS q "
         f"LIMIT {MAX_RESULT_ROWS + 1}"
     )
+
+
+def build_display_sql(validated_sql: str, campaign_ids: list[str]) -> str:
+    """
+    The validated query rewritten to run on its own in Postgres, for display.
+
+    `cal` becomes a first CTE over the real table, filtered to the campaigns in
+    scope, ahead of any CTEs the model wrote. The app never executes this text;
+    execute_customer_query keeps the bound-parameter wrapper and row limit.
+    """
+    statement = sqlglot.parse_one(validated_sql, read="postgres")
+
+    source = (
+        exp.select("*")
+        .from_(exp.table_(SOURCE_TABLE, db=get_analytics_schema()))
+        .where(
+            exp.In(
+                this=exp.column("campaign_id"),
+                expressions=[exp.Literal.string(str(cid)) for cid in campaign_ids],
+            )
+        )
+    )
+    cal = exp.CTE(this=source, alias=exp.TableAlias(this=exp.to_identifier(VIRTUAL_TABLE)))
+
+    with_key = "with_" if "with_" in statement.arg_types else "with"
+    existing = statement.args.get(with_key)
+    if existing is not None:
+        existing.set("expressions", [cal, *existing.expressions])
+    else:
+        statement.set(with_key, exp.With(expressions=[cal]))
+
+    return statement.sql(dialect="postgres", pretty=True)
 
 
 def execute_customer_query(validated_sql: str, campaign_ids: list[str]) -> pd.DataFrame:
@@ -270,6 +304,7 @@ def run_customer_query(
             rows=rows.head(MAX_RESULT_ROWS),
             truncated=truncated,
             campaign_ids=list(campaign_ids),
+            display_sql=build_display_sql(validated_sql, campaign_ids),
         )
 
     raise ValueError("I couldn't build a working query for that question.")
