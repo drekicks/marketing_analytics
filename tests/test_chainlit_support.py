@@ -124,3 +124,7 @@ def test_campaign_profiles_dedupe_and_tolerate_missing_details():
 
 def test_welcome_text_points_to_the_campaign_menu():
     assert "campaign menu at the top left" in welcome_text("CMP-2026-004 — Spring")
+
+
+def test_welcome_text_shows_the_assistant_name():
+    assert welcome_text("CMP-2026-004 — Spring").startswith("## AI Marketing Analytics Assistant\n")

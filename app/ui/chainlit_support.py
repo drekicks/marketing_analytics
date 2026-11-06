@@ -89,8 +89,13 @@ def campaign_label(options: list[tuple[str, str]], campaign_id: str) -> str:
     return dict(options).get(campaign_id, campaign_id)
 
 
+# Matches [UI].name in .chainlit/config.toml (Chainlit only shows that in the tab title).
+ASSISTANT_NAME = "AI Marketing Analytics Assistant"
+
+
 def welcome_text(label: str) -> str:
     return (
+        f"## {ASSISTANT_NAME}\n\n"
         f"**Active campaign:** {label}\n\n"
         "Ask a question about campaign performance, segments, customers, "
         "comparisons or definitions, or pick one of the examples below. "
