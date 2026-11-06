@@ -117,7 +117,7 @@ reaction_on_message_received = false
 # Name of the assistant.
 name = "AI Marketing Analytics Assistant"
 
-# default_theme = "dark"
+default_theme = "light"
 
 # Force a specific language for all users (e.g., "en-US", "he-IL", "fr-FR")
 # If not set, the browser's language will be used
@@ -137,14 +137,14 @@ layout = "wide"
 confirm_new_chat = true
 
 # Description of the assistant. This is used for HTML tags.
-# description = ""
+description = "ClariMotive AI Marketing Analytics Assistant: ask questions about campaign performance in plain English."
 
 # Chain of Thought (CoT) display mode. Can be "hidden", "tool_call" or "full".
 cot = "full"
 
 # Specify a CSS file that can be used to customize the user interface.
 # The CSS file can be served from the public directory or via an external link.
-# custom_css = "/public/test.css"
+custom_css = "/public/custom.css"
 
 # Specify additional attributes for a custom CSS file
 # custom_css_attributes = "media=\"print\""
@@ -193,6 +193,11 @@ default_avatar_file_url = ""
 #     icon_url = "https://avatars.githubusercontent.com/u/128686189?s=200&v=4"
 #     url = "https://github.com/Chainlit/chainlit/issues"
 #     target = "_blank" (default)  # Optional: "_self", "_parent", "_top".
+[[UI.header_links]]
+    name = "ClariMotive"
+    display_name = "ClariMotive"
+    icon_url = "/favicon"
+    url = "https://clarimotive.com"
 
 [meta]
 generated_by = "2.12.0"
