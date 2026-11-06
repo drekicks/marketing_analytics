@@ -1,0 +1,22 @@
+/* ClariMotive brand touches that theme.json can't express (source: assets/brand/styles.css).
+   Keep this small: global site rules would break Chainlit's layout. */
+h1, h2, h3, h4 {
+  font-family: 'Sora', 'Segoe UI', system-ui, sans-serif;
+  letter-spacing: -0.015em;
+  color: #14212E;
+}
+.dark h1, .dark h2, .dark h3, .dark h4 { color: #FFFFFF; }
+
+a { color: #0B6B5C; }
+.dark a { color: #5EE0C8; }
+
+/* Site buttons are pills in the display font. */
+button.bg-primary {
+  border-radius: 999px;
+  font-family: 'Sora', 'Segoe UI', system-ui, sans-serif;
+  font-weight: 600;
+}
+button.bg-primary:hover { background-color: #08554A; }
+.dark button.bg-primary:hover { background-color: #FFFFFF; }
+
+:focus-visible { outline: 3px solid #5EE0C8; outline-offset: 2px; }
