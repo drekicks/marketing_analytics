@@ -21,10 +21,7 @@ st.set_page_config(page_title="AI Marketing Analytics Assistant",
 
 try:
     from app.utils.data_loader import clear_campaign_data_cache, get_campaign_data
-    from app.ai.context_builder import build_campaign_context
-    from app.ai.prompt_builder import build_prompt
-    from app.ai.prompt_loader import load_prompt
-    from app.ai.llm_client_api import generate_analysis
+    from app.services.summary_service import generate_executive_summary
     from app.config.settings import SessionState
     from app.services.analyst_service import process_analyst_question
 
@@ -237,20 +234,8 @@ with st.sidebar:
 if st.button("Generate Executive Summary"):
     with st.spinner("Generating Executive Summary..."):
         try:
-            context = build_campaign_context(
-                summary_df,
-                campaign_goals_df,
-                selected_campaign_id
-            )
-
-            # Load the dedicated executive-summary prompt.
-            template = load_prompt("executive_summary")
-
-            # Insert the campaign metrics into the prompt template
-            final_prompt = build_prompt(template=template, variables={"campaign_metrics": context})
-
-            # Send the completed prompt to the configured LLM.
-            analysis = generate_analysis(final_prompt, purpose="summary")
+            # Same summary as typing "Generate executive summary" in the chat.
+            analysis = generate_executive_summary(selected_campaign_id)
 
             # Save the result so it remains visible after Streamlit reruns.
             st.session_state.executive_summary = analysis

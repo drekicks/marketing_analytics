@@ -31,6 +31,11 @@ SQL_ELEMENT_NAME = "SQL used"
 # Id of the campaign picker shown in the message box (a Chainlit "mode").
 CAMPAIGN_MODE_ID = "campaign"
 
+# Buttons that stay in the message box (Chainlit "commands"), apart from the examples.
+SUMMARY_COMMAND = "Executive summary"
+REFRESH_COMMAND = "Refresh data"
+SUMMARY_QUESTION = "Generate executive summary"
+
 
 @dataclass(frozen=True)
 class ReplyParts:
@@ -100,10 +105,10 @@ def welcome_text(label: str) -> str:
     return (
         f"## {ASSISTANT_NAME}\n\n"
         f"**Active campaign:** {label}\n\n"
-        "Ask a question about campaign performance, segments, customers, "
-        "comparisons or definitions, or pick one of the examples below. "
-        "Change the campaign with the Campaign picker in the message box. "
-        "Comparing to another campaign makes it the active one, as in the web app."
+        "Ask about campaign performance, segments, customers, comparisons or definitions, "
+        "or pick an example below. The message box has the Campaign picker and the "
+        "Executive summary and Refresh data buttons. Comparing to another campaign makes "
+        "it the active one."
     )
 
 

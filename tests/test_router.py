@@ -85,3 +85,22 @@ def test_vs_as_a_word_is_still_a_comparison(question):
     route = route_question(question)
 
     assert route.analysis_type == "comparison"
+
+
+@pytest.mark.parametrize(
+    "question",
+    [
+        "Generate executive summary",
+        "Generate Executive Summary",
+        "Can I get the exec summary?",
+        "Executive summary for CMP-2026-003",
+    ],
+)
+def test_executive_summary_requests_use_the_summary_route(question):
+    route = route_question(question)
+
+    assert route.context_type == "executive_summary"
+
+
+def test_summary_of_segments_is_not_the_executive_summary():
+    assert route_question("Give me a summary of segment performance").context_type != "executive_summary"

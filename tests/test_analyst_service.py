@@ -110,3 +110,40 @@ def test_ask_analyst_receives_the_service_route(ask_analyst_calls):
 
     assert ask_analyst_calls[0]["route"].context_type == "insight"
     assert ask_analyst_calls[1]["route"].analysis_type == "visualization"
+
+
+def test_typed_executive_summary_uses_the_summary_service(monkeypatch):
+    import app.services.analyst_service as analyst_service
+    from app.config.settings import SessionState
+
+    calls = []
+    monkeypatch.setattr(
+        analyst_service, "generate_executive_summary",
+        lambda campaign_id: calls.append(campaign_id) or f"Summary of {campaign_id}",
+    )
+    monkeypatch.setattr(
+        analyst_service, "ask_analyst",
+        lambda **kwargs: (_ for _ in ()).throw(AssertionError("chat answer path used")),
+    )
+    session = SessionState(active_campaign_id="CMP-2026-004")
+    valid = set(analyst_service.get_campaign_data().summary["campaign_id"].astype(str))
+
+    result = analyst_service.process_analyst_question(
+        question="Generate executive summary",
+        session_state=session,
+        default_campaign_id="CMP-2026-004",
+        valid_campaign_ids=valid,
+        conversation_history=[],
+    )
+    named = analyst_service.process_analyst_question(
+        question="Executive summary for CMP-2026-003",
+        session_state=session,
+        default_campaign_id="CMP-2026-004",
+        valid_campaign_ids=valid,
+        conversation_history=[],
+    )
+
+    assert result.answer == "Summary of CMP-2026-004"
+    assert named.answer == "Summary of CMP-2026-003"
+    assert session.active_campaign_id == "CMP-2026-003"
+    assert calls == ["CMP-2026-004", "CMP-2026-003"]

@@ -32,16 +32,16 @@ if sys.version_info >= (3, 14):
 startup_error: Exception | None = None
 
 try:
-    from app.ai.context_builder import build_campaign_context
-    from app.ai.llm_client_api import generate_analysis
-    from app.ai.prompt_builder import build_prompt
-    from app.ai.prompt_loader import load_prompt
+    from app.config.router import is_executive_summary_request
     from app.config.settings import SessionState
     from app.services.analyst_service import process_analyst_question
     from app.ui.chainlit_support import (
         EXAMPLE_QUESTIONS,
         CAMPAIGN_MODE_ID,
+        REFRESH_COMMAND,
         SQL_ELEMENT_NAME,
+        SUMMARY_COMMAND,
+        SUMMARY_QUESTION,
         campaign_label,
         campaign_options,
         campaign_profiles,
@@ -72,15 +72,23 @@ async def _send_error(prefix: str, error: Exception) -> None:
 
 
 def _welcome_actions() -> list[cl.Action]:
-    actions = [
-        cl.Action(name="executive_summary", payload={}, label="Generate executive summary", icon="file-text"),
-        cl.Action(name="refresh_data", payload={}, label="Refresh data", icon="refresh-cw"),
-    ]
-    actions += [
+    """Example questions only; summary and refresh are buttons in the message box."""
+    return [
         cl.Action(name="example_question", payload={"question": question}, label=question)
         for question in EXAMPLE_QUESTIONS
     ]
-    return actions
+
+
+async def _show_message_box_buttons() -> None:
+    """Executive summary and Refresh data as buttons that stay in the message box."""
+    await cl.context.emitter.set_commands(
+        [
+            {"id": SUMMARY_COMMAND, "description": "Write the executive summary for the active campaign",
+             "icon": "file-text", "button": True, "persistent": False},
+            {"id": REFRESH_COMMAND, "description": "Reload the campaign data",
+             "icon": "refresh-cw", "button": True, "persistent": False},
+        ]
+    )
 
 
 async def _show_campaign_picker() -> None:
@@ -134,16 +142,6 @@ def _answer_question(question: str):
     )
 
 
-def _executive_summary(campaign_id: str) -> str:
-    data = get_campaign_data()
-    context = build_campaign_context(data.summary, data.goals, campaign_id)
-    prompt = build_prompt(
-        template=load_prompt("executive_summary"),
-        variables={"campaign_metrics": context},
-    )
-    return generate_analysis(prompt, purpose="summary")
-
-
 async def _answer(question: str) -> None:
     if cl.user_session.get("analytics_session") is None:
         await cl.Message(content="The app couldn't start. Please reload the page.").send()
@@ -152,7 +150,10 @@ async def _answer(question: str) -> None:
     session = cl.user_session.get("analytics_session")
     campaign_before = session.active_campaign_id
 
-    async with cl.Step(name="Analysing", type="run") as step:
+    is_summary = is_executive_summary_request(question)
+    step_name = "Writing executive summary" if is_summary else "Analysing"
+
+    async with cl.Step(name=step_name, type="run") as step:
         step.input = question
         try:
             result = await cl.make_async(_answer_question)(question)
@@ -180,6 +181,9 @@ async def _answer(question: str) -> None:
         )
 
     content = parts.content
+    if is_summary:
+        label = campaign_label(cl.user_session.get("campaign_options"), result.campaign_id)
+        content = f"## Executive summary: {label}\n\n{content}"
     # A comparison makes the other campaign active (shared back end, as in Streamlit):
     # say so and move the picker to it.
     note = campaign_switch_note(
@@ -220,6 +224,7 @@ async def on_chat_start() -> None:
     cl.user_session.set("analyst_history", [])
 
     await _show_campaign_picker()
+    await _show_message_box_buttons()
     await _send_welcome()
 
 
@@ -244,7 +249,7 @@ def _valid_campaign_ids() -> set[str]:
 
 @cl.on_window_message
 async def on_window_message(data) -> None:
-    # Sent by public/campaign_picker.js as soon as the picker changes, so the
+    # Sent by public/chainlit_ui.js as soon as the picker changes, so the
     # buttons (which carry no picker value) use the picked campaign too.
     if isinstance(data, dict) and data.get("type") == "campaign_picked":
         await _switch_to_picked_campaign(
@@ -256,7 +261,15 @@ async def on_window_message(data) -> None:
 async def on_message(message: cl.Message) -> None:
     # Also read the picker from the message itself, in case the script didn't run.
     await _switch_to_picked_campaign(picked_campaign(message.modes, _valid_campaign_ids()))
-    await _answer(message.content)
+
+    if message.command == SUMMARY_COMMAND:
+        # Same path as typing "Generate executive summary".
+        await _answer(SUMMARY_QUESTION)
+    elif message.command == REFRESH_COMMAND:
+        await _refresh_data()
+
+    if message.content.strip():
+        await _answer(message.content)
 
 
 # -------------------------------------------------------------------
@@ -270,27 +283,7 @@ async def on_example_question(action: cl.Action) -> None:
     await _answer(question)
 
 
-@cl.action_callback("executive_summary")
-async def on_executive_summary(action: cl.Action) -> None:
-    session = cl.user_session.get("analytics_session")
-    if session is None:
-        await cl.Message(content="The app couldn't start. Please reload the page.").send()
-        return
-
-    label = campaign_label(cl.user_session.get("campaign_options"), session.active_campaign_id)
-
-    async with cl.Step(name="Writing executive summary", type="run"):
-        try:
-            summary = await cl.make_async(_executive_summary)(session.active_campaign_id)
-        except Exception as error:  # noqa: BLE001 - shown to the user
-            await _send_error("Analyst: ", error)
-            return
-
-    await cl.Message(content=f"## Executive summary: {label}\n\n{summary}").send()
-
-
-@cl.action_callback("refresh_data")
-async def on_refresh_data(action: cl.Action) -> None:
+async def _refresh_data() -> None:
     session = cl.user_session.get("analytics_session")
     if session is None:
         await cl.Message(content="The app couldn't start. Please reload the page.").send()

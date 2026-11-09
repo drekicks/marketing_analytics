@@ -151,8 +151,8 @@ custom_css = "/public/custom.css"
 
 # Specify a JavaScript file that can be used to customize the user interface.
 # The JavaScript file can be served from the public directory.
-# Reports Campaign picker changes to the server so buttons use the picked campaign.
-custom_js = "/public/campaign_picker.js"
+# Reports Campaign picker changes to the server, and makes the message-box buttons one-click.
+custom_js = "/public/chainlit_ui.js"
 
 # The style of alert boxes. Can be "classic" or "modern".
 alert_style = "classic"

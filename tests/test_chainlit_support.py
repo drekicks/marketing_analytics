@@ -125,7 +125,9 @@ def test_campaign_profiles_dedupe_and_tolerate_missing_details():
 
 
 def test_welcome_text_points_to_the_campaign_picker():
-    assert "Campaign picker in the message box" in welcome_text("CMP-2026-004 — Spring")
+    text = welcome_text("CMP-2026-004 — Spring")
+    assert "Campaign picker" in text
+    assert "Executive summary and Refresh data buttons" in text
 
 
 def test_picked_campaign_reads_the_message_box_picker():
