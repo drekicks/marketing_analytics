@@ -223,21 +223,39 @@ async def on_chat_start() -> None:
     await _send_welcome()
 
 
+async def _switch_to_picked_campaign(picked: str | None) -> None:
+    """Apply a campaign chosen in the picker. A manual change starts a new analysis, as in Streamlit."""
+    session = cl.user_session.get("analytics_session")
+    if session is None or not picked or picked == session.active_campaign_id:
+        return
+
+    session.active_campaign_id = picked
+    session.last_route = None
+    cl.user_session.set("analyst_history", [])
+    label = campaign_label(cl.user_session.get("campaign_options") or [], picked)
+    await cl.Message(
+        content=f"Now analysing {label}. Earlier answers are no longer used as context."
+    ).send()
+
+
+def _valid_campaign_ids() -> set[str]:
+    return {campaign_id for campaign_id, _ in cl.user_session.get("campaign_options") or []}
+
+
+@cl.on_window_message
+async def on_window_message(data) -> None:
+    # Sent by public/campaign_picker.js as soon as the picker changes, so the
+    # buttons (which carry no picker value) use the picked campaign too.
+    if isinstance(data, dict) and data.get("type") == "campaign_picked":
+        await _switch_to_picked_campaign(
+            picked_campaign({CAMPAIGN_MODE_ID: data.get("campaign_id")}, _valid_campaign_ids())
+        )
+
+
 @cl.on_message
 async def on_message(message: cl.Message) -> None:
-    session = cl.user_session.get("analytics_session")
-    options = cl.user_session.get("campaign_options") or []
-    picked = picked_campaign(message.modes, {campaign_id for campaign_id, _ in options})
-
-    if session is not None and picked and picked != session.active_campaign_id:
-        # A manual campaign change starts a new analysis, as in the Streamlit app.
-        session.active_campaign_id = picked
-        session.last_route = None
-        cl.user_session.set("analyst_history", [])
-        await cl.Message(
-            content=f"Now analysing {campaign_label(options, picked)}. Earlier answers are no longer used as context."
-        ).send()
-
+    # Also read the picker from the message itself, in case the script didn't run.
+    await _switch_to_picked_campaign(picked_campaign(message.modes, _valid_campaign_ids()))
     await _answer(message.content)
 
 
