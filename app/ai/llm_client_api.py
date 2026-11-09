@@ -5,6 +5,7 @@ from dataclasses import dataclass, replace
 
 from openai import BadRequestError, OpenAI, OpenAIError
 
+from app.ai.markdown_cleanup import normalize_markdown
 from app.config import settings
 from app.config.settings import openai_api_key
 from app.errors import ConfigurationError, LLMServiceError  # noqa: F401  (re-exported for callers)
@@ -185,7 +186,7 @@ def generate_analysis(prompt: str, purpose: str = "answer") -> str:
         if not analysis or not analysis.strip():
             raise LLMServiceError("LLM request returned no text.")
 
-        return analysis.strip()
+        return normalize_markdown(analysis.strip())
 
     except BadRequestError as e:
         error_message = str(e)
