@@ -9,7 +9,9 @@ from app.ui.chainlit_support import (
     campaign_label,
     campaign_options,
     campaign_profiles,
+    added_campaigns,
     campaign_switch_note,
+    new_campaigns_note,
     picked_campaign,
     format_sql_for_display,
     reply_parts,
@@ -151,3 +153,19 @@ def test_campaign_switch_note_only_when_the_campaign_changed():
 
 def test_welcome_text_shows_the_assistant_name():
     assert welcome_text("CMP-2026-004 — Spring").startswith("## AI Marketing Analytics Assistant\n")
+
+
+def test_added_campaigns_lists_only_new_ones():
+    old = [("CMP-2026-004", "CMP-2026-004 — Spring"), ("CMP-2026-005", "CMP-2026-005 — Fall")]
+    new = [("CMP-2026-004", "CMP-2026-004 — Spring"), ("CMP-2026-006", "CMP-2026-006 — Winter")]
+
+    assert added_campaigns(old, new) == [("CMP-2026-006", "CMP-2026-006 — Winter")]
+    assert added_campaigns(old, old) == []
+
+
+def test_new_campaigns_note():
+    assert new_campaigns_note([]) is None
+    assert new_campaigns_note([("CMP-2026-006", "CMP-2026-006 — Winter")]) == (
+        "New campaign available: CMP-2026-006 — Winter. Pick it in the Campaign picker."
+    )
+    assert "New campaigns available: A, B" in new_campaigns_note([("a", "A"), ("b", "B")])

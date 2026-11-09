@@ -54,7 +54,9 @@ See `.env.example`.
   `run_customer_query`, `build_customer_query_context`). `llm_client_api.generate_json` returns structured `{sql, explanation}`.
   Users see `build_display_sql` output (scoped `cal` CTE over the real table, runnable as-is); it is never executed.
 - `app/utils/data_loader.py`: `get_campaign_data()` → `CampaignData(summary, segment, goals, unique_campaigns)`, cached
-  (framework-neutral in-process cache, no Streamlit import; Postgres TTL 10 min; `clear_campaign_data_cache()` backs the Refresh Data buttons). Call it inside functions,
+  (framework-neutral in-process cache, no Streamlit import; Postgres TTL 10 min, plus a one-row "new campaigns?" check
+  every `CAMPAIGN_CHECK_SECONDS` (default 60, `app/sql/campaign_list_version.sql`) that reloads when the list changes;
+  `clear_campaign_data_cache()` backs the Refresh Data buttons). Chainlit adds new campaigns to an open chat's picker. Call it inside functions,
   never import DataFrames at module level, or new campaigns won't appear until a restart. Customer-level data is queried from Neon, not loaded.
 - `app/visualization/`: matplotlib PNG charts (`chart_dispatcher`) and their text equivalents (`chart_builder`).
 - `prompts/*.md`: prompt templates using `{{placeholder}}` syntax (filled by `app/ai/prompt_builder.py`).

@@ -118,6 +118,23 @@ def picked_campaign(modes: dict | None, valid_ids: set[str]) -> str | None:
     return campaign_id if campaign_id in valid_ids else None
 
 
+def added_campaigns(
+    old_options: list[tuple[str, str]], new_options: list[tuple[str, str]]
+) -> list[tuple[str, str]]:
+    """Campaigns in the new list that the chat didn't know about (removed ones are ignored)."""
+    known = {campaign_id for campaign_id, _ in old_options or []}
+    return [(campaign_id, label) for campaign_id, label in new_options if campaign_id not in known]
+
+
+def new_campaigns_note(added: list[tuple[str, str]]) -> str | None:
+    if not added:
+        return None
+    labels = ", ".join(label for _, label in added)
+    if len(added) == 1:
+        return f"New campaign available: {labels}. Pick it in the Campaign picker."
+    return f"New campaigns available: {labels}. Pick one in the Campaign picker."
+
+
 def campaign_switch_note(options: list[tuple[str, str]], before: str | None, after: str | None) -> str | None:
     """A line telling the user the active campaign changed (e.g. after a comparison)."""
     if not after or after == before:

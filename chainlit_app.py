@@ -45,7 +45,9 @@ try:
         campaign_label,
         campaign_options,
         campaign_profiles,
+        added_campaigns,
         campaign_switch_note,
+        new_campaigns_note,
         picked_campaign,
         reply_parts,
         welcome_text,
@@ -142,10 +144,28 @@ def _answer_question(question: str):
     )
 
 
+async def _sync_campaign_list() -> None:
+    """Add campaigns created since this chat started (e.g. by the weekly job) to the picker."""
+    try:
+        data = await cl.make_async(get_campaign_data)()
+    except Exception:  # noqa: BLE001 - the answer itself reports database problems
+        return
+    current = cl.user_session.get("campaign_options") or []
+    latest = campaign_options(data.unique_campaigns)
+    note = new_campaigns_note(added_campaigns(current, latest))
+    if not note:
+        return
+    cl.user_session.set("campaign_options", latest)
+    await _show_campaign_picker()
+    await cl.Message(content=note).send()
+
+
 async def _answer(question: str) -> None:
     if cl.user_session.get("analytics_session") is None:
         await cl.Message(content="The app couldn't start. Please reload the page.").send()
         return
+
+    await _sync_campaign_list()
 
     session = cl.user_session.get("analytics_session")
     campaign_before = session.active_campaign_id

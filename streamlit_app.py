@@ -120,6 +120,16 @@ campaign_options['display_name'] = (
         + campaign_options['campaign_name'].astype(str)
 )
 
+# Tell the user when campaigns were added since their last interaction
+# (the data loader checks Neon for new campaigns about once a minute).
+current_campaign_ids = campaign_options["campaign_id"].astype(str).tolist()
+known_campaign_ids = st.session_state.get("known_campaign_ids")
+if known_campaign_ids is not None:
+    for row in campaign_options.itertuples(index=False):
+        if str(row.campaign_id) not in known_campaign_ids:
+            st.toast(f"New campaign available: {row.display_name}")
+st.session_state.known_campaign_ids = set(current_campaign_ids)
+
 # -------------------------------------------------------------------
 # ACTIVE CAMPAIGN INITIALIZATION
 #
