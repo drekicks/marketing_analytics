@@ -220,3 +220,37 @@ def test_load_campaign_refuses_existing_id(campaign):
     with pytest.raises(ValueError, match="already exists in public.campaign_results"):
         cg.load_campaign(_FakeEngine(connection), campaign)
     assert not any(sql.startswith("insert") for sql in connection.statements)
+
+
+def test_should_skip_boundaries():
+    from datetime import datetime, timedelta, timezone
+
+    now = datetime(2026, 11, 16, 17, 43, tzinfo=timezone.utc)
+    assert cg.should_skip(None, now, 5) is False
+    assert cg.should_skip(now - timedelta(hours=4), now, 5) is True          # earlier slot today
+    assert cg.should_skip(now - timedelta(days=4, hours=23), now, 5) is True
+    assert cg.should_skip(now - timedelta(days=5), now, 5) is False
+    assert cg.should_skip(now - timedelta(days=7), now, 5) is False          # last week's campaign
+    naive = (now - timedelta(hours=1)).replace(tzinfo=None)                  # updated_at is naive UTC
+    assert cg.should_skip(naive, now, 5) is True
+
+
+def test_main_skips_when_campaign_loaded_recently(monkeypatch, capsys):
+    from datetime import datetime, timedelta, timezone
+
+    import app.utils.database as database
+
+    for name in ("DB_HOST", "DB_NAME", "DB_USER"):
+        monkeypatch.setenv(name, "x")
+    monkeypatch.setattr(database, "get_database_engine", lambda: object())
+    recent = datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(hours=3)
+    monkeypatch.setattr(cg, "fetch_last_loaded", lambda engine: ("CMP-2026-006", recent))
+
+    def fail(*args, **kwargs):
+        raise AssertionError("should not generate or load")
+
+    monkeypatch.setattr(cg, "fetch_inputs", fail)
+    monkeypatch.setattr(cg, "load_campaign", fail)
+
+    cg.main(["--skip-if-recent", "5"])
+    assert "skipping" in capsys.readouterr().out

@@ -375,6 +375,26 @@ def generate_campaign(
     return GeneratedCampaign(spec=spec, seed=seed, rates=rates, results=results, goal=goal)
 
 
+def should_skip(last_loaded_at: datetime | None, now: datetime, days: float) -> bool:
+    """
+    True when a campaign was loaded less than `days` ago.
+
+    The weekly workflow has backup schedule slots in case GitHub drops the
+    primary one; this keeps them from creating a second campaign that week.
+    Timestamps are compared in UTC; naive values are treated as UTC (the
+    generator writes updated_at as naive UTC).
+    """
+    if last_loaded_at is None:
+        return False
+
+    def as_utc(value: datetime) -> datetime:
+        if value.tzinfo is None:
+            return value.replace(tzinfo=timezone.utc)
+        return value.astimezone(timezone.utc)
+
+    return as_utc(now) - as_utc(last_loaded_at) < timedelta(days=days)
+
+
 def summarize(campaign: GeneratedCampaign) -> str:
     """Readable per-segment summary for logs."""
     spec = campaign.spec
@@ -452,6 +472,18 @@ def fetch_inputs(engine) -> tuple[list[dict], list[str]]:
     return customers, existing_ids
 
 
+def fetch_last_loaded(engine) -> tuple[str | None, datetime | None]:
+    """The most recently loaded campaign_id and its updated_at, or (None, None)."""
+    from sqlalchemy import text
+
+    with engine.connect() as connection:
+        row = connection.execute(text(
+            "select campaign_id, updated_at from public.campaign_results "
+            "where updated_at is not null order by updated_at desc limit 1"
+        )).first()
+    return (row[0], row[1]) if row else (None, None)
+
+
 def load_campaign(engine, campaign: GeneratedCampaign) -> None:
     """
     Insert this campaign's results and goal in one transaction.
@@ -491,6 +523,9 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--dry-run", action="store_true", help="Generate and print, but do not write to Neon.")
     parser.add_argument("--run-date", type=date.fromisoformat, default=date.today(),
                         help="Pretend today is this date (YYYY-MM-DD).")
+    parser.add_argument("--skip-if-recent", type=float, metavar="DAYS",
+                        help="Do nothing if a campaign was loaded less than DAYS days ago "
+                             "(used by the workflow's backup schedule slots).")
     args = parser.parse_args(argv)
 
     missing = [name for name in ("DB_HOST", "DB_NAME", "DB_USER") if not os.getenv(name)]
@@ -503,6 +538,13 @@ def main(argv: list[str] | None = None) -> None:
     from app.utils.database import get_database_engine
 
     engine = get_database_engine()
+
+    if args.skip_if_recent is not None:
+        last_id, last_loaded_at = fetch_last_loaded(engine)
+        if should_skip(last_loaded_at, datetime.now(timezone.utc), args.skip_if_recent):
+            print(f"Campaign already loaded this week ({last_id}, {last_loaded_at} UTC); skipping.")
+            return
+
     customers, existing_ids = fetch_inputs(engine)
     campaign = generate_campaign(customers, load_rates(), existing_ids, args.run_date, seed=args.seed)
 
