@@ -54,7 +54,8 @@ See `.env.example`.
 - `app/visualization/`: matplotlib PNG charts (`chart_dispatcher`) and their text equivalents (`chart_builder`).
 - `prompts/*.md`: prompt templates using `{{placeholder}}` syntax (filled by `app/ai/prompt_builder.py`).
 - `tools/synthetic_data_creation/campaign_generation.py`: weekly synthetic campaign generator (results + exactly one goal per campaign
-  into `public.campaign_results` / `public.campaign_goals`); scheduled by `.github/workflows/weekly_campaign.yml`.
+  into `public.campaign_results` / `public.campaign_goals`); scheduled by `.github/workflows/weekly_campaign.yml`
+  (Monday primary + 2 backup slots; `--skip-if-recent` makes the backups no-ops once a campaign is loaded).
 - `marketing_analytics_dbt/`: dbt project. `knowledge/*.md` holds the RAG source docs (split on `#`/`##` headings).
 
 ## Conventions noticed
