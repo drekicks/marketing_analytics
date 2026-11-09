@@ -32,7 +32,8 @@ See `.env.example`.
 
 ## Key files
 - `streamlit_app.py`: Streamlit UI and session state. `chainlit_app.py` (+ testable helpers in `app/ui/chainlit_support.py`):
-  Chainlit chat UI on the same back end. `app/ui/cli.py` and `main.py` are the CLI. UIs stay thin: logic belongs in `app/services/`.
+  Chainlit chat UI on the same back end; the campaign is a "mode" picker in the message box (`CAMPAIGN_MODE_ID`), which the
+  server moves when a comparison changes the active campaign (Chainlit's header chat profiles can't change mid-chat). `app/ui/cli.py` and `main.py` are the CLI. UIs stay thin: logic belongs in `app/services/`.
 - Chainlit branding (ClariMotive): `public/theme.json` (colors/fonts), `public/logo_*.svg` + `public/favicon.svg`
   (placeholder wordmark; sources in `assets/brand/` with the site's `styles.css`), `public/custom.css`, and `[UI]` in `.chainlit/config.toml`.
 - `app/services/analyst_service.py::process_analyst_question`: the UI-agnostic orchestrator.

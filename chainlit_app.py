@@ -12,6 +12,7 @@ import sys
 from datetime import datetime
 
 import chainlit as cl
+from chainlit.mode import Mode, ModeOption
 
 from app.ui.errors import user_message
 
@@ -39,10 +40,13 @@ try:
     from app.services.analyst_service import process_analyst_question
     from app.ui.chainlit_support import (
         EXAMPLE_QUESTIONS,
+        CAMPAIGN_MODE_ID,
         SQL_ELEMENT_NAME,
         campaign_label,
         campaign_options,
         campaign_profiles,
+        campaign_switch_note,
+        picked_campaign,
         reply_parts,
         welcome_text,
     )
@@ -77,6 +81,31 @@ def _welcome_actions() -> list[cl.Action]:
         for question in EXAMPLE_QUESTIONS
     ]
     return actions
+
+
+async def _show_campaign_picker() -> None:
+    """Show (or update) the Campaign picker in the message box, set to the active campaign."""
+    session = cl.user_session.get("analytics_session")
+    data = get_campaign_data()
+    descriptions = {
+        profile.campaign_id: profile.description
+        for profile in campaign_profiles(data.unique_campaigns)
+    }
+    options = cl.user_session.get("campaign_options")
+    picker = Mode(
+        id=CAMPAIGN_MODE_ID,
+        name="Campaign",
+        options=[
+            ModeOption(
+                id=campaign_id,
+                name=label,
+                description=descriptions.get(campaign_id),
+                default=campaign_id == session.active_campaign_id,
+            )
+            for campaign_id, label in options
+        ],
+    )
+    await cl.context.emitter.set_modes([picker])
 
 
 async def _send_welcome() -> None:
@@ -120,6 +149,9 @@ async def _answer(question: str) -> None:
         await cl.Message(content="The app couldn't start. Please reload the page.").send()
         return
 
+    session = cl.user_session.get("analytics_session")
+    campaign_before = session.active_campaign_id
+
     async with cl.Step(name="Analysing", type="run") as step:
         step.input = question
         try:
@@ -147,7 +179,19 @@ async def _answer(question: str) -> None:
             cl.Text(name=SQL_ELEMENT_NAME, content=parts.sql, language="sql", display="side")
         )
 
-    await cl.Message(content=parts.content, elements=elements).send()
+    content = parts.content
+    # A comparison makes the other campaign active (shared back end, as in Streamlit):
+    # say so and move the picker to it.
+    note = campaign_switch_note(
+        cl.user_session.get("campaign_options"), campaign_before, session.active_campaign_id
+    )
+    if note:
+        content = f"{content}\n\n{note}"
+
+    await cl.Message(content=content, elements=elements).send()
+
+    if note:
+        await _show_campaign_picker()
 
 
 # -------------------------------------------------------------------
@@ -171,43 +215,29 @@ async def on_chat_start() -> None:
         await cl.Message(content="No campaigns were found in the data.").send()
         return
 
-    # The campaign menu in the header is Chainlit's chat profile selector; picking a
-    # campaign starts a new chat, so each chat analyses one campaign.
-    chosen = cl.user_session.get("chat_profile")
-    valid_ids = {campaign_id for campaign_id, _ in options}
-    active = chosen if chosen in valid_ids else options[0][0]
-
     cl.user_session.set("campaign_options", options)
-    cl.user_session.set("analytics_session", SessionState(active_campaign_id=active))
+    cl.user_session.set("analytics_session", SessionState(active_campaign_id=options[0][0]))
     cl.user_session.set("analyst_history", [])
 
+    await _show_campaign_picker()
     await _send_welcome()
-
-
-@cl.set_chat_profiles
-async def chat_profiles(current_user=None, language=None) -> list[cl.ChatProfile]:
-    """One menu entry per campaign, read on each page load so new campaigns appear."""
-    if startup_error is not None:
-        return []
-    try:
-        data = await cl.make_async(get_campaign_data)()
-    except Exception:  # noqa: BLE001 - on_chat_start shows the error
-        logger.exception("Couldn't load campaigns for the campaign menu")
-        return []
-
-    return [
-        cl.ChatProfile(
-            name=profile.campaign_id,
-            display_name=profile.label,
-            markdown_description=profile.description,
-            default=profile.default,
-        )
-        for profile in campaign_profiles(data.unique_campaigns)
-    ]
 
 
 @cl.on_message
 async def on_message(message: cl.Message) -> None:
+    session = cl.user_session.get("analytics_session")
+    options = cl.user_session.get("campaign_options") or []
+    picked = picked_campaign(message.modes, {campaign_id for campaign_id, _ in options})
+
+    if session is not None and picked and picked != session.active_campaign_id:
+        # A manual campaign change starts a new analysis, as in the Streamlit app.
+        session.active_campaign_id = picked
+        session.last_route = None
+        cl.user_session.set("analyst_history", [])
+        await cl.Message(
+            content=f"Now analysing {campaign_label(options, picked)}. Earlier answers are no longer used as context."
+        ).send()
+
     await _answer(message.content)
 
 
@@ -257,9 +287,5 @@ async def on_refresh_data(action: cl.Action) -> None:
 
     options = campaign_options(data.unique_campaigns)
     cl.user_session.set("campaign_options", options)
-    await cl.Message(
-        content=(
-            f"Data refreshed: {len(options)} campaigns available. "
-            "Reload the page to see new campaigns in the campaign menu."
-        )
-    ).send()
+    await _show_campaign_picker()
+    await cl.Message(content=f"Data refreshed: {len(options)} campaigns available.").send()

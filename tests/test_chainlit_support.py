@@ -9,6 +9,8 @@ from app.ui.chainlit_support import (
     campaign_label,
     campaign_options,
     campaign_profiles,
+    campaign_switch_note,
+    picked_campaign,
     format_sql_for_display,
     reply_parts,
     welcome_text,
@@ -122,8 +124,27 @@ def test_campaign_profiles_dedupe_and_tolerate_missing_details():
     assert profiles[0].description == "CMP-2026-004 — Spring"
 
 
-def test_welcome_text_points_to_the_campaign_menu():
-    assert "campaign menu at the top left" in welcome_text("CMP-2026-004 — Spring")
+def test_welcome_text_points_to_the_campaign_picker():
+    assert "Campaign picker in the message box" in welcome_text("CMP-2026-004 — Spring")
+
+
+def test_picked_campaign_reads_the_message_box_picker():
+    valid = {"CMP-2025-002", "CMP-2026-004"}
+
+    assert picked_campaign({"campaign": "CMP-2026-004"}, valid) == "CMP-2026-004"
+    assert picked_campaign({"campaign": "CMP-2099-001"}, valid) is None
+    assert picked_campaign({}, valid) is None
+    assert picked_campaign(None, valid) is None
+
+
+def test_campaign_switch_note_only_when_the_campaign_changed():
+    options = [("CMP-2025-002", "CMP-2025-002 — Summer"), ("CMP-2026-004", "CMP-2026-004 — Spring")]
+
+    assert campaign_switch_note(options, "CMP-2025-002", "CMP-2026-004") == (
+        "Active campaign is now CMP-2026-004 — Spring."
+    )
+    assert campaign_switch_note(options, "CMP-2026-004", "CMP-2026-004") is None
+    assert campaign_switch_note(options, "CMP-2026-004", None) is None
 
 
 def test_welcome_text_shows_the_assistant_name():
