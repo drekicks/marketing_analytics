@@ -380,7 +380,9 @@ def test_customer_question_across_all_campaigns_uses_every_campaign(service_fake
 
     _ask("Across all campaigns, how much has customer ID 7470 spent?")
 
-    assert sorted(query_calls[0]["campaign_ids"]) == sorted(VALID_CAMPAIGN_IDS)
+    all_ids = set(analyst_service.get_campaign_data().summary["campaign_id"].astype(str))
+    assert set(query_calls[0]["campaign_ids"]) == all_ids
+    assert len(all_ids) > 1
 
 
 def test_customer_question_without_scope_uses_active_campaign(service_fakes):
