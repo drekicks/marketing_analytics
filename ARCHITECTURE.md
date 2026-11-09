@@ -395,6 +395,15 @@ Severity is my judgement: 🔴 likely user-visible breakage · 🟠 wrong or was
 30. ✅ **Fixed (Phase 2):** `requirements.txt` is now UTF-8. Still fully unpinned, which is a reproducibility risk for the hosted app.
 31. In the Streamlit sidebar, typing a different campaign ID in chat changes the "Active Campaign" badge but not the selectbox value, so the two can disagree.
 
+### Possible future changes
+32. **Remove the Refresh Data buttons** (Streamlit sidebar, Chainlit message box). Since the "new campaigns?" check
+    (`data_loader`, `CAMPAIGN_CHECK_SECONDS`, default 60 s), new campaigns appear on their own, so the button is only
+    needed to (a) see changes to *existing* campaigns (e.g. corrected numbers after a dbt rerun), which otherwise wait for
+    the 10-minute `POSTGRES_CACHE_TTL_SECONDS`, and (b) skip the up-to-60-second wait. Kept for now (user decision).
+    If removed: delete both buttons and `chainlit_app._refresh_data`, keep `clear_campaign_data_cache()` for tests and
+    scripts, and shorten `POSTGRES_CACHE_TTL_SECONDS` (e.g. to 2–3 minutes) so corrected numbers also appear without a
+    click. Each full reload is four mart queries.
+
 ---
 
 ## 10. Questions I'd want answered before making changes
