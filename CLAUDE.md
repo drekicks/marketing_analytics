@@ -32,15 +32,10 @@ See `.env.example`.
 
 ## Key files
 - `streamlit_app.py`: Streamlit UI and session state. `chainlit_app.py` (+ testable helpers in `app/ui/chainlit_support.py`):
-  Chainlit chat UI on the same back end; the campaign is a "mode" picker in the message box (`CAMPAIGN_MODE_ID`), which the
-  server moves when a comparison changes the active campaign (Chainlit's header chat profiles can't change mid-chat).
-  `public/chainlit_ui.js` (`custom_js`) reports picker changes via `@cl.on_window_message`, so buttons use the picked campaign,
-  and makes the message-box command buttons (Executive summary, Refresh data) one-click. `app/ui/cli.py` and `main.py` are the CLI. UIs stay thin: logic belongs in `app/services/`.
+  Chainlit chat UI on the same back end. `app/ui/cli.py` and `main.py` are the CLI. UIs stay thin: logic belongs in `app/services/`.
 - Chainlit branding (ClariMotive): `public/theme.json` (colors/fonts), `public/logo_*.svg` + `public/favicon.svg`
   (placeholder wordmark; sources in `assets/brand/` with the site's `styles.css`), `public/custom.css`, and `[UI]` in `.chainlit/config.toml`.
 - `app/services/analyst_service.py::process_analyst_question`: the UI-agnostic orchestrator.
-  `app/services/summary_service.py::generate_executive_summary` is the one summary path (buttons in every UI and typed
-  "executive summary" requests, routed as `context_type="executive_summary"`).
 - `app/config/router.py::route_question`: keyword router → `RouteResult(context_type, analysis_type, campaign_ids, visualization_request)`.
 - `app/ai/analyst_chat.py::ask_analyst`: builds context, fills `prompts/analyst_guidelines.md`, calls the LLM.
 - `app/ai/context_builder.py`: DataFrame rows → labelled text for the LLM. `app/ai/insight_signals.py` holds the pre-computed rankings.
@@ -54,9 +49,7 @@ See `.env.example`.
   `run_customer_query`, `build_customer_query_context`). `llm_client_api.generate_json` returns structured `{sql, explanation}`.
   Users see `build_display_sql` output (scoped `cal` CTE over the real table, runnable as-is); it is never executed.
 - `app/utils/data_loader.py`: `get_campaign_data()` → `CampaignData(summary, segment, goals, unique_campaigns)`, cached
-  (framework-neutral in-process cache, no Streamlit import; Postgres TTL 10 min, plus a one-row "new campaigns?" check
-  every `CAMPAIGN_CHECK_SECONDS` (default 60, `app/sql/campaign_list_version.sql`) that reloads when the list changes;
-  `clear_campaign_data_cache()` backs the Refresh Data buttons). Chainlit adds new campaigns to an open chat's picker. Call it inside functions,
+  (framework-neutral in-process cache, no Streamlit import; Postgres TTL 10 min; `clear_campaign_data_cache()` backs the Refresh Data buttons). Call it inside functions,
   never import DataFrames at module level, or new campaigns won't appear until a restart. Customer-level data is queried from Neon, not loaded.
 - `app/visualization/`: matplotlib PNG charts (`chart_dispatcher`) and their text equivalents (`chart_builder`).
 - `prompts/*.md`: prompt templates using `{{placeholder}}` syntax (filled by `app/ai/prompt_builder.py`).

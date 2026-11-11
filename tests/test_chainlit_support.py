@@ -9,10 +9,6 @@ from app.ui.chainlit_support import (
     campaign_label,
     campaign_options,
     campaign_profiles,
-    added_campaigns,
-    campaign_switch_note,
-    new_campaigns_note,
-    picked_campaign,
     format_sql_for_display,
     reply_parts,
     welcome_text,
@@ -126,46 +122,9 @@ def test_campaign_profiles_dedupe_and_tolerate_missing_details():
     assert profiles[0].description == "CMP-2026-004 — Spring"
 
 
-def test_welcome_text_points_to_the_campaign_picker():
-    text = welcome_text("CMP-2026-004 — Spring")
-    assert "Campaign picker" in text
-    assert "Executive summary and Refresh data buttons" in text
-
-
-def test_picked_campaign_reads_the_message_box_picker():
-    valid = {"CMP-2025-002", "CMP-2026-004"}
-
-    assert picked_campaign({"campaign": "CMP-2026-004"}, valid) == "CMP-2026-004"
-    assert picked_campaign({"campaign": "CMP-2099-001"}, valid) is None
-    assert picked_campaign({}, valid) is None
-    assert picked_campaign(None, valid) is None
-
-
-def test_campaign_switch_note_only_when_the_campaign_changed():
-    options = [("CMP-2025-002", "CMP-2025-002 — Summer"), ("CMP-2026-004", "CMP-2026-004 — Spring")]
-
-    assert campaign_switch_note(options, "CMP-2025-002", "CMP-2026-004") == (
-        "Active campaign is now CMP-2026-004 — Spring."
-    )
-    assert campaign_switch_note(options, "CMP-2026-004", "CMP-2026-004") is None
-    assert campaign_switch_note(options, "CMP-2026-004", None) is None
+def test_welcome_text_points_to_the_campaign_menu():
+    assert "campaign menu at the top left" in welcome_text("CMP-2026-004 — Spring")
 
 
 def test_welcome_text_shows_the_assistant_name():
     assert welcome_text("CMP-2026-004 — Spring").startswith("## AI Marketing Analytics Assistant\n")
-
-
-def test_added_campaigns_lists_only_new_ones():
-    old = [("CMP-2026-004", "CMP-2026-004 — Spring"), ("CMP-2026-005", "CMP-2026-005 — Fall")]
-    new = [("CMP-2026-004", "CMP-2026-004 — Spring"), ("CMP-2026-006", "CMP-2026-006 — Winter")]
-
-    assert added_campaigns(old, new) == [("CMP-2026-006", "CMP-2026-006 — Winter")]
-    assert added_campaigns(old, old) == []
-
-
-def test_new_campaigns_note():
-    assert new_campaigns_note([]) is None
-    assert new_campaigns_note([("CMP-2026-006", "CMP-2026-006 — Winter")]) == (
-        "New campaign available: CMP-2026-006 — Winter. Pick it in the Campaign picker."
-    )
-    assert "New campaigns available: A, B" in new_campaigns_note([("a", "A"), ("b", "B")])

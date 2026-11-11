@@ -20,7 +20,3 @@ button.bg-primary:hover { background-color: #08554A; }
 .dark button.bg-primary:hover { background-color: #FFFFFF; }
 
 :focus-visible { outline: 3px solid #5EE0C8; outline-offset: 2px; }
-
-/* Campaign picker in the message box: show the full "CMP-… — name" label
-   (Chainlit truncates mode labels at 120px). */
-#mode-picker-trigger-campaign span.truncate { max-width: 340px; }

@@ -28,14 +28,6 @@ EXAMPLE_QUESTIONS = (
 # when its name appears in the message text.
 SQL_ELEMENT_NAME = "SQL used"
 
-# Id of the campaign picker shown in the message box (a Chainlit "mode").
-CAMPAIGN_MODE_ID = "campaign"
-
-# Buttons that stay in the message box (Chainlit "commands"), apart from the examples.
-SUMMARY_COMMAND = "Executive summary"
-REFRESH_COMMAND = "Refresh data"
-SUMMARY_QUESTION = "Generate executive summary"
-
 
 @dataclass(frozen=True)
 class ReplyParts:
@@ -105,41 +97,10 @@ def welcome_text(label: str) -> str:
     return (
         f"## {ASSISTANT_NAME}\n\n"
         f"**Active campaign:** {label}\n\n"
-        "Ask about campaign performance, segments, customers, comparisons or definitions, "
-        "or pick an example below. The message box has the Campaign picker and the "
-        "Executive summary and Refresh data buttons. Comparing to another campaign makes "
-        "it the active one."
+        "Ask a question about campaign performance, segments, customers, "
+        "comparisons or definitions, or pick one of the examples below. "
+        "Change the campaign with the campaign menu at the top left."
     )
-
-
-def picked_campaign(modes: dict | None, valid_ids: set[str]) -> str | None:
-    """The campaign chosen in the message-box picker, if it is a known campaign."""
-    campaign_id = (modes or {}).get(CAMPAIGN_MODE_ID)
-    return campaign_id if campaign_id in valid_ids else None
-
-
-def added_campaigns(
-    old_options: list[tuple[str, str]], new_options: list[tuple[str, str]]
-) -> list[tuple[str, str]]:
-    """Campaigns in the new list that the chat didn't know about (removed ones are ignored)."""
-    known = {campaign_id for campaign_id, _ in old_options or []}
-    return [(campaign_id, label) for campaign_id, label in new_options if campaign_id not in known]
-
-
-def new_campaigns_note(added: list[tuple[str, str]]) -> str | None:
-    if not added:
-        return None
-    labels = ", ".join(label for _, label in added)
-    if len(added) == 1:
-        return f"New campaign available: {labels}. Pick it in the Campaign picker."
-    return f"New campaigns available: {labels}. Pick one in the Campaign picker."
-
-
-def campaign_switch_note(options: list[tuple[str, str]], before: str | None, after: str | None) -> str | None:
-    """A line telling the user the active campaign changed (e.g. after a comparison)."""
-    if not after or after == before:
-        return None
-    return f"Active campaign is now {campaign_label(options, after)}."
 
 
 def format_sql_for_display(sql: str) -> str:

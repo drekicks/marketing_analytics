@@ -64,7 +64,6 @@ def test_postgres_data_is_cached_then_reloaded_after_ttl(monkeypatch):
 
     monkeypatch.setattr(data_loader, "DATA_SOURCE", "postgres")
     monkeypatch.setattr(data_loader, "load_postgres_data", fake_load)
-    monkeypatch.setattr(data_loader, "load_campaign_list_version", lambda: ("3", "CMP-2026-004"))
     monkeypatch.setattr(data_loader.time, "monotonic", lambda: clock[0])
     data_loader.clear_campaign_data_cache()
     try:
@@ -124,98 +123,3 @@ def test_data_loader_does_not_import_streamlit():
     source = open(data_loader.__file__, encoding="utf-8").read()
 
     assert "import streamlit" not in source
-
-
-# --- "anything new?" check -------------------------------------------------
-
-
-class _FakeNeon:
-    """Counts full loads and version checks; the version can be changed or made to fail."""
-
-    def __init__(self, monkeypatch):
-        self.loads = 0
-        self.checks = 0
-        self.version = ("3", "CMP-2026-004")
-        self.fail_check = False
-        self.clock = 1000.0
-        monkeypatch.setattr(data_loader, "DATA_SOURCE", "postgres")
-        monkeypatch.setattr(data_loader, "load_postgres_data", self._load)
-        monkeypatch.setattr(data_loader, "load_campaign_list_version", self._version)
-        monkeypatch.setattr(data_loader.time, "monotonic", lambda: self.clock)
-        monkeypatch.setattr(data_loader, "CAMPAIGN_CHECK_SECONDS", 60)
-        data_loader.clear_campaign_data_cache()
-
-    def _load(self):
-        self.loads += 1
-        return _frames(f"load-{self.loads}")
-
-    def _version(self):
-        self.checks += 1
-        if self.fail_check:
-            raise ConnectionError("Neon is waking up")
-        return self.version
-
-
-def test_no_check_within_the_check_interval(monkeypatch):
-    neon = _FakeNeon(monkeypatch)
-    try:
-        first = data_loader.get_campaign_data()
-        checks_after_load = neon.checks
-        neon.clock += 59
-        assert data_loader.get_campaign_data() is first
-        assert neon.checks == checks_after_load and neon.loads == 1
-    finally:
-        data_loader.clear_campaign_data_cache()
-
-
-def test_unchanged_campaign_list_keeps_the_cache(monkeypatch):
-    neon = _FakeNeon(monkeypatch)
-    try:
-        first = data_loader.get_campaign_data()
-        neon.clock += 61
-        assert data_loader.get_campaign_data() is first
-        assert neon.loads == 1 and neon.checks == 2
-    finally:
-        data_loader.clear_campaign_data_cache()
-
-
-def test_new_campaign_triggers_a_reload_at_the_next_check(monkeypatch):
-    neon = _FakeNeon(monkeypatch)
-    try:
-        data_loader.get_campaign_data()
-        neon.version = ("4", "CMP-2026-006")
-        neon.clock += 61
-        reloaded = data_loader.get_campaign_data()
-        assert neon.loads == 2
-        assert reloaded.summary["campaign_id"].tolist() == ["load-2"]
-
-        neon.clock += 61  # same new version: no further reload
-        assert data_loader.get_campaign_data() is reloaded
-        assert neon.loads == 2
-    finally:
-        data_loader.clear_campaign_data_cache()
-
-
-def test_failed_check_keeps_serving_cached_data(monkeypatch):
-    neon = _FakeNeon(monkeypatch)
-    try:
-        first = data_loader.get_campaign_data()
-        neon.fail_check = True
-        neon.clock += 61
-        assert data_loader.get_campaign_data() is first
-        assert neon.loads == 1
-    finally:
-        data_loader.clear_campaign_data_cache()
-
-
-def test_csv_mode_never_checks(monkeypatch):
-    calls = []
-    monkeypatch.setattr(data_loader, "load_campaign_list_version", lambda: calls.append(1))
-    monkeypatch.setattr(data_loader, "DATA_SOURCE", "csv")
-    data_loader.clear_campaign_data_cache()
-    try:
-        data_loader.get_campaign_data()
-        data_loader.get_campaign_data()
-        assert calls == []
-    finally:
-        data_loader.clear_campaign_data_cache()

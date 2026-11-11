@@ -37,14 +37,6 @@ SCOPE_TERMS = (
 
 VS_PATTERN = re.compile(r"\bvs\b\.?")
 
-# "Generate executive summary", "exec summary for CMP-2026-003", ...
-EXECUTIVE_SUMMARY_PATTERN = re.compile(r"\bexec(?:utive)?\.?\s+summar(?:y|ies)\b")
-
-
-def is_executive_summary_request(question: str) -> bool:
-    """True when the user asks for the executive summary (same output as the summary button)."""
-    return bool(EXECUTIVE_SUMMARY_PATTERN.search(question.lower()))
-
 
 def is_scope_request(question: str) -> bool:
     """True when the question asks about all campaigns rather than one."""
@@ -325,14 +317,6 @@ def route_question(question: str) -> RouteResult:
     has_line_term = any(
         term in normalized for term in line_term
     )
-
-    # Typed request for the executive summary: same prompt and model as the button.
-    if is_executive_summary_request(question):
-        return RouteResult(
-            analysis_type="summary",
-            context_type="executive_summary",
-            campaign_ids=campaign_ids,
-        )
 
     # Explicit multi-campaign comparison
     if has_multiple_campaigns and has_comparison_term:
