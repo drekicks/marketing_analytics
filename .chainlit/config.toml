@@ -151,7 +151,8 @@ custom_css = "/public/custom.css"
 
 # Specify a JavaScript file that can be used to customize the user interface.
 # The JavaScript file can be served from the public directory.
-# custom_js = "/public/test.js"
+# Makes the Generate Executive Summary button in the message box one-click.
+custom_js = "/public/chainlit_ui.js"
 
 # The style of alert boxes. Can be "classic" or "modern".
 alert_style = "classic"

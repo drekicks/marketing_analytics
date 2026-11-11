@@ -31,18 +31,21 @@ if sys.version_info >= (3, 14):
 startup_error: Exception | None = None
 
 try:
-    from app.ai.context_builder import build_campaign_context
-    from app.ai.llm_client_api import generate_analysis
-    from app.ai.prompt_builder import build_prompt
-    from app.ai.prompt_loader import load_prompt
+    from app.config.router import is_executive_summary_request, is_scope_request
     from app.config.settings import SessionState
     from app.services.analyst_service import process_analyst_question
     from app.ui.chainlit_support import (
         EXAMPLE_QUESTIONS,
         SQL_ELEMENT_NAME,
+        SUMMARY_COMMAND,
+        SUMMARY_QUESTION,
+        added_campaigns,
+        answer_label,
         campaign_label,
         campaign_options,
         campaign_profiles,
+        campaign_switch_note,
+        new_campaigns_note,
         reply_parts,
         welcome_text,
     )
@@ -68,8 +71,8 @@ async def _send_error(prefix: str, error: Exception) -> None:
 
 
 def _welcome_actions() -> list[cl.Action]:
+    # The executive summary is a button in the message box (see _show_summary_button).
     actions = [
-        cl.Action(name="executive_summary", payload={}, label="Generate executive summary", icon="file-text"),
         cl.Action(name="refresh_data", payload={}, label="Refresh data", icon="refresh-cw"),
     ]
     actions += [
@@ -77,6 +80,16 @@ def _welcome_actions() -> list[cl.Action]:
         for question in EXAMPLE_QUESTIONS
     ]
     return actions
+
+
+async def _show_summary_button() -> None:
+    """Generate Executive Summary as a button that stays in the message box."""
+    await cl.context.emitter.set_commands(
+        [
+            {"id": SUMMARY_COMMAND, "description": "Write the executive summary for the active campaign",
+             "icon": "file-text", "button": True, "persistent": False},
+        ]
+    )
 
 
 async def _send_welcome() -> None:
@@ -105,14 +118,18 @@ def _answer_question(question: str):
     )
 
 
-def _executive_summary(campaign_id: str) -> str:
-    data = get_campaign_data()
-    context = build_campaign_context(data.summary, data.goals, campaign_id)
-    prompt = build_prompt(
-        template=load_prompt("executive_summary"),
-        variables={"campaign_metrics": context},
-    )
-    return generate_analysis(prompt, purpose="summary")
+async def _sync_campaign_list() -> None:
+    """Tell an open chat about campaigns added since it started (e.g. by the weekly job)."""
+    try:
+        data = await cl.make_async(get_campaign_data)()
+    except Exception:  # noqa: BLE001 - the answer itself reports database problems
+        return
+    current = cl.user_session.get("campaign_options") or []
+    latest = campaign_options(data.unique_campaigns)
+    note = new_campaigns_note(added_campaigns(current, latest))
+    cl.user_session.set("campaign_options", latest)
+    if note:
+        await cl.Message(content=note).send()
 
 
 async def _answer(question: str) -> None:
@@ -120,7 +137,14 @@ async def _answer(question: str) -> None:
         await cl.Message(content="The app couldn't start. Please reload the page.").send()
         return
 
-    async with cl.Step(name="Analysing", type="run") as step:
+    await _sync_campaign_list()
+
+    session = cl.user_session.get("analytics_session")
+    options = cl.user_session.get("campaign_options")
+    campaign_before = session.active_campaign_id
+    is_summary = is_executive_summary_request(question)
+
+    async with cl.Step(name="Writing executive summary" if is_summary else "Analysing", type="run") as step:
         step.input = question
         try:
             result = await cl.make_async(_answer_question)(question)
@@ -147,7 +171,29 @@ async def _answer(question: str) -> None:
             cl.Text(name=SQL_ELEMENT_NAME, content=parts.sql, language="sql", display="side")
         )
 
-    await cl.Message(content=parts.content, elements=elements).send()
+    if is_summary:
+        content = f"## Executive summary: {campaign_label(options, result.campaign_id)}\n\n{parts.content}"
+    else:
+        # Which campaign the answer is about, then (only when it changed, e.g. after a
+        # comparison) a highlighted note: the header menu keeps the chat's starting campaign.
+        route = session.last_route
+        if route is not None and route.analysis_type == "comparison":
+            # "Compare CMP-A vs CMP-B" names both; "Compare to CMP-B" is relative to the active one.
+            about = list(dict.fromkeys(route.campaign_ids if len(route.campaign_ids) > 1
+                                       else [campaign_before, result.campaign_id]))
+        else:
+            about = [result.campaign_id]
+        label = answer_label(
+            [campaign_label(options, campaign_id) for campaign_id in about],
+            all_campaigns=is_scope_request(question) and route is not None
+            and route.context_type in ("insight", "customer_campaign"),
+        )
+        content = f"{label}\n\n{parts.content}"
+        note = campaign_switch_note(options, campaign_before, session.active_campaign_id)
+        if note:
+            content = f"{content}\n\n{note}"
+
+    await cl.Message(content=content, elements=elements).send()
 
 
 # -------------------------------------------------------------------
@@ -181,6 +227,7 @@ async def on_chat_start() -> None:
     cl.user_session.set("analytics_session", SessionState(active_campaign_id=active))
     cl.user_session.set("analyst_history", [])
 
+    await _show_summary_button()
     await _send_welcome()
 
 
@@ -208,7 +255,11 @@ async def chat_profiles(current_user=None, language=None) -> list[cl.ChatProfile
 
 @cl.on_message
 async def on_message(message: cl.Message) -> None:
-    await _answer(message.content)
+    if message.command == SUMMARY_COMMAND:
+        # Same path as typing "Generate executive summary".
+        await _answer(SUMMARY_QUESTION)
+    if message.content.strip():
+        await _answer(message.content)
 
 
 # -------------------------------------------------------------------
@@ -220,25 +271,6 @@ async def on_example_question(action: cl.Action) -> None:
     question = action.payload.get("question", "")
     await cl.Message(content=question, type="user_message").send()
     await _answer(question)
-
-
-@cl.action_callback("executive_summary")
-async def on_executive_summary(action: cl.Action) -> None:
-    session = cl.user_session.get("analytics_session")
-    if session is None:
-        await cl.Message(content="The app couldn't start. Please reload the page.").send()
-        return
-
-    label = campaign_label(cl.user_session.get("campaign_options"), session.active_campaign_id)
-
-    async with cl.Step(name="Writing executive summary", type="run"):
-        try:
-            summary = await cl.make_async(_executive_summary)(session.active_campaign_id)
-        except Exception as error:  # noqa: BLE001 - shown to the user
-            await _send_error("Analyst: ", error)
-            return
-
-    await cl.Message(content=f"## Executive summary: {label}\n\n{summary}").send()
 
 
 @cl.action_callback("refresh_data")
