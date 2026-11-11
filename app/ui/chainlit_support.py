@@ -28,6 +28,11 @@ EXAMPLE_QUESTIONS = (
 # when its name appears in the message text.
 SQL_ELEMENT_NAME = "SQL used"
 
+# Button kept in the message box (a Chainlit "command"); runs the same path as
+# typing "Generate executive summary".
+SUMMARY_COMMAND = "Generate Executive Summary"
+SUMMARY_QUESTION = "Generate executive summary"
+
 
 @dataclass(frozen=True)
 class ReplyParts:
@@ -99,7 +104,43 @@ def welcome_text(label: str) -> str:
         f"**Active campaign:** {label}\n\n"
         "Ask a question about campaign performance, segments, customers, "
         "comparisons or definitions, or pick one of the examples below. "
-        "Change the campaign with the campaign menu at the top left."
+        "Change the campaign with the campaign menu at the top left. "
+        "The Generate Executive Summary button is in the message box."
+    )
+
+
+def answer_label(labels: list[str], all_campaigns: bool = False) -> str:
+    """Small line at the top of each answer naming the campaign(s) it is about."""
+    if all_campaigns:
+        return "_Campaigns: all_"
+    if len(labels) > 1:
+        return f"_Campaigns: {' vs '.join(labels)}_"
+    return f"_Campaign: {labels[0]}_"
+
+
+def campaign_switch_note(options: list[tuple[str, str]], before: str | None, after: str | None) -> str | None:
+    """Highlighted line shown once when the active campaign changes (e.g. after a comparison)."""
+    if not after or after == before:
+        return None
+    return f"**Active campaign is now {campaign_label(options, after)}.**"
+
+
+def added_campaigns(
+    old_options: list[tuple[str, str]], new_options: list[tuple[str, str]]
+) -> list[tuple[str, str]]:
+    """Campaigns in the new list that the chat didn't know about (removed ones are ignored)."""
+    known = {campaign_id for campaign_id, _ in old_options or []}
+    return [(campaign_id, label) for campaign_id, label in new_options if campaign_id not in known]
+
+
+def new_campaigns_note(added: list[tuple[str, str]]) -> str | None:
+    if not added:
+        return None
+    labels = ", ".join(label for _, label in added)
+    noun = "New campaign" if len(added) == 1 else "New campaigns"
+    return (
+        f"{noun} available: {labels}. Choose it in the campaign menu at the top left "
+        "(this starts a new chat)."
     )
 
 

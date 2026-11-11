@@ -8,7 +8,11 @@ from app.ui.chainlit_support import (
     SQL_ELEMENT_NAME,
     campaign_label,
     campaign_options,
+    added_campaigns,
+    answer_label,
     campaign_profiles,
+    campaign_switch_note,
+    new_campaigns_note,
     format_sql_for_display,
     reply_parts,
     welcome_text,
@@ -128,3 +132,34 @@ def test_welcome_text_points_to_the_campaign_menu():
 
 def test_welcome_text_shows_the_assistant_name():
     assert welcome_text("CMP-2026-004 — Spring").startswith("## AI Marketing Analytics Assistant\n")
+
+
+def test_answer_label():
+    assert answer_label(["CMP-2026-004 — Spring"]) == "_Campaign: CMP-2026-004 — Spring_"
+    assert answer_label(["A", "B"]) == "_Campaigns: A vs B_"
+    assert answer_label(["A"], all_campaigns=True) == "_Campaigns: all_"
+
+
+def test_campaign_switch_note_is_highlighted_and_only_on_change():
+    options = [("CMP-2025-002", "CMP-2025-002 — Summer"), ("CMP-2026-004", "CMP-2026-004 — Spring")]
+
+    assert campaign_switch_note(options, "CMP-2025-002", "CMP-2026-004") == (
+        "**Active campaign is now CMP-2026-004 — Spring.**"
+    )
+    assert campaign_switch_note(options, "CMP-2026-004", "CMP-2026-004") is None
+
+
+def test_new_campaigns_since_the_chat_started():
+    old = [("CMP-2026-004", "CMP-2026-004 — Spring")]
+    new = old + [("CMP-2026-006", "CMP-2026-006 — Winter")]
+
+    assert added_campaigns(old, new) == [("CMP-2026-006", "CMP-2026-006 — Winter")]
+    assert added_campaigns(new, old) == []
+    assert new_campaigns_note([]) is None
+    assert new_campaigns_note(added_campaigns(old, new)).startswith(
+        "New campaign available: CMP-2026-006 — Winter. Choose it in the campaign menu at the top left"
+    )
+
+
+def test_welcome_text_mentions_the_summary_button():
+    assert "Generate Executive Summary button is in the message box" in welcome_text("CMP-2026-004 — Spring")
