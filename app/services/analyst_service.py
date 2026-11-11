@@ -12,6 +12,7 @@ from app.visualization.chart_builder import build_visualization_context
 from app.visualization.chart_dispatcher import create_visualization
 from app.config.paths import OUTPUT_DIR
 from app.ai.campaign_id_validation import validate_campaign_ids
+from app.services.summary_service import generate_executive_summary
 from app.services.customer_sql_service import (
     build_customer_query_context,
     run_customer_query,
@@ -77,6 +78,12 @@ def process_analyst_question(
         default_campaign_id=default_campaign_id,
         valid_campaign_ids=valid_campaign_ids,
     )
+
+    if route.context_type == "executive_summary":
+        return AnalystResult(
+            answer=generate_executive_summary(resolved_campaign_id),
+            campaign_id=resolved_campaign_id,
+        )
 
     scope_request = is_scope_request(question)
 

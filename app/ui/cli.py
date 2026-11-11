@@ -1,10 +1,6 @@
-from app.utils.data_loader import get_campaign_data
 from app.config.settings import SessionState
 from app.services.analyst_service import process_analyst_question
-from app.ai.context_builder import build_campaign_context
-from app.ai.prompt_loader import load_prompt
-from app.ai.prompt_builder import build_prompt
-from app.ai.llm_client_api import generate_analysis
+from app.services.summary_service import generate_executive_summary
 from app.ui.errors import user_message
 from datetime import datetime
 
@@ -17,26 +13,7 @@ def show_executive_summary(default_campaign_id: str,campaign_name) -> None:
     print()
 
     try:
-        data = get_campaign_data()
-        context = build_campaign_context(
-            data.summary,
-            data.goals,
-            default_campaign_id
-        )
-
-    except ValueError as e:
-        print(f"Analyst:{e}")
-        raise SystemExit(1)
-
-    template = load_prompt("executive_summary")
-
-    final_prompt = build_prompt(template=template, variables={"campaign_metrics": context})
-
-    # print(f"Final prompt size: {len(final_prompt):,} characters")
-    # print(f"Approximate prompt tokens: {len(final_prompt) // 4:,}")
-
-    try:
-        analysis = generate_analysis(final_prompt, purpose="summary")
+        analysis = generate_executive_summary(default_campaign_id)
     except Exception as error:
         # Keep going: the chat may still work even if the summary failed.
         print(f"Analyst: {user_message(error)}")

@@ -1,3 +1,4 @@
+import logging
 import os
 import threading
 import time
@@ -12,9 +13,15 @@ DATA_SOURCE = os.getenv("DATA_SOURCE",
                         "csv",
                         ).strip().lower()
 
-# How long Neon data stays cached. New weekly campaigns appear in a running
-# app within this window, or at once via clear_campaign_data_cache().
+logger = logging.getLogger(__name__)
+
+# How long Neon data stays cached at most (a backstop for changes to existing
+# campaigns). clear_campaign_data_cache() reloads at once.
 POSTGRES_CACHE_TTL_SECONDS = 600
+
+# How often a cached app asks Neon whether campaigns were added (one cheap row).
+# New campaigns appear within this window without a full reload in between.
+CAMPAIGN_CHECK_SECONDS = float(os.getenv("CAMPAIGN_CHECK_SECONDS", "60"))
 
 
 @dataclass(frozen=True)
@@ -92,11 +99,34 @@ def load_postgres_data() -> tuple[
     return summary, segment, goals, unique_campaigns
 
 
+def load_campaign_list_version() -> tuple:
+    """A small fingerprint of the campaign list (count, latest ID, latest start date)."""
+    row = load_sql_extracts(["campaign_list_version"])["campaign_list_version"].iloc[0]
+    return tuple(str(value) for value in row.tolist())
+
+
 # In-process cache shared by every UI (Streamlit, Chainlit, CLI) and every
 # user session in this process. Framework-neutral on purpose: the back end
 # must not depend on one UI's caching. Failed loads are never cached.
 _cache_lock = threading.Lock()
-_cache: dict = {"source": None, "data": None, "loaded_at": 0.0}
+_EMPTY_CACHE = {"source": None, "data": None, "loaded_at": 0.0, "version": None, "checked_at": 0.0}
+_cache: dict = dict(_EMPTY_CACHE)
+
+
+def _campaign_list_unchanged(now: float) -> bool:
+    """Check (at most every CAMPAIGN_CHECK_SECONDS) that no campaign was added since the load."""
+    if now - _cache["checked_at"] < CAMPAIGN_CHECK_SECONDS:
+        return True
+    try:
+        version = load_campaign_list_version()
+    except Exception:  # noqa: BLE001 - keep serving cached data; retry at the next check
+        logger.warning("Campaign list check failed; using cached data", exc_info=True)
+        _cache["checked_at"] = now
+        return True
+    if _cache["version"] is not None and version != _cache["version"]:
+        return False
+    _cache.update(version=version, checked_at=now)
+    return True
 
 
 def _cache_is_fresh(source: str) -> bool:
@@ -104,7 +134,18 @@ def _cache_is_fresh(source: str) -> bool:
         return False
     if source == "csv":
         return True
-    return time.monotonic() - _cache["loaded_at"] < POSTGRES_CACHE_TTL_SECONDS
+    now = time.monotonic()
+    if now - _cache["loaded_at"] >= POSTGRES_CACHE_TTL_SECONDS:
+        return False
+    return _campaign_list_unchanged(now)
+
+
+def _version_before_load() -> tuple | None:
+    try:
+        return load_campaign_list_version()
+    except Exception:  # noqa: BLE001 - the next check sets it
+        logger.warning("Campaign list check failed before load", exc_info=True)
+        return None
 
 
 def get_campaign_data() -> CampaignData:
@@ -127,6 +168,9 @@ def get_campaign_data() -> CampaignData:
         if _cache_is_fresh(source):
             return _cache["data"]
 
+        # Fingerprint first: a campaign added during the load then triggers one
+        # extra reload at the next check instead of being missed until the TTL.
+        version = _version_before_load() if source == "postgres" else None
         loaded = load_csv_data() if source == "csv" else load_postgres_data()
 
         summary, segment, goals, unique_campaigns = loaded
@@ -136,11 +180,12 @@ def get_campaign_data() -> CampaignData:
             goals=goals,
             unique_campaigns=unique_campaigns,
         )
-        _cache.update(source=source, data=data, loaded_at=time.monotonic())
+        now = time.monotonic()
+        _cache.update(source=source, data=data, loaded_at=now, version=version, checked_at=now)
         return data
 
 
 def clear_campaign_data_cache() -> None:
     """Drop cached datasets so the next get_campaign_data() reloads them."""
     with _cache_lock:
-        _cache.update(source=None, data=None, loaded_at=0.0)
+        _cache.update(_EMPTY_CACHE)
