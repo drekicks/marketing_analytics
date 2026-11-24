@@ -104,3 +104,38 @@ def test_executive_summary_requests_use_the_summary_route(question):
 
 def test_summary_of_segments_is_not_the_executive_summary():
     assert route_question("Give me a summary of segment performance").context_type != "executive_summary"
+
+
+@pytest.mark.parametrize(
+    ("question", "context_type"),
+    [
+        ("What is the audience size?", "campaign"),
+        ("What is the total revenue?", "campaign"),
+        ("What is the campaign cost?", "campaign"),
+        ("What is the marketing ROI for this campaign?", "campaign"),
+        ("What is the incremental revenue?", "campaign"),
+        ("What was the audience size?", "campaign"),
+        ("What's the conversion rate?", "campaign"),
+        ("How much revenue did the campaign generate?", "campaign"),
+        ("What is the audience size by segment?", "segment"),
+    ],
+)
+def test_metric_value_questions_use_campaign_data(question, context_type):
+    # "What is the <metric>?" asks for a number from the data, not a definition.
+    assert route_question(question).context_type == context_type
+
+
+@pytest.mark.parametrize(
+    "question",
+    [
+        "What is absolute lift?",
+        "What is a lapsed customer?",
+        "How is conversion rate calculated?",
+        "What does absolute lift mean?",
+        "What does Churn Watchlist mean?",
+        "Define audience size",
+        "Explain incremental revenue",
+    ],
+)
+def test_definition_questions_still_use_the_documentation(question):
+    assert route_question(question).context_type == "knowledge"

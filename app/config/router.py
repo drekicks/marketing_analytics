@@ -240,6 +240,31 @@ def route_question(question: str) -> RouteResult:
     # A specific customer: "customer 7470", "customer ID 7470", "customer #7470".
     customer_reference_pattern = re.compile(r"\bcustomer\s*(?:id\s*)?#?\s*\d+\b")
 
+    # Asking for the value of a campaign metric ("What is the audience size?") is a
+    # data question, not a definition, even though it starts with "what is".
+    metric_value_pattern = re.compile(
+        r"\b(what is the|what's the|what was|what were|how much|how many)\b"
+    )
+    campaign_metric_terms = (
+        "audience size",
+        "audience",
+        "revenue",
+        "cost",
+        "conversions",
+        "conversion rate",
+        "lift",
+        "incremental",
+        "roi",
+        "return on investment",
+        "budget",
+    )
+
+    def is_metric_value_question(question: str) -> bool:
+        q = question.lower()
+        if any(term in q for term in strong_knowledge_terms) or re.search(r"\bmeans?\b", q):
+            return False
+        return bool(metric_value_pattern.search(q)) and any(term in q for term in campaign_metric_terms)
+
     def is_knowledge_question(question: str) -> bool:
         q = question.lower()
 
@@ -421,6 +446,14 @@ def route_question(question: str) -> RouteResult:
         return RouteResult(
             analysis_type="insight",
             context_type="insight",
+            campaign_ids=campaign_ids,
+        )
+
+    # The value of a campaign metric: answered from the campaign (or segment) data.
+    if is_metric_value_question(question):
+        return RouteResult(
+            analysis_type="summary",
+            context_type="segment" if re.search(r"\bsegments?\b", normalized) else "campaign",
             campaign_ids=campaign_ids,
         )
 
