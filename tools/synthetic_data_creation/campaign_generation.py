@@ -375,19 +375,23 @@ def generate_campaign(
     return GeneratedCampaign(spec=spec, seed=seed, rates=rates, results=results, goal=goal)
 
 
-def should_skip(last_loaded_at: datetime | None, now: datetime, days: float) -> bool:
+def should_skip(last_loaded_at: date | datetime | None, now: datetime, days: float) -> bool:
     """
     True when a campaign was loaded less than `days` ago.
 
     The weekly workflow has backup schedule slots in case GitHub drops the
     primary one; this keeps them from creating a second campaign that week.
-    Timestamps are compared in UTC; naive values are treated as UTC (the
-    generator writes updated_at as naive UTC).
+
+    public.campaign_results.updated_at is a DATE column in Neon, so the value
+    is usually a plain date: it is treated as midnight UTC that day. Datetimes
+    are compared in UTC, with naive values treated as UTC.
     """
     if last_loaded_at is None:
         return False
 
-    def as_utc(value: datetime) -> datetime:
+    def as_utc(value: date | datetime) -> datetime:
+        if not isinstance(value, datetime):
+            return datetime(value.year, value.month, value.day, tzinfo=timezone.utc)
         if value.tzinfo is None:
             return value.replace(tzinfo=timezone.utc)
         return value.astimezone(timezone.utc)
@@ -472,7 +476,7 @@ def fetch_inputs(engine) -> tuple[list[dict], list[str]]:
     return customers, existing_ids
 
 
-def fetch_last_loaded(engine) -> tuple[str | None, datetime | None]:
+def fetch_last_loaded(engine) -> tuple[str | None, date | datetime | None]:
     """The most recently loaded campaign_id and its updated_at, or (None, None)."""
     from sqlalchemy import text
 

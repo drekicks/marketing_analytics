@@ -51,7 +51,7 @@ from {{ ref('stg_campaign_results') }} cr join {{ ref('stg_customer_segment') }}
 	on cr.customer_id = cs.customer_id
 
 {% if is_incremental() %}
-where cr.updated_at > (
+where cr.updated_at >= (
     select coalesce(max(t.updated_at),'1990-01-01'::date)
     from {{ this }} as t
 )
