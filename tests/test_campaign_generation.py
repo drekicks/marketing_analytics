@@ -254,3 +254,35 @@ def test_main_skips_when_campaign_loaded_recently(monkeypatch, capsys):
 
     cg.main(["--skip-if-recent", "5"])
     assert "skipping" in capsys.readouterr().out
+
+
+def test_should_skip_handles_date_column():
+    """Regression: Neon's updated_at is a DATE, and should_skip crashed on it."""
+    from datetime import date, datetime, timezone
+
+    monday_late = datetime(2026, 11, 24, 4, 3, tzinfo=timezone.utc)   # delayed backup slot
+    assert cg.should_skip(date(2026, 11, 23), monday_late, 5) is True
+    assert cg.should_skip(date(2026, 11, 23), datetime(2026, 11, 23, 13, 17, tzinfo=timezone.utc), 5) is True
+    assert cg.should_skip(date(2026, 11, 20), monday_late, 5) is True    # 4 days 4 hours
+    assert cg.should_skip(date(2026, 11, 19), monday_late, 5) is False   # 5 days 4 hours
+    assert cg.should_skip(date(2026, 11, 16), datetime(2026, 11, 23, 13, 17, tzinfo=timezone.utc), 5) is False
+
+
+def test_main_skips_with_date_updated_at(monkeypatch, capsys):
+    from datetime import date
+
+    import app.utils.database as database
+
+    for name in ("DB_HOST", "DB_NAME", "DB_USER"):
+        monkeypatch.setenv(name, "x")
+    monkeypatch.setattr(database, "get_database_engine", lambda: object())
+    monkeypatch.setattr(cg, "fetch_last_loaded", lambda engine: ("CMP-2026-008", date.today()))
+
+    def fail(*args, **kwargs):
+        raise AssertionError("should not generate or load")
+
+    monkeypatch.setattr(cg, "fetch_inputs", fail)
+    monkeypatch.setattr(cg, "load_campaign", fail)
+
+    cg.main(["--skip-if-recent", "5"])
+    assert "skipping" in capsys.readouterr().out
