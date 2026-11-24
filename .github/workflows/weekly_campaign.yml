@@ -17,6 +17,9 @@ on:
       seed:
         description: "Optional seed to reproduce a previous run"
         required: false
+      run_date:
+        description: "Optional YYYY-MM-DD to treat as today (backfill a missed week)"
+        required: false
 
 concurrency:
   group: weekly-campaign
@@ -64,6 +67,7 @@ jobs:
           args=()
           if [ "${{ inputs.dry_run }}" = "true" ]; then args+=(--dry-run); fi
           if [ -n "${{ inputs.seed }}" ]; then args+=(--seed "${{ inputs.seed }}"); fi
+          if [ -n "${{ inputs.run_date }}" ]; then args+=(--run-date "${{ inputs.run_date }}"); fi
           if [ "${{ github.event_name }}" = "schedule" ]; then args+=(--skip-if-recent 5); fi
           python -m tools.synthetic_data_creation.campaign_generation "${args[@]}"
 
